@@ -72,6 +72,13 @@
                             <span> Users </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{route('products')}}">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span class="badge bg-success rounded-pill float-end"></span>
+                            <span> Products </span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="clearfix"></div>

@@ -52,6 +52,11 @@ class User extends Authenticatable
 
     public function position()
     {
-        return $this->hasOne(Position::class, 'id', 'position_id');
+        return $this->belongsTo(Position::class, 'position_id', 'id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'user_id', 'id');
     }
 }

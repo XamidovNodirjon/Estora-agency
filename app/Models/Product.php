@@ -26,4 +26,19 @@ class Product extends Model
         'long_id',
         'latitude_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'user_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id', 'category_id');
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'id', 'subcategory_id');
+    }
 }
