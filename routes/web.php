@@ -19,5 +19,8 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::get('products', [ProductController::class, 'index'])->name('products');
 Route::get('create', [ProductController::class, 'create'])->name('create-product');
-Route::get('store-product', [ProductController::class, 'store'])->name('store-product');
+Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
 Route::get('/subcategories/{category_id}', [ProductController::class, 'getSubcategories']);
+Route::get('/get-cities/{region_id}', function ($region_id) {
+    return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
+});

@@ -2,7 +2,7 @@
 @section('content')
     <div class="container py-4">
         <div class="card shadow-sm rounded">
-            <div class="card-header bg-primary text-white text-center">
+            <div class="card-header text-center">
                 <h4 class="mb-0 fw-bold">Create Product</h4>
             </div>
             <div class="card-body">
@@ -30,9 +30,23 @@
                             </select>
                         </div>
                         <div class="col-md-6">
+                            <label for="region_id" class="form-label fw-semibold">Viloyat</label>
+                            <select id="region_id" name="region_id" class="form-select" required>
+                                <option value="">Viloyat tanlang</option>
+                                @foreach($address as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="city_id" class="form-label fw-semibold">Tuman / Shahar</label>
+                            <select id="city_id" name="city_id" class="form-select" required>
+                                <option value="">Tuman/shahar tanlang</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <label for="price" class="form-label fw-semibold">Narxi</label>
-                            <input type="number" name="price" id="price" class="form-control" placeholder="Narxi"
-                                   required>
+                            <input type="number" name="price" id="price" class="form-control" placeholder="Narxi">
                         </div>
                         <div class="col-md-12">
                             <label for="description" class="form-label fw-semibold">Tavsifi</label>
@@ -47,7 +61,7 @@
                         <div class="col-md-6">
                             <label for="phone" class="form-label fw-semibold">Telefon</label>
                             <input type="text" name="phone" id="phone" class="form-control" placeholder="+998901234567"
-                                   maxlength="13" minlength="9" required>
+                                   maxlength="13" minlength="9">
                         </div>
                         <div class="col-md-4">
                             <label for="floor" class="form-label fw-semibold">Qavat</label>
@@ -80,18 +94,9 @@
                         <div class="col-md-12">
                             <label class="form-label fw-semibold mb-2">Joylashuv (xaritadan tanlang)</label>
                             <div style="height:350px;" id="map"></div>
-                            <div class="row mt-2">
-                                <div class="col-md-6">
-                                    <label for="long_id" class="form-label">Longitude</label>
-                                    <input type="text" class="form-control" id="long_id" name="long_id" readonly
-                                           required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="latitude_id" class="form-label">Latitude</label>
-                                    <input type="text" class="form-control" id="latitude_id" name="latitude_id" readonly
-                                           required>
-                                </div>
-                            </div>
+                            <input type="hidden" name="latitude_id" id="latitude_id">
+                            <input type="hidden" name="long_id" id="long_id">
+                            <div class="row mt-2"></div>
                         </div>
                     </div>
                     <div class="text-center mt-4">
@@ -104,26 +109,7 @@
         </div>
     </div>
 
-    {{-- Subcategory AJAX --}}
-    <script>
-        document.getElementById('category').addEventListener('change', function () {
-            var categoryId = this.value;
-            var subcategorySelect = document.getElementById('subcategory');
-            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
 
-            if (categoryId) {
-                fetch('/subcategories/' + categoryId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (subcategory) {
-                            subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.name}</option>`;
-                        });
-                    });
-            }
-        });
-    </script>
-
-    {{-- Google Maps --}}
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1lZcK4FFGcyNjh1sGsZW2x968zYMyfB4"></script>
     <script>
         let map;
@@ -166,5 +152,40 @@
                 initMap();
             }
         }
+    </script>
+    {{-- Subcategory AJAX --}}
+    <script>
+        document.getElementById('category').addEventListener('change', function () {
+            var categoryId = this.value;
+            var subcategorySelect = document.getElementById('subcategory');
+            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+
+            if (categoryId) {
+                fetch('/subcategories/' + categoryId)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (subcategory) {
+                            subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.name}</option>`;
+                        });
+                    });
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('region_id').addEventListener('change', function () {
+            var regionId = this.value;
+            var citySelect = document.getElementById('city_id');
+            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+
+            if (regionId) {
+                fetch('/get-cities/' + regionId)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (city) {
+                            citySelect.innerHTML += `<option value="${city.id}">${city.name}</option>`;
+                        });
+                    });
+            }
+        });
     </script>
 @endsection

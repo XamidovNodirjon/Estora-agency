@@ -13,6 +13,8 @@ class Product extends Model
         'category_id',
         'subcategory_id',
         'user_id',
+        'region_id',
+        'city_id',
         'price',
         'description',
         'images',
@@ -29,7 +31,7 @@ class Product extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     public function category()
