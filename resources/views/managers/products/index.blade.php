@@ -4,8 +4,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{route('create-product')}}" type="button" class="btn btn-primary text-end">Create product
+                    <a href="{{route('manager-create-product')}}" type="button" class="btn btn-primary text-end">Create
+                        product
                     </a>
+                    <p>Your balls = {{$user->balls->amount}}</p>
                     <div class="table-responsive">
                         <table class="table mb-0">
                             <thead>
@@ -26,7 +28,20 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->price }}</td>
-                                    <td>{{ $product->phone}}</td>
+                                    <td>
+                                        @if($product->isPhoneVisibleTo(auth()->user()) ?? '')
+                                            {{ $product->phone }}
+                                        @else
+                                            <form action="{{ route('manager.reveal-phone', $product->id) }}"
+                                                  method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-warning btn-sm">
+                                                    Reveal phone (–1 ball)
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td>
+
                                     <td>{{ $product->square}}</td>
                                     <td>{{ $product->rooms}}</td>
                                     <td>{{ $product->sotix}}</td>

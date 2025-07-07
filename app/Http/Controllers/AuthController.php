@@ -50,7 +50,7 @@ class AuthController extends Controller
         switch ($user->position_id) {
             case 1: return '/users';
             case 2: return '/products';
-            case 3: return '/user-products';
+            case 3: return '/manager';
             default: return '/';
         }
     }

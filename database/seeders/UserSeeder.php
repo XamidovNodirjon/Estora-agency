@@ -21,18 +21,17 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($positions as $role => $id) {
-            User::create([
-                'name' => strtoupper($role),
-                'username' => $role,
-                'password' => Hash::make('1234'),
-                'position_id' => $id,
-                'phone' => '+998935273335' . $id,
-                'passport' => 'AB7938253' . $id,
-                'jshshir' => '50510016810045' . $id,
-            ]);
+            User::updateOrCreate(
+                ['username' => $role],
+                [
+                    'name' => strtoupper($role),
+                    'password' => Hash::make('1234'),
+                    'position_id' => $id,
+                    'phone' => '+998935273335' . $id,
+                    'passport' => 'AB7938253' . $id,
+                    'jshshir' => '50510016810045' . $id,
+                ]
+            );
         }
-
-
-//        User::factory()->count(100)->create();
     }
 }

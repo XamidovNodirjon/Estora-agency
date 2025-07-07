@@ -7,12 +7,21 @@ use App\Jobs\CreateUserJob;
 use App\Models\Balls;
 use App\Models\Position;
 use App\Models\User;
+use App\Services\UserService;
 use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+
     use UserTrait;
 
     public function index()
@@ -30,7 +39,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        CreateUserJob::dispatch($data);
+        $this->userService->userStore($data);
         return redirect()->back()->with(['user successful create']);
     }
 

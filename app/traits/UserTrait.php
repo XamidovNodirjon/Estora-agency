@@ -9,7 +9,8 @@ trait UserTrait
 {
     public function authUser()
     {
-        $user = Auth::user();
+        return $user = Auth::user();
+
     }
 
 

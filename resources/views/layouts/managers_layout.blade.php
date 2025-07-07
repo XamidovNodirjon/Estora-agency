@@ -44,7 +44,6 @@
                     <i class="fe-settings noti-icon"></i>
                 </a>
             </li>
-
         </ul>
         <div class="logo-box">
             <a href="" class="logo logo-light text-center">
@@ -62,16 +61,23 @@
     <div class="left-side-menu">
         <div class="h-100" data-simplebar>
             <div id="sidebar-menu">
-{{--                <ul id="side-menu">--}}
-{{--                    <li class="menu-title">Navigation</li>--}}
-{{--                    <li>--}}
-{{--                        <a href="{{route('products')}}">--}}
-{{--                            <i class="mdi mdi-view-dashboard-outline"></i>--}}
-{{--                            <span class="badge bg-success rounded-pill float-end"></span>--}}
-{{--                            <span> Products </span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                </ul>--}}
+                <ul id="side-menu">
+                    <li class="menu-title">Navigation</li>
+                    <li>
+                        <a href="{{route('manager')}}">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span class="badge bg-success rounded-pill float-end"></span>
+                            <span> Products </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('manager.seen-products')}}">
+                            <i class="mdi mdi-view-dashboard-outline"></i>
+                            <span class="badge bg-success rounded-pill float-end"></span>
+                            <span> Seen house </span>
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -82,7 +88,6 @@
             @yield('content')
         </div>
         @include('layouts.footer')
-
     </div>
 </div>
 

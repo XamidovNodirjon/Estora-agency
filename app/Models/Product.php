@@ -25,9 +25,15 @@ class Product extends Model
         'rooms',
         'repair',
         'sotix',
-        'long_id',
-        'latitude_id',
     ];
+
+    public function isPhoneVisibleTo($user)
+    {
+        return \App\Models\ProductView::where('manager_id', $user->id)
+            ->where('product_id', $this->id)
+            ->exists();
+    }
+
 
     public function user()
     {

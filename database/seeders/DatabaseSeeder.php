@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Position;
 use App\Models\User;
 
+use App\Services\ProductService;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +16,8 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             CategorySeeder::class,
             SubCategorySeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }
