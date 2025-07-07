@@ -7,30 +7,31 @@ use App\Models\City;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\SubCategory;
+use App\Traits\ProductTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    use ProductTrait;
+
     public function index()
     {
-        $products = Product::with(['user', 'category.subcategory'])->get();
+        $products = Product::with(['user'])->get();
         $categories = Category::with('subcategories')->get();
+
         return view('products.index', [
             'products' => $products,
             'categories' => $categories,
         ]);
     }
 
+
     public function create()
     {
-        $products = Product::with(['user', 'category.subcategory'])->get();
-        $categories = Category::with('subcategories')->get();
-        $address = Region::with('cities')->get();
         return view('products.create', [
-            'products' => $products,
-            'categories' => $categories,
-            'address' => $address
+            'categories' => Category::with('subcategories')->get(),
+            'address' => Region::with('cities')->get()
         ]);
     }
 
@@ -43,8 +44,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
-//         dd($request->all(),$user);
         $product = new Product();
         $product->name = $request->name;
         $product->category_id = $request->category_id;
@@ -60,7 +59,9 @@ class ProductController extends Controller
         $product->rooms = $request->rooms;
         $product->repair = $request->repair;
         $product->sotix = $request->sotix;
-//        $product->user_id = $user;
+        $product->user_id = $user->id;
+        $product->long_id = $request->long_id;
+        $product->latitude_id = $request->latitude_id;
 
         $imagePaths = [];
         if ($request->hasFile('images')) {
@@ -74,6 +75,23 @@ class ProductController extends Controller
         $product->save();
 
         return redirect()->route('products')->with('success', 'Product created!');
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $product = $this->getProductById($id);
+
+        return view('products.edit', [
+            'categories' => Category::with('subcategories')->get(),
+            'address' => Region::with('cities')->get(),
+            'product' => $product,
+            'images' => $product->images ? json_decode($product->images, true) : [],
+        ]);
+    }
+
+    public function show($id)
+    {
+
     }
 
 }

@@ -9,12 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next, $roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         $user = Auth::user();
 
@@ -22,26 +17,10 @@ class CheckRoleMiddleware
             return redirect('/login');
         }
 
-        $roleMap = [
-//            1 => 'superAdmin',
-            2 => 'admin',
-            3 => 'manager',
-        ];
-
-        $userRole = $roleMap[$user->position_id] ?? null;
-
-        if (in_array($userRole, $roles)) {
-            switch ($userRole->position_id) {
-//                case 1:
-//                    return redirect('');
-                case 2:
-                    return redirect('users');
-                case 3:
-                    return redirect('user-edit');
-                default:
-                    return redirect()->back();
-            }
+        if (!in_array($user->position_id, $roles)) {
+            abort(403, 'Unauthorized action.');
         }
+
         return $next($request);
     }
 }

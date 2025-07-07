@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
+
+    public function balls()
+    {
+        return $this->hasOne(Balls::class, 'user_id', 'id');
+    }
 }

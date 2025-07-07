@@ -28,8 +28,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('rooms')->nullable();
             $table->string('repair')->nullable();
             $table->unsignedBigInteger('sotix')->nullable();
-            $table->unsignedBigInteger('long_id')->nullable();
-            $table->unsignedBigInteger('latitude_id')->nullable();
+            $table->decimal('long_id')->nullable();
+            $table->decimal('latitude_id')->nullable();
             $table->timestamps();
         });
     }

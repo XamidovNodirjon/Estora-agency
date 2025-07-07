@@ -16,7 +16,7 @@ class PositionSeeder extends Seeder
         $positions = ['superAdmin', 'admin', 'manager'];
 
         foreach ($positions as $position) {
-            Position::create([
+            Position::firstOrCreate([
                 'name' => $position
             ]);
         }

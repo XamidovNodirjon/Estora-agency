@@ -6,29 +6,63 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Psr\Container\NotFoundExceptionInterface;
 
 class AuthController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        return view('auth.login');
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required|email',
-            'password' => 'required',
+        $credentials = $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        $loginField = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        if (!filter_var($request->username, FILTER_VALIDATE_EMAIL) && is_numeric($request->username)) {
+            $loginField = 'phone';
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $credentials = [
+            $loginField => $request->username,
+            'password' => $request->password
+        ];
 
-        return response()->json(['token' => $token, 'user' => $user]);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return back()->withErrors([
+            'username' => 'Login yoki parol noto‘g‘ri',
+        ])->withInput($request->only('username'));
     }
+
+    protected function redirectPath()
+    {
+        $user = Auth::user();
+
+        switch ($user->position_id) {
+            case 1: return '/users';
+            case 2: return '/products';
+            case 3: return '/user-products';
+            default: return '/';
+        }
+    }
+
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+
 }

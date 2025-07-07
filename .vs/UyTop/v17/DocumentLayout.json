@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Projects\\UyTop\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Asus\\Desktop\\Projects\\UyTop\\app\\Models\\Position.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:app\\Models\\Position.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Position.php",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Projects\\UyTop\\app\\Models\\Position.php",
+              "RelativeDocumentMoniker": "app\\Models\\Position.php",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Projects\\UyTop\\app\\Models\\Position.php",
+              "RelativeToolTip": "app\\Models\\Position.php",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQ/SURBVDhPhZNtaJVlGMd/9/M852xubjtztp0TGiaRKMLsxbAidUqa0YuUCe2LVKKUfQj80gcrC9IKpLQyqawIQ6KswBKTBKkPaYlJTlvmh5huTt125nbOee7n5b6uPmyuGUV/uLjg5n/97v/14TKMSu/asZja6l1MLRwGPYx4R6nKHDHb20pXPP8rVTUAettbNxLbExiytEyGKYXxtg6cO8bvXTsOLVhb9B0vGOVPhaMu4GTbZtM53mwuzP6upcp0n24ILtWPvTbUQX0dNDeB07I93ZvpnXD9pbM3zfcx5Md8CpJIf3Q2eWnpnuptAOaPGQfP1vhDU6q8EGdK9Js\u002BUg3w/IQ4U6OVim/6ctO4mCng5TyoAXGCiOCSlOboBrKmtvPBfRNnApi\u002BW3afL1XqhsQEdd16If9R3GESsUQSkkqEQyEwxBJhneWyKxOLJXKWIVvi6dnbmJGbR4q0Pbq/8VBQnjDpXH3Qf\u002BvEdICwKibqVZatbaMwfTJ9vQMc/OIHervPs2L1/VTXVfP13gMcPXKM4aRE6MqEkhBKiqDrgENeMdvSUczmGczmCUND4iytC2Zx5rcu8tNaeGrTY9x\u002B71yWPLKIzhOdFKY2E7kQ1YhESsQaYzWlIsnytxdezHuXM4WOwWyBYrbAsNdApBYFVCAMQ6y1dBw/RW1DLSvXPMz5893YtEzsInwMsbqRlJoEJS9c5fUFDZ3FbJ7BTJ6hoIEwreAkZc78mXSf6\u002BHl9a/R3dPNqmVr2P/lt7z54RYSiRB1\u002BCZDTVBLlQkwakhwTwRDGT3pXA2pyXLZb8S6EFFh59Zd/Pj9YRIZpu2\u002BBby\u002BcwvF/iJ7PvsKUQFVBCHwAkoSYzWNQ9XHDcA7y5PhBicTi4O/8vGp54nVEktEIhablkilTKQRTY3NXBzsQ1VQBFHhuZs/xTbNjSM7eN2mg9MveAD9vunsDzyKnhJKBesqRGkFm4bEEmMlInYRA4MDiLqrCpRrgzp/08HpFwA8gL7A7\u002Bj3PQaMYF0J68pUpEwoJUIpYyVCgFTSERB/A8ueIefE37DS7R4DxkpHv\u002B8xbAQr5RGIK2OlTCwhIwsqqaYIgqjDqUMQioHHZd9QMt7KjQs1CADUoxOFFEfoyrz46gZmt85CVcbO9u7F94z8P5pQAVBioCfj05w6r/caf78BeGa55lwVr3T37Jt34Kf21kRinKSjI2BGe0AWzJW8I2q/8xsKzYuIjCE2XDJjEYAcuVwpsHPWtb7/bF11fmnR9wCod0K9KF6N0JX4pCixMSQGGnNzkKomNYb9k3t56CrgFb33QPzkmSp/uxhDkxOaUmGSUyZWC8dNhooaIjNSsaErCFix9RPzM6Pb/KveWK0txUH3bmDMksZEqpuc0IjwS12GgdSjYoxVx/rtn5vt4\u002Bf\u002BEzhem9t1emDdBy1O7uid4Jku8fdOvkj7xkPG/tP7F6kVdjHVX/\u002BIAAAAAElFTkSuQmCC",
+              "WhenOpened": "2025-07-03T16:41:16.197Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

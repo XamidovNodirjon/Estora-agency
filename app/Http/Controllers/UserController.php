@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Jobs\CreateUserJob;
+use App\Models\Balls;
 use App\Models\Position;
 use App\Models\User;
-use App\traits\UserTrait;
+use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     use UserTrait;
-
 
     public function index()
     {
@@ -20,32 +22,15 @@ class UserController extends Controller
 
         return view('users.index', [
             'users' => $users,
-            'positions' => $positions
+            'positions' => $positions,
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'position_id' => 'required',
-            'username' => 'required|unique:users,username',
-            'password' => 'required',
-            'phone' => 'required|string',
-            'passport' => 'required|string',
-            'jshshir' => 'required|string|max:14',
-        ]);
+        $data = $request->validated();
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->position_id = $request->position_id;
-        $user->username = $request->username;
-        $user->password = Hash::make($request->password);
-        $user->phone = $request->phone;
-        $user->passport = $request->passport;
-        $user->jshshir = $request->jshshir;
-        $user->save();
-
+        CreateUserJob::dispatch($data);
         return redirect()->back()->with(['user successful create']);
     }
 
@@ -84,16 +69,13 @@ class UserController extends Controller
                 $user->$key = $value;
             }
         }
-
         $user->save();
-
         return redirect()->route('users')->with('success', 'User updated successfully.');
     }
 
     public function delete($id)
     {
         $user = $this->getUser($id);
-
         if (!$user) {
             return redirect()->back()->with(['user not found'], 404);
         }
