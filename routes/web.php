@@ -25,9 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::get('manager', [ManagerController::class, 'index'])->name('manager');
     Route::get('create-product', [ManagerController::class, 'create'])->name('manager-create-product');
     Route::post('manager-store-product', [ManagerController::class, 'store'])->name('manager-store-products');
-
     Route::post('/manager/reveal-phone/{product}', [ManagerController::class, 'revealPhone'])->name('manager.reveal-phone');
     Route::get('/manager/seen-products', [ManagerController::class, 'seenProducts'])->name('manager.seen-products');
+    Route::get('show-product/{id}',[ManagerController::class,'show'])->name('show-product');
 
 
     Route::get('products', [ProductController::class, 'index'])->name('products');

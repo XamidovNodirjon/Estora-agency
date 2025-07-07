@@ -9,13 +9,15 @@ use App\Models\Product;
 use App\Models\ProductView;
 use App\Models\Region;
 use App\Services\ProductService;
+use App\Traits\ProductTrait;
 use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ManagerController extends Controller
 {
-    use UserTrait;
+    use UserTrait, ProductTrait;
+
 
     protected $productService;
 
@@ -93,5 +95,15 @@ class ManagerController extends Controller
         return view('managers.products.seen', compact('products'));
     }
 
-
+    public function show($id)
+    {
+        $product = $this->getProductById($id);
+        $category = Category::with('subcategories')->get();
+        $address = Region::with('cities')->get();
+        return view('managers.products.show', [
+            'product' => $product,
+            'category' => $category,
+            'address' => $address,
+        ]);
+    }
 }

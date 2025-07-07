@@ -2,84 +2,66 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <a href="{{route('manager-create-product')}}" type="button" class="btn btn-primary text-end">Create
-                        product
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary">Barcha eʼlonlar</h5>
+                    <a href="{{ route('manager-create-product') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Yangi eʼlon
                     </a>
-                    <p>Your balls = {{$user->balls->amount}}</p>
-                    <div class="table-responsive">
-                        <table class="table mb-0">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>price</th>
-                                <th>phone</th>
-                                <th>square</th>
-                                <th>rooms</th>
-                                <th>sotix</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($products as $index => $product)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->price }}</td>
-                                    <td>
-                                        @if($product->isPhoneVisibleTo(auth()->user()) ?? '')
-                                            {{ $product->phone }}
-                                        @else
-                                            <form action="{{ route('manager.reveal-phone', $product->id) }}"
-                                                  method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-warning btn-sm">
-                                                    Reveal phone (–1 ball)
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </td>
+                </div>
 
-                                    <td>{{ $product->square}}</td>
-                                    <td>{{ $product->rooms}}</td>
-                                    <td>{{ $product->sotix}}</td>
-                                    <td class="text-nowrap" style="width: 180px;">
-                                        <div class="d-flex gap-2">
-                                            <a href="{{route('edit-product',$product->id)}}"
-                                               class="btn btn-sm btn-primary"
-                                               title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href=""
-                                               class="btn btn-sm btn-info text-white"
-                                               title="View details">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <form action="+" method="POST"
-                                                  class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="btn btn-sm btn-danger"
-                                                        title="Delete"
-                                                        onclick="return confirm('Are you sure you want to delete this item?')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            @if($products->isEmpty())
-                                <tr>
-                                    <td colspan="7" class="text-center">No products found.</td>
-                                </tr>
-                            @endif
-                            </tbody>
-                        </table>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="badge bg-light border text-dark p-2">Sizda mavjud ball:
+                            <strong class="text-success">{{ $user->balls->amount }}</strong>
+                        </span>
                     </div>
+
+                    @if($products->isEmpty())
+                        <div class="alert alert-warning text-center">Eʼlonlar mavjud emas.</div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle text-center">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nomi</th>
+                                    <th>Narxi (UZS)</th>
+                                    <th>Telefon</th>
+                                    <th>Maydoni (m²)</th>
+                                    <th>Xonalar</th>
+                                    <th>Sotix</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($products as $index => $product)
+                                    <tr class="clickable-row" style="cursor: pointer;"
+                                        onclick="window.location='{{ route('show-product', $product->id) }}'">
+                                        <td>{{ $index + 1 }}</td>
+                                        <td class="text-start">{{ $product->name }}</td>
+                                        <td>{{ number_format($product->price, 0, '.', ' ') }}</td>
+                                        <td>
+                                            @if($product->isPhoneVisibleTo(auth()->user()))
+                                                <span class="text-success fw-semibold">{{ $product->phone }}</span>
+                                            @else
+                                                <form action="{{ route('manager.reveal-phone', $product->id) }}"
+                                                      method="POST" onClick="event.stopPropagation();">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning">
+                                                        Ko‘rish (–1)
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                        <td>{{ $product->square }}</td>
+                                        <td>{{ $product->rooms }}</td>
+                                        <td>{{ $product->sotix }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -24,16 +24,13 @@ class BallsController extends Controller
             'action' => 'sometimes|in:set,increment,decrement'
         ]);
 
-        // Default action - set (qiymatni o'rnatish)
         $action = $request->input('action', 'set');
         $amount = (int)$request->amount;
 
-        // Agar ball mavjud bo'lmasa, 0 bilan yaratamiz
         if (!$user->balls) {
             $user->balls()->create(['amount' => 0]);
         }
 
-        // Amalni bajarish
         switch ($action) {
             case 'increment':
                 $user->balls()->increment('amount', $amount);
