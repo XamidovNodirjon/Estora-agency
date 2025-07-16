@@ -29,7 +29,7 @@ class UserController extends Controller
         $users = User::with('position')->get();
         $positions = Position::all();
 
-        return view('users.index', [
+        return view('Admin.users.index', [
             'users' => $users,
             'positions' => $positions,
         ]);
@@ -47,7 +47,7 @@ class UserController extends Controller
     {
         $user = $this->getUser($id);
         $positions = Position::all();
-        return view('users.edit', [
+        return view('Admin.users.edit', [
             'user' => $user,
             'positions' => $positions,
         ]);

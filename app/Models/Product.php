@@ -59,4 +59,10 @@ class Product extends Model
     {
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(ReservationProduct::class);
+    }
+
 }

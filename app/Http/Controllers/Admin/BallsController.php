@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBallRequest;
 use App\Models\Balls;
-use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
+use function redirect;
 
 class BallsController extends Controller
 {

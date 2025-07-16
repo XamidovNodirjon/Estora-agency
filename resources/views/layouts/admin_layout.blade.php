@@ -81,6 +81,12 @@
                             <span> Products </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('reservations') }}">
+                            <i class="mdi mdi-calendar-check"></i>
+                            <span> Reservation Products </span>
+                        </a>
+                    </li>
 
                 </ul>
             </div>

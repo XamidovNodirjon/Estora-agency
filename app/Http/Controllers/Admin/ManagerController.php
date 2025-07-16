@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Jobs\CreateProducts;
+use App\Http\Controllers\Controller;
 use App\Models\Balls;
 use App\Models\Category;
 use App\Models\Product;
@@ -13,11 +13,13 @@ use App\Traits\ProductTrait;
 use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function back;
+use function redirect;
+use function view;
 
 class ManagerController extends Controller
 {
     use UserTrait, ProductTrait;
-
 
     protected $productService;
 
@@ -106,4 +108,5 @@ class ManagerController extends Controller
             'address' => $address,
         ]);
     }
+
 }

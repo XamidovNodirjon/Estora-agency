@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\City;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\SubCategory;
 use App\Services\ProductService;
 use App\Traits\ProductTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use function dd;
+use function redirect;
+use function response;
+use function view;
 
 class ProductController extends Controller
 {
@@ -28,7 +31,7 @@ class ProductController extends Controller
         $products = Product::with(['user'])->get();
         $categories = Category::with('subcategories')->get();
 
-        return view('products.index', [
+        return view('Admin.products.index', [
             'products' => $products,
             'categories' => $categories,
         ]);
@@ -36,7 +39,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('products.create', [
+        return view('Admin.products.create', [
             'categories' => Category::with('subcategories')->get(),
             'address' => Region::with('cities')->get()
         ]);

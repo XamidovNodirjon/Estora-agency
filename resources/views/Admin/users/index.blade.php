@@ -51,8 +51,13 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a href="{{ route('user-edit', $user->id) }}" class="btn btn-sm btn-outline-primary me-1">
+                                    <a href="{{ route('user-edit', $user->id) }}"
+                                       class="btn btn-sm btn-outline-primary me-1">
                                         <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{{ route('user.product.views', $user->id) }}"
+                                       class="btn btn-sm btn-outline-info me-1" title="Mahsulotlar ko‘rish">
+                                        <i class="fa fa-eye"></i>
                                     </a>
                                     <form action="{{ route('delete-user', $user->id) }}" method="POST" class="d-inline">
                                         @csrf

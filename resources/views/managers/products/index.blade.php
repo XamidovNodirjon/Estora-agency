@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <span class="badge bg-light border text-dark p-2">Sizda mavjud ball:
-                            <strong class="text-success">{{ $user->balls->amount }}</strong>
+                            <strong class="text-success">{{ $user->balls->amount ?? '0' }}</strong>
                         </span>
                     </div>
 
