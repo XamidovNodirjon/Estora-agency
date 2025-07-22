@@ -25,6 +25,13 @@ class Product extends Model
         'rooms',
         'repair',
         'sotix',
+        'status',
+    ];
+
+
+    protected $casts = [
+        'images' => 'array',
+        'status' => 'boolean',
     ];
 
     public function isPhoneVisibleTo($user)

@@ -10,10 +10,11 @@ use \App\Http\Controllers\Admin\ReservationProductController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('Admin.auth.login');
-})->name('login.form');
+//Route::get('/', function () {
+//    return view('Admin.auth.login');
+//})->name('login.form');
 
+Route::get('/', [AuthController::class, 'index'])->name('login.index');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth')->group(function () {
@@ -53,5 +54,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });

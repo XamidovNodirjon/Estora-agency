@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('rooms')->nullable();
             $table->string('repair')->nullable();
             $table->unsignedBigInteger('sotix')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

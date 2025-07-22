@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('auth.login');
+        return view('admin.Auth.login');
     }
 
     public function login(Request $request)
@@ -49,10 +49,14 @@ class AuthController extends Controller
         $user = Auth::user();
 
         switch ($user->position_id) {
-            case 1: return '/users';
-            case 2: return '/products';
-            case 3: return '/manager';
-            default: return '/';
+            case 1:
+                return '/users';
+            case 2:
+                return '/products';
+            case 3:
+                return '/manager';
+            default:
+                return '/';
         }
     }
 
@@ -63,7 +67,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login.index');
     }
 
 }

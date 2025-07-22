@@ -16,6 +16,9 @@ return new class extends Migration {
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->string('phone')->nullable();
             $table->integer('quantity')->default(1);
+            $table->date('reserved_at')->nullable();
+            $table->date('reserved_until')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -28,7 +28,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with(['user'])->get();
+        $products = Product::where('status', true)->with(['user', 'category', 'subcategory'])->get();
         $categories = Category::with('subcategories')->get();
 
         return view('Admin.products.index', [
@@ -54,8 +54,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        dd($data);
-
         $data['images'] = $request->file('images');
 
         $this->productService->storeProduct($data);
