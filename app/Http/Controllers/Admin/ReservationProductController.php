@@ -34,7 +34,7 @@ class ReservationProductController extends Controller
     {
 
         $validatedData = $request->validate([
-            'phone' => 'required|string|max:20', // Telefon raqami qidiruvdan kelishi kerak
+            'phone' => 'required|string|max:20',
             'product_id' => 'required|exists:products,id',
             'user_id' => 'required|exists:users,id',
             'reserved_at' => 'required|date|after_or_equal:now',
@@ -42,31 +42,25 @@ class ReservationProductController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        // dd($validatedData); // Debugging uchun qoldirishingiz mumkin
-
         $product = Product::findOrFail($validatedData['product_id']);
 
-        // Agar mahsulot allaqachon bron qilingan bo'lsa (status false bo'lsa), xato qaytarish
         if (!$product->status) {
             return back()->withErrors(['product_id' => 'This product is currently unavailable or already reserved.'])
                 ->withInput();
         }
 
         DB::transaction(function () use ($validatedData, $product) {
-            // Rezervatsiyani yaratish
             ReservationProduct::create([
                 'user_id' => $validatedData['user_id'],
                 'product_id' => $validatedData['product_id'],
                 'phone' => $validatedData['phone'],
-                'quantity' => 1, // Quantity har doim 1 bo'ladi, chunki siz uni olib tashladingiz
                 'reserved_at' => $validatedData['reserved_at'],
                 'reserved_until' => $validatedData['reserved_until'],
                 'notes' => $validatedData['notes'],
             ]);
 
-            // Mahsulot statusini false qilish
             $product->status = false;
-            $product->save(); // Mahsulotni saqlash
+            $product->save();
         });
 
         return redirect()->route('reservations')->with('success', 'Reservation created successfully!');

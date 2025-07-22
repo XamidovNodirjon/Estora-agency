@@ -54,5 +54,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

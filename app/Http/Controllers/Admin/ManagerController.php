@@ -30,7 +30,7 @@ class ManagerController extends Controller
 
     public function index()
     {
-        $products = Product::all();
+        $products = Product::where('status', true)->with(['user', 'category', 'subcategory'])->get();
         $categories = Category::with('subcategories')->get();
         $user = Auth::user();
 
