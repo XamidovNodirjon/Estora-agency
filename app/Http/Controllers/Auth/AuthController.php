@@ -11,9 +11,14 @@ use function view;
 
 class AuthController extends Controller
 {
+    public function dashboard()
+    {
+        return view('dashboard');
+    }
+
     public function index()
     {
-        return view('admin.Auth.login');
+        return view('admin.auth.login');
     }
 
     public function login(Request $request)

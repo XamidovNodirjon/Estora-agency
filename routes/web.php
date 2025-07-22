@@ -10,11 +10,8 @@ use \App\Http\Controllers\Admin\ReservationProductController;
 use Illuminate\Support\Facades\Route;
 
 
-//Route::get('/', function () {
-//    return view('Admin.auth.login');
-//})->name('login.form');
-
-Route::get('/', [AuthController::class, 'index'])->name('login.index');
+Route::get('/', [AuthController::class, 'dashboard']);
+Route::get('login', [AuthController::class, 'index'])->name('login.index');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth')->group(function () {
@@ -34,9 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::get('view-info', [ProductViewController::class, 'index'])->name('view-products');
     Route::get('/users/{user}/product-views', [ProductViewController::class, 'byUser'])->name('user.product.views');
     Route::delete('/product-views/{id}', [ProductViewController::class, 'deleteViewProduct'])->name('product-view.delete');
-    Route::get('reservations',[ReservationProductController::class,'index'])->name('reservations');
-    Route::get('get-reservations',[ReservationProductController::class,'search'])->name('reservations.search');
-    Route::post('store-reservations',[ReservationProductController::class,'store'])->name('reservations.store');
+    Route::get('reservations', [ReservationProductController::class, 'index'])->name('reservations');
+    Route::get('get-reservations', [ReservationProductController::class, 'search'])->name('reservations.search');
+    Route::post('store-reservations', [ReservationProductController::class, 'store'])->name('reservations.store');
 
 
     Route::get('products', [ProductController::class, 'index'])->name('products');

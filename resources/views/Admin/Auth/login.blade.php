@@ -1,187 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
+    <title>Log In | Adminto - Responsive Admin Dashboard Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estora Real Estate Agency</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
+    <meta content="Coderthemes" name="author"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style"/>
+
+    <!-- icons -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+
 </head>
-<body>
-<div class="hero-section">
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <img src="https://via.placeholder.com/100x40?text=Estora" alt="Estora Logo">
-                <span>REAL ESTATE AGENCY</span>
-            </div>
-            <nav class="main-nav">
-                <div class="contact-info">
-                    <a href="tel:+998951606446">+998 95 160 64 46</a>
-                </div>
-                <div class="language-selector">
-                    <select>
-                        <option value="en">ENGLISH</option>
-                        <option value="uz">UZBEK</option>
-                        <option value="ru">RUSSIAN</option>
-                    </select>
-                </div>
-                <div class="menu-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </nav>
-        </div>
-    </header>
 
-    <div class="mobile-menu-overlay">
-        <div class="mobile-menu">
-            <button class="close-menu">&times;</button>
-            <ul>
-                <li><a href="#" class="mobile-login-btn">Login</a></li>
-            </ul>
-        </div>
-    </div>
+<body class="loading authentication-bg authentication-bg-pattern">
 
-    <div class="search-section">
-        <div class="container">
-            <div class="search-card">
-                <div class="input-group">
-                    <label for="ad-type">E'LON TURI</label>
-                    <select id="ad-type">
-                        <option value="">Tanlang</option>
-                        <option value="sale">Sotish</option>
-                        <option value="rent">Ijaraga</option>
-                    </select>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="input-group">
-                    <label for="regions">HUDUDLAR BO'YICHA</label>
-                    <select id="regions">
-                        <option value="">Tanlang</option>
-                        <option value="tashkent">Toshkent</option>
-                        <option value="samarkand">Samarqand</option>
-                    </select>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="input-group">
-                    <label for="rooms">XONALAR SONI</label>
-                    <select id="rooms">
-                        <option value="">Tanlang</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3+</option>
-                    </select>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="input-group">
-                    <label for="floors">QAVATLAR SONI</label>
-                    <select id="floors">
-                        <option value="">Tanlang</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3+</option>
-                    </select>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="input-group text-input">
-                    <label for="budget">BUDJETINGIZ (y.e.da)</label>
-                    <input type="text" id="budget" placeholder="Masalan: 50000 - 100000">
-                </div>
-                <div class="input-group">
-                    <label for="property-type">UY TURI</label>
-                    <select id="property-type">
-                        <option value="">Tanlang</option>
-                        <option value="apartment">Kvartira</option>
-                        <option value="house">Uy</option>
-                        <option value="land">Yer</option>
-                    </select>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <button class="search-button">
-                    <i class="bi bi-search"></i> QIDIRUV
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<section class="categories-section">
+<div class="account-pages my-5">
     <div class="container">
-        <div class="category-cards">
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-key"></i>
-                </div>
-                <span>IJARA</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-house"></i>
-                </div>
-                <span>SOTUV</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-laptop"></i>
-                </div>
-                <span>OFIS</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-door-open"></i>
-                </div>
-                <span>XONA</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-globe"></i>
-                </div>
-                <span>EXPATS</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-briefcase"></i>
-                </div>
-                <span>BUSINESS SPACE</span>
-            </div>
-        </div>
-    </div>
-</section>
 
-<footer class="footer">
-    <div class="footer-background">
-        <div class="container footer-content">
-            <div class="footer-logo">
-                <img src="https://via.placeholder.com/100x40?text=Estora" alt="Estora Logo">
-                <span>REAL ESTATE AGENCY</span>
-            </div>
-            <div class="footer-links">
-                <ul>
-                    <li><a href="#">BOSH SAHIFA</a></li>
-                    <li><a href="#">BIZ HAQIMIZDA</a></li>
-                    <li><a href="#">YANGLILIKLAR</a></li>
-                </ul>
-            </div>
-            <div class="footer-contact">
-                <p>ALOQA UCHUN</p>
-                <p>+998 95 160 64 46</p>
-                <p>info@estora.uz</p>
-            </div>
-            <div class="footer-social">
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-telegram"></i></a>
-                <a href="#"><i class="bi bi-youtube"></i></a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 Estora. Barcha huquqlar himoyalangan</p>
-        </div>
-    </div>
-</footer>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="text-center">
+                    <a href="index.html">
+                        <img src="assets/images/logo-dark.png" alt="" height="22" class="mx-auto">
+                    </a>
+                    <p class="text-muted mt-2 mb-4">Responsive Admin Dashboard</p>
 
-<script src="js/script.js"></script>
+                </div>
+                <div class="card">
+                    <div class="card-body p-4">
+
+                        <div class="text-center mb-4">
+                            <h4 class="text-uppercase mt-0">Sign In</h4>
+                        </div>
+
+                        <form action="{{route('login')}}" method="post">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Enter Username</label>
+                                <input class="form-control" name="username" type="username" id="username" required=""
+                                       placeholder="Enter your username">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input class="form-control" name="password" type="password" required="" id="password"
+                                       placeholder="Enter your password">
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                                    <label class="form-check-label" for="checkbox-signin">Remember me</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 d-grid text-center">
+                                <button class="btn btn-primary" type="submit"> Log In</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div>
+                <!-- end card -->
+
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        <p><a href="pages-recoverpw.html" class="text-muted ms-1"><i class="fa fa-lock me-1"></i>Forgot
+                                your password?</a></p>
+                        <p class="text-muted">Don't have an account? <a href="pages-register.html"
+                                                                        class="text-dark ms-1"><b>Sign Up</b></a></p>
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>
+<!-- end page -->
+
+<!-- Vendor -->
+<script src="assets/libs/jquery/jquery.min.js"></script>
+<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/libs/simplebar/simplebar.min.js"></script>
+<script src="assets/libs/node-waves/waves.min.js"></script>
+<script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+<script src="assets/libs/feather-icons/feather.min.js"></script>
+
+<!-- App js -->
+<script src="assets/js/app.min.js"></script>
+
 </body>
 </html>
