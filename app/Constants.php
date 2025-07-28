@@ -4,15 +4,14 @@ namespace App;
 
 class Constants
 {
-
-//    category
+    // category
     const APARTMENT_SELLERS = 'apartment sellers';
     const APARTMENT_RENTERS = 'apartment renters ';
     const HOME_LOT_SELLERS = 'home lot sellers '; //uy-uchastka sotuvchilari
     const COMMERCIAL_BUILDING_SALESPEOPLE = 'Commercial building salespeople ';  //tijoriy bino sotuvchilari
     const COMMERCIAL_BUILDING_LESSORS = 'Commercial building lessors ';  //tijoriy bino ijaraa beruvchilar
 
-//    sub category
+    // sub category
     const NEW_APARTMENT = 'new apartment';
     const OLD_APARTMENT = 'old apartment';
 
@@ -26,4 +25,11 @@ class Constants
     const BUILDING = 'building';  //Omborhona,sanoat zonalari
     const CATERING_BUILDING = 'Catering building';  //umumiy ovqatlanish zonalari
     const PRIVATE_PROPERTY = 'private property';  //xususiy mulkl
+
+
+    public const PROPERTY_TYPE_APARTMENT = 'Kvartira';
+    public const PROPERTY_TYPE_HOUSE = 'Uy';
+    public const PROPERTY_TYPE_LAND = 'Yer';
+    public const PROPERTY_TYPE_COMMERCIAL = 'Tijorat';
 }
+

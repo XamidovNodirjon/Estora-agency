@@ -64,7 +64,7 @@ class ProductController extends Controller
     {
         $product = $this->getProductById($id);
 
-        return view('products.edit', [
+        return view('Admin.products.edit', [
             'categories' => Category::with('subcategories')->get(),
             'address' => Region::with('cities')->get(),
             'product' => $product,
@@ -75,6 +75,26 @@ class ProductController extends Controller
     public function show($id)
     {
 
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('products')->with('error', 'Product not found!');
+        }
+
+        if ($product->images) {
+            $images = json_decode($product->images, true);
+            foreach ($images as $imagePath) {
+
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
+            }
+        }
+        $product->delete();
+
+        return redirect()->route('products')->with('success', 'Product deleted successfully!');
     }
 
 }

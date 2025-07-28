@@ -12,8 +12,6 @@ trait UserTrait
         return $user = Auth::user();
 
     }
-
-
     public function getUser($id)
     {
         return User::with('position')->findOrFail($id);

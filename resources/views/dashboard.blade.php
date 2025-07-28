@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estora Real Estate Agency</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css"> {{-- Sizning alohida style.css faylingiz --}}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -13,7 +13,7 @@
     <header class="header">
         <div class="container">
             <div class="logo">
-                <img src="https://via.placeholder.com/100x40?text=Estora" alt="Estora Logo">
+                <img src="/logo/Estora Logo.png" alt="Estora Logo">
                 <span>REAL ESTATE AGENCY</span>
             </div>
             <nav class="main-nav">
@@ -47,10 +47,12 @@
 
     <div class="search-section">
         <div class="container">
-            <div class="search-card">
+            {{-- Formani bu yerga joylashtiramiz va method, action, name atributlarini qo'shamiz --}}
+            <form action="{{ route('products.filter') }}" method="POST" class="search-card">
+                @csrf {{-- Laravel CSRF himoyasi uchun --}}
                 <div class="input-group">
                     <label for="ad-type">E'LON TURI</label>
-                    <select id="ad-type">
+                    <select id="ad-type" name="ad_type"> {{-- name atributi qo'shildi --}}
                         <option value="">Tanlang</option>
                         <option value="sale">Sotish</option>
                         <option value="rent">Ijaraga</option>
@@ -59,8 +61,12 @@
                 </div>
                 <div class="input-group">
                     <label for="regions">HUDUDLAR BO'YICHA</label>
-                    <select id="regions">
+                    <select id="regions" name="region"> {{-- name atributi qo'shildi --}}
                         <option value="">Tanlang</option>
+                        {{-- Laraveldan kelgan hududlar ro'yxati --}}
+                        {{-- @foreach($regions as $region)
+                            <option value="{{ $region->id }}">{{ $region->name }}</option>
+                        @endforeach --}}
                         <option value="tashkent">Toshkent</option>
                         <option value="samarkand">Samarqand</option>
                     </select>
@@ -68,31 +74,33 @@
                 </div>
                 <div class="input-group">
                     <label for="rooms">XONALAR SONI</label>
-                    <select id="rooms">
+                    <select id="rooms" name="rooms"> {{-- name atributi qo'shildi --}}
                         <option value="">Tanlang</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
-                        <option value="3">3+</option>
+                        <option value="3">3</option>
+                        <option value="3+">3+</option>
                     </select>
                     <i class="bi bi-chevron-down"></i>
                 </div>
                 <div class="input-group">
                     <label for="floors">QAVATLAR SONI</label>
-                    <select id="floors">
+                    <select id="floors" name="floors"> {{-- name atributi qo'shildi --}}
                         <option value="">Tanlang</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
-                        <option value="3">3+</option>
+                        <option value="3">3</option>
+                        <option value="3+">3+</option>
                     </select>
                     <i class="bi bi-chevron-down"></i>
                 </div>
                 <div class="input-group text-input">
                     <label for="budget">BUDJETINGIZ (y.e.da)</label>
-                    <input type="text" id="budget" placeholder="Masalan: 50000 - 100000">
+                    <input type="text" id="budget" name="budget" placeholder="Masalan: 50000 - 100000"> {{-- name atributi qo'shildi --}}
                 </div>
                 <div class="input-group">
                     <label for="property-type">UY TURI</label>
-                    <select id="property-type">
+                    <select id="property-type" name="property_type"> {{-- name atributi qo'shildi --}}
                         <option value="">Tanlang</option>
                         <option value="apartment">Kvartira</option>
                         <option value="house">Uy</option>
@@ -100,62 +108,95 @@
                     </select>
                     <i class="bi bi-chevron-down"></i>
                 </div>
-                <button class="search-button">
+                <button type="submit" class="search-button"> {{-- type="submit" qo'shildi --}}
                     <i class="bi bi-search"></i> QIDIRUV
                 </button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 
-<section class="categories-section">
-    <div class="container">
-        <div class="category-cards">
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-key"></i>
+<div class="search-section">
+        <div class="container">
+            <form action="{{ route('products.filter') }}" method="GET" class="search-card">
+                <div class="input-group">
+                    <label for="ad_type">E'lon Turi</label>
+                    <select id="ad_type" name="ad_type">
+                        <option value="">Hammasi</option>
+                        <option value="sale" {{ $request->ad_type == 'sale' ? 'selected' : '' }}>Sotish</option>
+                        <option value="rent" {{ $request->ad_type == 'rent' ? 'selected' : '' }}>Ijaraga berish</option>
+                    </select>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <span>IJARA</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-house"></i>
+
+                <div class="input-group">
+                    <label for="property_type">Mulk turi</label>
+                    <select id="property_type" name="property_type">
+                        <option value="">Hammasi</option>
+                        <option value="apartment" {{ $request->property_type == 'apartment' ? 'selected' : '' }}>Kvartira</option>
+                        <option value="house" {{ $request->property_type == 'house' ? 'selected' : '' }}>Uy/Hovli</option>
+                        <option value="land" {{ $request->property_type == 'land' ? 'selected' : '' }}>Yer</option>
+                        <option value="commercial" {{ $request->property_type == 'commercial' ? 'selected' : '' }}>Tijorat binosi</option>
+                    </select>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <span>SOTUV</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-laptop"></i>
+
+                <div class="input-group">
+                    <label for="region">Hudud</label>
+                    <select id="region" name="region">
+                        <option value="">Tanlang</option>
+                        @foreach($regions as $region)
+                            <option value="{{ $region->id }}" {{ $request->region == $region->id ? 'selected' : '' }}>
+                                {{ $region->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <span>OFIS</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-door-open"></i>
+
+                <div class="input-group">
+                    <label for="rooms">Xonalar soni</label>
+                    <select id="rooms" name="rooms">
+                        <option value="">Hammasi</option>
+                        <option value="1" {{ $request->rooms == '1' ? 'selected' : '' }}>1</option>
+                        <option value="2" {{ $request->rooms == '2' ? 'selected' : '' }}>2</option>
+                        <option value="3" {{ $request->rooms == '3' ? 'selected' : '' }}>3</option>
+                        <option value="3+" {{ $request->rooms == '3+' ? 'selected' : '' }}>3+</option>
+                    </select>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <span>XONA</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-globe"></i>
+
+                <div class="input-group">
+                    <label for="floors">Qavatlar soni</label>
+                    <select id="floors" name="floors">
+                        <option value="">Hammasi</option>
+                        <option value="1" {{ $request->floors == '1' ? 'selected' : '' }}>1</option>
+                        <option value="2" {{ $request->floors == '2' ? 'selected' : '' }}>2</option>
+                        <option value="3" {{ $request->floors == '3' ? 'selected' : '' }}>3</option>
+                        <option value="3+" {{ $request->floors == '3+' ? 'selected' : '' }}>3+</option>
+                    </select>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <span>EXPATS</span>
-            </div>
-            <div class="card">
-                <div class="icon-box">
-                    <i class="bi bi-briefcase"></i>
+
+                <div class="input-group">
+                    <label for="budget">Byudjet</label>
+                    <input type="text" id="budget" name="budget" placeholder="Min - Max (USD)" value="{{ $request->budget ?? '' }}">
                 </div>
-                <span>BUSINESS SPACE</span>
-            </div>
+
+                <button type="submit" class="search-button">
+                    <i class="bi bi-search"></i> Qidirish
+                </button>
+            </form>
         </div>
     </div>
-</section>
+    
+</div>
 
 <footer class="footer">
     <div class="footer-background">
         <div class="container footer-content">
             <div class="footer-logo">
-                <img src="https://via.placeholder.com/100x40?text=Estora" alt="Estora Logo">
+                <img src="/logo/Estora Logo.png" alt="Estora Logo">
                 <span>REAL ESTATE AGENCY</span>
             </div>
             <div class="footer-links">
@@ -183,6 +224,6 @@
     </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script src="js/script.js"></script> {{-- Sizning alohida script.js faylingiz --}}
 </body>
-</html>
+</html>  

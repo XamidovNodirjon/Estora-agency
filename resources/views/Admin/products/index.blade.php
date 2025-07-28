@@ -28,7 +28,7 @@
                         <tbody>
                         @forelse ($products as $index => $product)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ number_format($product->price, 0, '.', ' ') }} so'm</td>
                                 <td>{{ $product->phone }}</td>
@@ -49,7 +49,7 @@
                                            data-bs-toggle="tooltip">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <form action=""
+                                        <form action="{{route('delete.product',$product->id)}}"
                                               method="POST"
                                               onsubmit="return confirm('Ishonchingiz komilmi?')"
                                               class="d-inline">

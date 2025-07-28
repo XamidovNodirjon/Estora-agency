@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Traits\UserTrait;
+use Illuminate\Support\Facades\Auth;
 
 class ProductService
 {
@@ -11,7 +12,7 @@ class ProductService
 
     public function storeProduct(array $data)
     {
-        $user = $this->authUser();
+        $user = Auth::user();
         $product = new Product();
         $product->name = $data['name'];
         $product->category_id = $data['category_id'];

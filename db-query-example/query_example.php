@@ -8,7 +8,6 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
 )";
 $pdo->exec($sql);
 
-// Ma'lumot qo'shish
 $stmt = $pdo->prepare("INSERT INTO users (name) VALUES (:name)");
 $stmt->execute(['name' => 'Ali']);
 

@@ -33,6 +33,9 @@
                         </thead>
                         <tbody>
                         @forelse ($users as $index => $user)
+                            @if ($user->position->name === 'superAdmin')
+                                @continue
+                            @endif
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $user->name }}</td>
@@ -81,123 +84,239 @@
         </div>
     </div>
 
-    {{-- Create User Modal --}}
-    <div class="modal fade" id="create-modal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="{{ route('store-users') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Yangi foydalanuvchi yaratish</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
-                </div>
-                <div class="modal-body">
-                    @foreach (['name', 'username', 'password', 'phone', 'passport', 'jshshir'] as $field)
-                        <div class="mb-3">
-                            <label class="form-label">{{ ucfirst($field) }}</label>
-                            <input type="{{ $field === 'password' ? 'password' : 'text' }}"
-                                   name="{{ $field }}"
-                                   class="form-control"
-                                   placeholder="{{ ucfirst($field) }}"
-                                   {{ in_array($field, ['jshshir']) ? 'maxlength=14 minlength=14' : '' }}
-                                   required>
+   <div class="modal fade" id="create-modal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content border-radius-20px" action="{{ route('store-users') }}" method="POST">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Yangi foydalanuvchi yaratish</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Name <span style="color: red;">*</span></label>
+                        <input type="text"
+                               name="name"
+                               id="name"
+                               class="form-control"
+                               placeholder="Name"
+                               required>
+                        <div id="name-feedback" class="invalid-feedback">
+                            Raqam kiritish mumkin emas.
                         </div>
-                    @endforeach
-                    <div class="mb-3">
-                        <label class="form-label">Lavozim</label>
-                        <select class="form-select" name="position_id" required>
-                            <option value="" disabled selected>Tanlang</option>
-                            @foreach ($positions as $position)
+                    </div>
+                    <div class="col-md-6">
+                        <label for="username" class="form-label">Username <span style="color: red;">*</span></label>
+                        <input type="text"
+                               name="username"
+                               id="username"
+                               class="form-control"
+                               placeholder="Username"
+                               required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">Password <span style="color: red;">*</span></label>
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               class="form-control"
+                               placeholder="Password"
+                               required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Phone <span style="color: red;">*</span></label>
+                        <input type="text"
+                               name="phone"
+                               id="phone"
+                               class="form-control"
+                               placeholder="Phone"
+                               required>
+                            <div id="phone-feedback" class="invalid-feedback">
+                                Faqat raqam kiritish mumkin.
+                            </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="passport" class="form-label">Passport <span style="color: red;">*</span></label>
+                        <input type="text"
+                               name="passport"
+                               id="passport"
+                               class="form-control"
+                               placeholder="Passport"
+                               required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="jshshir" class="form-label">Jshshir <span style="color: red;">*</span></label>
+                        <input type="text"
+                               name="jshshir"
+                               id="jshshir"
+                               class="form-control"
+                               placeholder="Jshshir"
+                               maxlength="14"
+                               minlength="14"
+                               required>
+                            <div id="jshshir-feedback" class="invalid-feedback">
+                                Faqat raqam kiritish mumkin 14 tadan kam bo'lmasligi kerak.
+                            </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="position_id" class="form-label">Lavozim <span style="color: red;">*</span></label>
+                    <select class="form-select" name="position_id" id="position_id" required>
+                        <option value="" disabled selected>Tanlang</option>
+                        @foreach ($positions as $position)
+                            @if ($position->name !== 'superAdmin')
                                 <option value="{{ $position->id }}">{{ $position->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary w-100">Yaratish</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary w-100">Yaratish</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    {{-- Create Ball Modal --}}
-    <div class="modal fade" id="create-balls-modal" tabindex="-1" aria-labelledby="createBallLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="{{ route('create-ball', $user->id ?? 0) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Ball qo‘shish</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Foydalanuvchi</label>
-                        <select class="form-select" name="user_id" required>
-                            <option value="" disabled selected>Tanlang</option>
-                            @foreach ($users as $u)
+
+<div class="modal fade" id="create-balls-modal" tabindex="-1" aria-labelledby="createBallLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{{ route('create-ball', $user->id ?? 0) }}" method="POST">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Ball qo‘shish</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Foydalanuvchi</label>
+                    <select class="form-select" name="user_id" required>
+                        <option value="" disabled selected>Tanlang</option>
+                        @foreach ($users as $u)
+                            @if ($u->position->name !== 'superAdmin')
                                 <option value="{{ $u->id }}">{{ $u->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ball miqdori</label>
-                        <input class="form-control" type="number" name="amount" min="0" max="10" required>
-                    </div>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success w-100" type="submit">Berish</button>
+                <div class="mb-3">
+                    <label class="form-label">Ball miqdori</label>
+                    <input class="form-control" type="number" name="amount" min="0" max="10" required>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success w-100" type="submit">Berish</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    {{-- Edit Ball Modal --}}
-    <div class="modal fade" id="edit-ball-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="edit-ball-form" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-header">
-                    <h5 class="modal-title">Ballni tahrirlash</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Amal turi</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="action" id="set" value="set" checked>
-                            <label class="btn btn-outline-primary" for="set">O‘rnatish</label>
+<div class="modal fade" id="edit-ball-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="edit-ball-form" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title">Ballni tahrirlash</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Amal turi</label>
+                    <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="action" id="set" value="set" checked>
+                        <label class="btn btn-outline-primary" for="set">O‘rnatish</label>
 
-                            <input type="radio" class="btn-check" name="action" id="inc" value="increment">
-                            <label class="btn btn-outline-success" for="inc">Qo‘shish</label>
+                        <input type="radio" class="btn-check" name="action" id="inc" value="increment">
+                        <label class="btn btn-outline-success" for="inc">Qo‘shish</label>
 
-                            <input type="radio" class="btn-check" name="action" id="dec" value="decrement">
-                            <label class="btn btn-outline-warning" for="dec">Ayirish</label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Miqdor</label>
-                        <input class="form-control" type="number" name="amount" id="edit_ball_amount"
-                               min="0" max="10" required>
+                        <input type="radio" class="btn-check" name="action" id="dec" value="decrement">
+                        <label class="btn btn-outline-warning" for="dec">Ayirish</label>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary w-100" type="submit">Saqlash</button>
+                <div class="mb-3">
+                    <label class="form-label">Miqdor</label>
+                    <input class="form-control" type="number" name="amount" id="edit_ball_amount"
+                            min="0" max="10" required>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary w-100" type="submit">Saqlash</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.edit-ball-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const userId = button.dataset.userId;
-                    const currentBall = button.dataset.currentBall;
-                    const form = document.getElementById('edit-ball-form');
-                    form.action = `/users/${userId}/balls`;
-                    document.getElementById('edit_ball_amount').value = currentBall;
-                });
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.edit-ball-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const userId = button.dataset.userId;
+                const currentBall = button.dataset.currentBall;
+                const form = document.getElementById('edit-ball-form');
+                form.action = `/users/${userId}/balls`;
+                document.getElementById('edit_ball_amount').value = currentBall;
             });
         });
-    </script>
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('name');
+        const nameFeedback = document.getElementById('name-feedback');
+        const phoneInput = document.getElementById('phone');
+        const phoneFeedback = document.getElementById('phone-feedback');
+        const jshshirInput = document.getElementById('jshshir');
+        const jshshirFeedback = document.getElementById('jshshir-feedback');
+
+        nameInput.addEventListener('input', function() {
+            if (/\d/.test(this.value)) { 
+                this.classList.add('is-invalid'); 
+                nameFeedback.style.display = 'block'; 
+            } else {
+                this.classList.remove('is-invalid'); 
+                nameFeedback.style.display = 'none'; 
+            }
+        });
+        
+        phoneInput.addEventListener('input', function() {
+            if (!/^\d+$/.test(this.value)) { 
+                this.classList.add('is-invalid'); 
+                phoneFeedback.style.display = 'block'; 
+            } else {
+                this.classList.remove('is-invalid'); 
+                phoneFeedback.style.display = 'none'; 
+            }
+        });
+        jshshirInput.addEventListener('input', function() {
+            if (!/^\d+$/.test(this.value) || this.value.length !== 14) { 
+                this.classList.add('is-invalid'); 
+                jshshirFeedback.style.display = 'block'; 
+            } else {
+                this.classList.remove('is-invalid'); 
+                jshshirFeedback.style.display = 'none'; 
+            }
+        });
+
+        const userForm = document.querySelector('#create-modal form');
+        if (userForm) {
+            userForm.addEventListener('submit', function(event) {
+                if (/\d/.test(nameInput.value)) {
+                    event.preventDefault(); 
+                    nameInput.classList.add('is-invalid');
+                    nameFeedback.style.display = 'block';
+                    
+                }
+            });
+        }
+    });
+</script>
 @endsection

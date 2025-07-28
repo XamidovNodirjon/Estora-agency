@@ -5,14 +5,17 @@ use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\HomeController;
 use \App\Http\Controllers\Admin\ProductViewController;
 use \App\Http\Controllers\Admin\ReservationProductController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', [AuthController::class, 'dashboard']);
+Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
+Route::get('/products/filter', [HomeController::class, 'filterProducts'])->name('products.filter');
+Route::get('/products/{product}', [HomeController::class, 'showProduct'])->name('products.show');
 Route::get('login', [AuthController::class, 'index'])->name('login.index');
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('login.store');
 
 Route::middleware('auth')->group(function () {
 
@@ -44,8 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::put('update-product/{id}', [ProductController::class, 'update'])->name('update-product');
     Route::post('create-ball/{id}', [BallsController::class, 'store'])->name('create-ball');
     Route::put('/users/{user}/balls', [BallsController::class, 'updateBall'])->name('users.balls.update');
+    Route::delete('products-delete/{id}',[ProductController::class,'destroy'])->name('delete.product');
 
-    Route::get('/get-cities/{region_id}', function ($region_id) {
+    Route::get('/cities/{region_id}', function ($region_id) {
         return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
     });
 

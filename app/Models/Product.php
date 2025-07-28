@@ -71,5 +71,19 @@ class Product extends Model
     {
         return $this->hasMany(ReservationProduct::class);
     }
+    
+
+    protected $appends = ['image_array'];
+
+    public function getImageArrayAttribute()
+    {
+        if (is_array($this->images)) {
+            return $this->images;
+        }
+        
+        $decoded = json_decode($this->images, true);
+        return is_array($decoded) ? $decoded : [];
+    }
+
 
 }

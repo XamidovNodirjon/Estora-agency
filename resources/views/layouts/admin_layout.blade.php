@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
 
     <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
 
     <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -49,18 +50,7 @@
             </li>
 
         </ul>
-        <div class="logo-box">
-            <a href="" class="logo logo-light text-center">
-            </a>
-            <a href="" class="logo logo-dark text-center">
-                <span class="logo-sm">
-                    <img src="assets/images/logo-sm.png" alt="" height="22">
-                </span>
-                <span class="logo-lg">
-                    <img src="assets/images/logo-dark.png" alt="" height="16">
-                </span>
-            </a>
-        </div>
+    
     </div>
     <div class="left-side-menu">
         <div class="h-100" data-simplebar>

@@ -19,7 +19,7 @@ use function view;
 
 class ManagerController extends Controller
 {
-    use UserTrait, ProductTrait;
+    use ProductTrait;
 
     protected $productService;
 

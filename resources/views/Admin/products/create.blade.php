@@ -27,13 +27,14 @@
                             <label for="subcategory" class="form-label fw-semibold">Subkategoriya</label>
                             <select id="subcategory" name="subcategory_id" class="form-select" required>
                                 <option value="">Subkategoriya tanlang</option>
+                                {{-- Subkategoriyalar shu yerda JavaScript orqali yuklanadi --}}
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="region_id" class="form-label fw-semibold">Viloyat</label>
                             <select id="region_id" name="region_id" class="form-select" required>
                                 <option value="">Viloyat tanlang</option>
-                                @foreach($address as $region)
+                                @foreach($address as $region) {{-- 'address' o'rniga 'regions' deb nomlash tavsiya etiladi --}}
                                     <option value="{{ $region->id }}">{{ $region->name }}</option>
                                 @endforeach
                             </select>
@@ -42,6 +43,7 @@
                             <label for="city_id" class="form-label fw-semibold">Tuman / Shahar</label>
                             <select id="city_id" name="city_id" class="form-select" required>
                                 <option value="">Tuman/shahar tanlang</option>
+                                {{-- Shaharlar shu yerda JavaScript orqali yuklanadi --}}
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -90,14 +92,6 @@
                             <label for="sotix" class="form-label fw-semibold">Sotix</label>
                             <input type="text" name="sotix" id="sotix" class="form-control" placeholder="50">
                         </div>
-                        <!-- Google Map -->
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold mb-2">Joylashuv (xaritadan tanlang)</label>
-                            <div style="height:350px;" id="map"></div>
-                            <input type="hidden" name="latitude_id" id="latitude_id">
-                            <input type="hidden" name="long_id" id="long_id">
-                            <div class="row mt-2"></div>
-                        </div>
                     </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold rounded-pill">Create
@@ -109,83 +103,86 @@
         </div>
     </div>
 
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1lZcK4FFGcyNjh1sGsZW2x968zYMyfB4"></script>
     <script>
-        let map;
-        let marker;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Kategoriya va Subkategoriya uchun
+            const categorySelect = document.getElementById('category');
+            const subcategorySelect = document.getElementById('subcategory');
 
-        function initMap() {
-            // Default center (Tashkent)
-            const defaultLatLng = {lat: 41.2995, lng: 69.2401};
+            categorySelect.addEventListener('change', function () {
+                const categoryId = this.value;
+                subcategorySelect.innerHTML = '<option value="">Yuklanmoqda...</option>'; // Yuklanish xabari
+                subcategorySelect.disabled = true; // Subkategoriya maydonini o'chirish
 
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: defaultLatLng,
-                zoom: 12,
+                if (categoryId) {
+                    fetch(`/subcategories/${categoryId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>'; // Default option
+                            if (data.length > 0) {
+                                data.forEach(subcategory => {
+                                    const option = document.createElement('option');
+                                    option.value = subcategory.id;
+                                    option.textContent = subcategory.name;
+                                    subcategorySelect.appendChild(option);
+                                });
+                                subcategorySelect.disabled = false; // Faollashtirish
+                            } else {
+                                subcategorySelect.innerHTML = '<option value="">Subkategoriyalar topilmadi</option>';
+                                subcategorySelect.disabled = true; // O'chirish
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Xatolik yuz berdi:', error);
+                            subcategorySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            subcategorySelect.disabled = true;
+                        });
+                } else {
+                    subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+                    subcategorySelect.disabled = true;
+                }
             });
 
-            map.addListener("click", (e) => {
-                placeMarker(e.latLng);
+            // Viloyat va Shahar uchun
+            const regionSelect = document.getElementById('region_id');
+            const citySelect = document.getElementById('city_id');
+
+            regionSelect.addEventListener('change', function () {
+                const regionId = this.value;
+                citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>'; // Yuklanish xabari
+                citySelect.disabled = true; // Shahar maydonini o'chirish
+
+                if (regionId) {
+                    fetch(`/cities/${regionId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>'; // Default option
+                            if (data.length > 0) {
+                                data.forEach(city => {
+                                    const option = document.createElement('option');
+                                    option.value = city.id;
+                                    option.textContent = city.name;
+                                    citySelect.appendChild(option);
+                                });
+                                citySelect.disabled = false; // Faollashtirish
+                            } else {
+                                citySelect.innerHTML = '<option value="">Tuman/shahar topilmadi</option>';
+                                citySelect.disabled = true; // O'chirish
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Xatolik yuz berdi:', error);
+                            citySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            citySelect.disabled = true;
+                        });
+                } else {
+                    citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+                    citySelect.disabled = true;
+                }
             });
-        }
 
-        function placeMarker(location) {
-            if (marker) {
-                marker.setPosition(location);
-            } else {
-                marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                });
-            }
-            document.getElementById('latitude_id').value = location.lat();
-            document.getElementById('long_id').value = location.lng();
-        }
-
-        window.initMap = initMap;
-    </script>
-    {{-- Map Loader --}}
-    <script>
-        // Google Maps must be loaded after window.onload for some admin templates
-        window.onload = function () {
-            if (typeof google !== 'undefined') {
-                initMap();
-            }
-        }
-    </script>
-    {{-- Subcategory AJAX --}}
-    <script>
-        document.getElementById('category').addEventListener('change', function () {
-            var categoryId = this.value;
-            var subcategorySelect = document.getElementById('subcategory');
-            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
-
-            if (categoryId) {
-                fetch('/subcategories/' + categoryId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (subcategory) {
-                            subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.name}</option>`;
-                        });
-                    });
-            }
-        });
-    </script>
-    <script>
-        document.getElementById('region_id').addEventListener('change', function () {
-            var regionId = this.value;
-            var citySelect = document.getElementById('city_id');
-            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
-
-            if (regionId) {
-                fetch('/get-cities/' + regionId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (city) {
-                            citySelect.innerHTML += `<option value="${city.id}">${city.name}</option>`;
-                        });
-                    });
-            }
+            subcategorySelect.disabled = true;
+            citySelect.disabled = true;
         });
     </script>
 @endsection

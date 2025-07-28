@@ -3,7 +3,7 @@
     <div class="container py-4">
         <div class="card shadow-sm rounded">
             <div class="card-header text-center">
-                <h4 class="mb-0 fw-bold">Edit Product</h4>
+                <h4 class="mb-0 fw-bold">Edit {{ $product->name }}</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('update-product', $product->id) }}" method="POST" enctype="multipart/form-data">
@@ -139,16 +139,6 @@
                             <input type="text" name="sotix" id="sotix" value="{{ old('sotix', $product->sotix) }}"
                                    class="form-control" placeholder="50">
                         </div>
-                        <!-- Google Map -->
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold mb-2">Joylashuv (xaritadan tanlang)</label>
-                            <div style="height:350px;" id="map"></div>
-                            <input type="hidden" name="latitude_id" id="latitude_id"
-                                   value="{{ old('latitude_id', $product->latitude_id) }}">
-                            <input type="hidden" name="long_id" id="long_id"
-                                   value="{{ old('long_id', $product->long_id) }}">
-                            <div class="row mt-2"></div>
-                        </div>
                     </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold rounded-pill">Yangilash
@@ -158,136 +148,4 @@
             </div>
         </div>
     </div>
-
-    {{-- Subcategory AJAX --}}
-    <script>
-        document.getElementById('category').addEventListener('change', function () {
-            var categoryId = this.value;
-            var subcategorySelect = document.getElementById('subcategory');
-            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
-
-            if (categoryId) {
-                fetch('/subcategories/' + categoryId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (subcategory) {
-                            subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.name}</option>`;
-                        });
-                    });
-            }
-        });
-
-        // Region -> Cities AJAX
-        document.getElementById('region_id').addEventListener('change', function () {
-            var regionId = this.value;
-            var citySelect = document.getElementById('city_id');
-            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
-
-            if (regionId) {
-                fetch('/get-cities/' + regionId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (city) {
-                            citySelect.innerHTML += `<option value="${city.id}">${city.name}</option>`;
-                        });
-                    });
-            }
-        });
-
-        // On load, set selected subcategory and city if needed
-        document.addEventListener('DOMContentLoaded', function () {
-            // Subcategory
-            let categoryId = document.getElementById('category').value;
-            let subcategorySelect = document.getElementById('subcategory');
-            let selectedSubcat = "{{ old('subcategory_id', $product->subcategory_id) }}";
-            if (categoryId) {
-                fetch('/subcategories/' + categoryId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (subcategory) {
-                            let selected = subcategory.id == selectedSubcat ? 'selected' : '';
-                            subcategorySelect.innerHTML += `<option value="${subcategory.id}" ${selected}>${subcategory.name}</option>`;
-                        });
-                    });
-            }
-
-            // City
-            let regionId = document.getElementById('region_id').value;
-            let citySelect = document.getElementById('city_id');
-            let selectedCity = "{{ old('city_id', $product->city_id) }}";
-            if (regionId) {
-                fetch('/get-cities/' + regionId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (city) {
-                            let selected = city.id == selectedCity ? 'selected' : '';
-                            citySelect.innerHTML += `<option value="${city.id}" ${selected}>${city.name}</option>`;
-                        });
-                    });
-            }
-        });
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1lZcK4FFGcyNjh1sGsZW2x968zYMyfB4"></script>
-    <script>
-        let map;
-        let marker;
-
-        function initMap() {
-            // If product has coordinates, use them; else Tashkent
-            const defaultLatLng = {
-                lat: {{ old('latitude_id', $product->latitude_id ?? 41.2995) }},
-                lng: {{ old('long_id', $product->long_id ?? 69.2401) }}
-            };
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: defaultLatLng,
-                zoom: 12,
-            });
-            marker = new google.maps.Marker({
-                position: defaultLatLng,
-                map: map,
-                draggable: true
-            });
-            marker.addListener('dragend', function (e) {
-                document.getElementById('latitude_id').value = e.latLng.lat();
-                document.getElementById('long_id').value = e.latLng.lng();
-            });
-            map.addListener("click", (e) => {
-                marker.setPosition(e.latLng);
-                document.getElementById('latitude_id').value = e.latLng.lat();
-                document.getElementById('long_id').value = e.latLng.lng();
-            });
-            // Initial set
-            document.getElementById('latitude_id').value = defaultLatLng.lat;
-            document.getElementById('long_id').value = defaultLatLng.lng;
-        }
-
-        window.initMap = initMap;
-        window.onload = function () {
-            if (typeof google !== 'undefined') {
-                initMap();
-            }
-        }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let removeImagesInput = document.getElementById('remove_images');
-            let imagesList = document.getElementById('product-images-list');
-
-            imagesList?.addEventListener('click', function (e) {
-                if (e.target.classList.contains('remove-image-btn')) {
-                    let imgDiv = e.target.closest('.position-relative');
-                    let index = e.target.getAttribute('data-index');
-                    imgDiv.remove();
-
-                    // Hidden inputga index qo‘shamiz
-                    let current = removeImagesInput.value ? removeImagesInput.value.split(',') : [];
-                    if (!current.includes(index)) {
-                        current.push(index);
-                    }
-                    removeImagesInput.value = current.join(',');
-                }
-            });
-        });
-    </script>
 @endsection

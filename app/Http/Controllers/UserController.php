@@ -8,8 +8,8 @@ use App\Models\Balls;
 use App\Models\Position;
 use App\Models\User;
 use App\Services\UserService;
-use App\Traits\UserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -20,9 +20,6 @@ class UserController extends Controller
     {
         $this->userService = $userService;
     }
-
-
-    use UserTrait;
 
     public function index()
     {
@@ -45,7 +42,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = $this->getUser($id);
+        $user = User::findOrFail($id);
         $positions = Position::all();
         return view('Admin.users.edit', [
             'user' => $user,
@@ -55,7 +52,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = $this->getUser($id);
+        $user = User::findOrFail($id);
         if (!$user) {
             return redirect()->back()->withErrors(['User not found']);
         }
@@ -84,7 +81,7 @@ class UserController extends Controller
 
     public function delete($id)
     {
-        $user = $this->getUser($id);
+        $user = User::findOrFail($id);
         if (!$user) {
             return redirect()->back()->with(['user not found'], 404);
         }

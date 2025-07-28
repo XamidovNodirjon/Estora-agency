@@ -4,8 +4,8 @@
     <div class="container-fluid py-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 text-primary">"{{ $user->name }}" foydalanuvchining ko‘rgan maxulotlar</h5>
-                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary btn-sm">Ortga</a>
+                <h5 class="mb-0 text-primary">{{ $user->name }} ning ko‘rgan maxulotlar</h5>
+                <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm "> <i class="bi bi-arrow-left"></i> Ortga </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
