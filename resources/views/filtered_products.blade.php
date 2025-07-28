@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/filter_product.css') }}">
+
 </head>
 <body>
 <header class="header">
@@ -141,14 +142,21 @@
         @else
             <div class="ads-grid">
                 @foreach($filteredProducts as $product)
-                    <div class="ad-card">
-                        @php
-                            $images = json_decode($product->images, true);
-                            $firstImage = $images[0] ?? null;
-                        @endphp
-                        <img src="{{ $firstImage ? asset('storage/' . $firstImage) : 'https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yoq' }}"
-                             alt="{{ $product->name }}"
-                             class="ad-image">
+                    <div class="ad-card" data-images="{{ json_encode($product->image_array) }}">
+                        <div class="image-gallery-card-container">
+                            @php
+                                $firstImage = count($product->image_array) > 0 ? $product->image_array[0] : null;
+                            @endphp
+                            <img src="{{ $firstImage ? asset('storage/' . $firstImage) : 'https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yoq' }}"
+                                 alt="{{ $product->name }}"
+                                 class="ad-image">
+                            <button class="nav-button-card prev-button-card">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="nav-button-card next-button-card">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
                         <div class="ad-info">
                             <h3>{{ $product->name }}</h3>
                             <p class="ad-price">{{ number_format($product->price, 0, '.', ' ') }} y.e.</p>
@@ -195,8 +203,8 @@
                 <nav aria-label="Pagination">
                     @if ($filteredProducts->onFirstPage())
                         <span class="page-link disabled" aria-disabled="true">
-                            <i class="bi bi-chevron-left"></i> Oldingi
-                        </span>
+                                <i class="bi bi-chevron-left"></i> Oldingi
+                            </span>
                     @else
                         <a href="{{ $filteredProducts->previousPageUrl() }}" class="page-link">
                             <i class="bi bi-chevron-left"></i> Oldingi
@@ -243,8 +251,8 @@
                         </a>
                     @else
                         <span class="page-link disabled" aria-disabled="true">
-                            Keyingi <i class="bi bi-chevron-right"></i>
-                        </span>
+                                Keyingi <i class="bi bi-chevron-right"></i>
+                            </span>
                     @endif
                 </nav>
             </div>
@@ -305,6 +313,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Mobile Menu Toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
         const closeMenuButton = document.querySelector('.close-menu');
@@ -325,6 +334,7 @@
             });
         }
 
+        // Quick Contact Modal
         const quickContactButtons = document.querySelectorAll('.quick-contact-button');
         const quickContactModal = document.getElementById('quickContactModal');
         const closeModalButton = quickContactModal.querySelector('.close-button');
@@ -356,11 +366,12 @@
 
         contactForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            alert('Murojaatingiz yuborildi! Tez orada siz bilan bog\'lanamiz.');
+            console.log('Murojaatingiz yuborildi! Tez orada siz bilan bog\'lanamiz.'); 
             quickContactModal.style.display = 'none';
             contactForm.reset();
         });
 
+        // More Filters Toggle
         const moreFiltersBtn = document.querySelector('.more-filters-btn');
         const moreFiltersHidden = document.querySelector('.more-filters-hidden');
 
@@ -375,6 +386,61 @@
                 }
             });
         }
+
+        // Image Gallery Navigation for each ad card
+        document.querySelectorAll('.ad-card').forEach(card => {
+            const adImage = card.querySelector('.ad-image');
+            const prevButton = card.querySelector('.prev-button-card');
+            const nextButton = card.querySelector('.next-button-card');
+            const allImagesData = card.dataset.images;
+
+            let allImages = [];
+            if (allImagesData) {
+                try {
+                    allImages = JSON.parse(allImagesData);
+                } catch (e) {
+                    console.error("Error parsing images data:", e);
+                }
+            }
+
+            let currentIndex = 0;
+
+            function updateCardImage(newIndex) {
+                if (adImage && allImages.length > 0) {
+                    currentIndex = (newIndex + allImages.length) % allImages.length;
+                    if (currentIndex < 0) {
+                        currentIndex = allImages.length - 1;
+                    }
+
+                    adImage.style.opacity = '0'; // Fade out
+
+                    setTimeout(() => {
+                        adImage.src = "{{ asset('storage/') }}/" + allImages[currentIndex];
+                        adImage.style.opacity = '1'; // Fade in
+                    }, 300); 
+                }
+            }
+
+            if (allImages.length > 0) {
+                updateCardImage(0);
+            }
+
+            if (prevButton) {
+                prevButton.addEventListener('click', function (event) {
+                    event.preventDefault(); 
+                    event.stopPropagation();
+                    updateCardImage(currentIndex - 1);
+                });
+            }
+
+            if (nextButton) {
+                nextButton.addEventListener('click', function (event) {
+                    event.preventDefault(); 
+                    event.stopPropagation(); 
+                    updateCardImage(currentIndex + 1);
+                });
+            }
+        });
     });
 </script>
 </body>

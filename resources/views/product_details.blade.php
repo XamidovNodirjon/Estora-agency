@@ -56,15 +56,16 @@
 
         <div class="product-gallery">
             <div class="image-viewer-container" style="position: relative; max-width: 800px; margin: 0 auto;">
+                {{-- `image_array` accessoridan foydalanamiz --}}
                 @if(count($product->image_array) > 0)
                     <img src="{{ asset('storage/' . $product->image_array[0]) }}" alt="{{ $product->name }}" class="main-image">
                 @else
                     <img src="https://placehold.co/800x600/CCCCCC/333333?text=Rasm+Yoq" alt="No Image" class="main-image">
                 @endif
-                <button class="nav-button prev-button" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 1.5em; z-index: 10; display: flex; align-items: center; justify-content: center;">
+                <button class="nav-button prev-button" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: #F7931E; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 1.5em; z-index: 10; display: flex; align-items: center; justify-content: center;">
                     <i class="bi bi-chevron-left"></i>
                 </button>
-                <button class="nav-button next-button" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 1.5em; z-index: 10; display: flex; align-items: center; justify-content: center;">
+                <button class="nav-button next-button" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: #F7931E; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 1.5em; z-index: 10; display: flex; align-items: center; justify-content: center;">
                     <i class="bi bi-chevron-right"></i>
                 </button>
             </div>
@@ -221,6 +222,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Mobile Menu Toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
         const closeMenuButton = document.querySelector('.close-menu');
@@ -241,6 +243,7 @@
             });
         }
 
+        // Quick Contact Modal
         const quickContactButton = document.querySelector('.quick-contact-button');
         const quickContactModal = document.getElementById('quickContactModal');
         const closeModalButton = quickContactModal.querySelector('.close-button');

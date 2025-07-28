@@ -47,12 +47,11 @@
 
     <div class="search-section">
         <div class="container">
-            {{-- Formani bu yerga joylashtiramiz va method, action, name atributlarini qo'shamiz --}}
             <form action="{{ route('products.filter') }}" method="POST" class="search-card">
-                @csrf {{-- Laravel CSRF himoyasi uchun --}}
+                @csrf 
                 <div class="input-group">
                     <label for="ad-type">E'LON TURI</label>
-                    <select id="ad-type" name="ad_type"> {{-- name atributi qo'shildi --}}
+                    <select id="ad-type" name="ad_type"> 
                         <option value="">Tanlang</option>
                         <option value="sale">Sotish</option>
                         <option value="rent">Ijaraga</option>
@@ -61,9 +60,8 @@
                 </div>
                 <div class="input-group">
                     <label for="regions">HUDUDLAR BO'YICHA</label>
-                    <select id="regions" name="region"> {{-- name atributi qo'shildi --}}
+                    <select id="regions" name="region"> 
                         <option value="">Tanlang</option>
-                        {{-- Laraveldan kelgan hududlar ro'yxati --}}
                         {{-- @foreach($regions as $region)
                             <option value="{{ $region->id }}">{{ $region->name }}</option>
                         @endforeach --}}

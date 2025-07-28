@@ -1,3 +1,4 @@
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
@@ -218,8 +219,9 @@ body {
     color: #fff;
 }
 
+/* Changed color for show-ads-btn */
 .show-ads-btn {
-    background: #1a3c34;
+    background: #F7931E; /* Changed from #1a3c34 */
     color: #fff;
 }
 
@@ -258,10 +260,43 @@ body {
     transform: translateY(-5px);
 }
 
-.ad-image {
+.image-gallery-card-container {
+    position: relative;
     width: 100%;
     height: 200px;
+    overflow: hidden;
+}
+
+.ad-image {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    transition: opacity 0.3s ease-in-out; /* Added for fade effect */
+}
+
+.nav-button-card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prev-button-card {
+    left: 5px;
+}
+
+.next-button-card {
+    right: 5px;
 }
 
 .ad-info {
@@ -337,8 +372,9 @@ body {
     color: #fff;
 }
 
+/* Changed color for quick-contact-button */
 .quick-contact-button {
-    background: #1a3c34;
+    background: #F7931E; /* Changed from #1a3c34 */
     color: #fff;
     display: flex;
     align-items: center;
@@ -532,6 +568,7 @@ body {
     font-size: 0.9rem;
 }
 
+/* Changed color for submit-contact-button */
 .submit-contact-button {
     width: 100%;
     padding: 10px;
