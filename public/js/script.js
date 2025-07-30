@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close menu when clicking outside (on overlay)
     if (mobileMenuOverlay) {
         mobileMenuOverlay.addEventListener('click', function(e) {
             if (e.target === mobileMenuOverlay) {
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close modal when clicking outside of the content
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -66,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle form submission (for your bot integration)
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
@@ -77,34 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // You will implement your bot integration here
             console.log(`Mijoz nomi: ${name}, Telefon raqami: ${phone}, Qiziqqan mahsulot: ${productName}`);
-
-            // Example: Send data to your bot API
-            // fetch('YOUR_BOT_API_ENDPOINT', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Authorization': 'Bearer YOUR_BOT_TOKEN' // If you have a token
-            //     },
-            //     body: JSON.stringify({
-            //         username: name,
-            //         phone: phone,
-            //         product_name: productName,
-            //         // Add any other data you need, like product ID
-            //         product_id: document.querySelector('.quick-contact-button').dataset.productId // Example of getting product ID
-            //     })
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Bot response:', data);
-            //     // Show success message or close modal
-            //     alert('So\'rovingiz yuborildi!'); // Replace with a custom message box
-            //     modal.style.display = 'none';
-            //     document.body.style.overflow = '';
-            // })
-            // .catch(error => {
-            //     console.error('Error sending to bot:', error);
-            //     alert('Xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.'); // Replace with a custom message box
-            // });
 
             alert('So\'rovingiz yuborildi!');
             modal.style.display = 'none';
@@ -121,6 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbnail.addEventListener('click', function() {
                 mainImage.src = this.src;
             });
+        });
+    }
+
+    const languageSwitcher = document.getElementById('language-switcher');
+    if (languageSwitcher) {
+        languageSwitcher.addEventListener('change', function() {
+            const selectedLang = this.value;
+            window.location.href = `/lang/${selectedLang}`;
         });
     }
 });

@@ -396,11 +396,11 @@ body {
     align-items: flex-start;
     color: #fff;
     font-weight: 600;
-    font-size: 1em; /* Kichraytirildi */
+    font-size: 1rem; /* Kichraytirildi */
 }
 
 .footer-logo img {
-    height: 35px; /* Logotip balandligi kichraytirildi */
+    height: 55px; /* Logotip balandligi kichraytirildi */
     margin-bottom: 5px;
 }
 

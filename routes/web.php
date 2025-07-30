@@ -10,6 +10,14 @@ use \App\Http\Controllers\Admin\ProductViewController;
 use \App\Http\Controllers\Admin\ReservationProductController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'uz', 'ru'])) {
+        session(['locale' => $locale]);
+//         dd(app()->getLocale());
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 
 Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/products/filter', [HomeController::class, 'filterProducts'])->name('products.filter');
@@ -40,6 +48,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::get('show-products/{id}', [ProductController::class, 'show'])->name('show-products');
     Route::get('create', [ProductController::class, 'create'])->name('create-product');
     Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
     Route::get('/subcategories/{category_id}', [ProductController::class, 'getSubcategories']);
@@ -47,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::put('update-product/{id}', [ProductController::class, 'update'])->name('update-product');
     Route::post('create-ball/{id}', [BallsController::class, 'store'])->name('create-ball');
     Route::put('/users/{user}/balls', [BallsController::class, 'updateBall'])->name('users.balls.update');
-    Route::delete('products-delete/{id}',[ProductController::class,'destroy'])->name('delete.product');
+    Route::delete('products-delete/{id}', [ProductController::class, 'destroy'])->name('delete.product');
 
     Route::get('/cities/{region_id}', function ($region_id) {
         return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();

@@ -43,7 +43,7 @@
                                            data-bs-toggle="tooltip">
                                             <i class="fas fa-pen"></i>
                                         </a>
-                                        <a href="{{ route('show-product', $product->id) }}"
+                                        <a href="{{ route('show-products', $product->id) }}"
                                            class="btn btn-sm btn-light border text-info"
                                            title="Ko‘rish"
                                            data-bs-toggle="tooltip">

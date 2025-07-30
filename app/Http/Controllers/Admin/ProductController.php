@@ -74,7 +74,14 @@ class ProductController extends Controller
 
     public function show($id)
     {
-
+        $product = $this->getProductById($id);
+        $category = Category::with('subcategories')->get();
+        $address = Region::with('cities')->get();
+        return view('Admin.products.show', [
+            'product' => $product,
+            'category' => $category,
+            'address' => $address,
+        ]);
     }
 
     public function destroy($id)

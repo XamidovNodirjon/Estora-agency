@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +15,17 @@
         <div class="container">
             <div class="logo">
                 <img src="{{ asset('/logo/Estora Logo.png') }}" alt="Estora Logo">
-                <span>REAL ESTATE AGENCY</span>
+                <span>{{ __('REAL ESTATE AGENCY') }}</span>
             </div>
             <nav class="main-nav">
                 <div class="contact-info">
                     <a href="tel:+998951606446">+998 95 160 64 46</a>
                 </div>
                 <div class="language-selector">
-                    <select>
-                        <option value="en">ENGLISH</option>
-                        <option value="uz">UZBEK</option>
-                        <option value="ru">RUSSIAN</option>
+                    <select id="language-switcher">
+                        <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>{{ __('ENGLISH') }}</option>
+                        <option value="uz" {{ app()->getLocale() == 'uz' ? 'selected' : '' }}>{{ __('UZBEK') }}</option>
+                        <option value="ru" {{ app()->getLocale() == 'ru' ? 'selected' : '' }}>{{ __('RUSSIAN') }}</option>
                     </select>
                 </div>
                 <div class="menu-toggle">
@@ -41,7 +41,7 @@
         <div class="mobile-menu">
             <button class="close-menu">&times;</button>
             <ul>
-                <li><a href="#" class="mobile-login-btn">Login</a></li>
+                <li><a href="#" class="mobile-login-btn">{{ __('Login') }}</a></li>
             </ul>
         </div>
     </div>
@@ -56,11 +56,10 @@
 
         <div class="product-gallery">
             <div class="image-viewer-container" style="position: relative; max-width: 800px; margin: 0 auto;">
-                {{-- `image_array` accessoridan foydalanamiz --}}
                 @if(count($product->image_array) > 0)
                     <img src="{{ asset('storage/' . $product->image_array[0]) }}" alt="{{ $product->name }}" class="main-image">
                 @else
-                    <img src="https://placehold.co/800x600/CCCCCC/333333?text=Rasm+Yoq" alt="No Image" class="main-image">
+                    <img src="https://placehold.co/800x600/CCCCCC/333333?text={{ urlencode(__('Rasm Yoq')) }}" alt="{{ __('Rasm Yoq') }}" class="main-image">
                 @endif
                 <button class="nav-button prev-button" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: #F7931E; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 1.5em; z-index: 10; display: flex; align-items: center; justify-content: center;">
                     <i class="bi bi-chevron-left"></i>
@@ -71,29 +70,29 @@
             </div>
             <div class="thumbnail-images">
                 @foreach($product->image_array as $index => $image)
-                    <img src="{{ asset('storage/' . $image) }}" alt="Product thumbnail" class="thumbnail" data-index="{{ $index }}">
+                    <img src="{{ asset('storage/' . $image) }}" alt="{{ __('Mahsulot rasmi') }}" class="thumbnail" data-index="{{ $index }}">
                 @endforeach
             </div>
         </div>
 
         <div class="product-info-grid">
             <div class="info-block">
-                <h4>Narxi</h4>
-                <p class="price">{{ number_format($product->price, 0, '.', ' ') }} y.e.</p>
+                <h4>{{ __('Narxi') }}</h4>
+                <p class="price">{{ number_format($product->price, 0, '.', ' ') }} {{ __('y.e.') }}</p>
             </div>
             <div class="info-block">
-                <h4>Manzil</h4>
-                <p>{{ $product->region->name ?? 'Noma\'lum hudud' }}, {{ $product->city->name ?? 'Noma\'lum shahar' }}</p>
+                <h4>{{ __('Manzil') }}</h4>
+                <p>{{ $product->region->name ?? __('Noma\'lum hudud') }}, {{ $product->city->name ?? __('Noma\'lum shahar') }}</p>
             </div>
             @if($product->rooms > 0)
                 <div class="info-block">
-                    <h4>Xonalar soni</h4>
+                    <h4>{{ __('Xonalar soni') }}</h4>
                     <p>{{ $product->rooms }}</p>
                 </div>
             @endif
             @if($product->floor > 0 || $product->building_floor > 0)
                 <div class="info-block">
-                    <h4>Qavat</h4>
+                    <h4>{{ __('Qavat') }}</h4>
                     <p>
                         @if($product->floor > 0) {{ $product->floor }} @endif
                         @if($product->floor > 0 && $product->building_floor > 0) / @endif
@@ -103,26 +102,26 @@
             @endif
             @if($product->square > 0)
                 <div class="info-block">
-                    <h4>Maydon</h4>
-                    <p>{{ $product->square }} m²</p>
+                    <h4>{{ __('Maydon') }}</h4>
+                    <p>{{ $product->square }} {{ __('m²') }}</p>
                 </div>
             @endif
             @if($product->sotix > 0)
                 <div class="info-block">
-                    <h4>Sotix</h4>
+                    <h4>{{ __('Sotix') }}</h4>
                     <p>{{ $product->sotix }}</p>
                 </div>
             @endif
             @if($product->repair)
                 <div class="info-block">
-                    <h4>Ta'mir holati</h4>
+                    <h4>{{ __('Ta\'mir holati') }}</h4>
                     <p>{{ $product->repair }}</p>
                 </div>
             @endif
             <div class="info-block">
-                <h4>Kategoriya</h4>
+                <h4>{{ __('Kategoriya') }}</h4>
                 <p>
-                    {{ $product->category->name ?? 'Noma\'lum' }}
+                    {{ $product->category->name ?? __('Noma\'lum') }}
                     @if($product->subcategory)
                         / {{ $product->subcategory->name }}
                     @endif
@@ -131,17 +130,16 @@
         </div>
 
         <div class="product-description">
-            <h3>Tavsif</h3>
-            <p>{{ $product->description ?? 'Tavsif mavjud emas.' }}</p>
+            <h3>{{ __('Tavsif') }}</h3>
+            <p>{{ $product->description ?? __('Tavsif mavjud emas.') }}</p>
         </div>
 
         <div class="product-actions-bottom">
             <button class="quick-contact-button" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}">
-                <i class="bi bi-headset"></i> Tezkor Bog'lanish
+                <i class="bi bi-headset"></i> {{ __('Tezkor Bog\'lanish') }}
             </button>
-            {{-- Oldingi filterlarni saqlagan holda qaytish --}}
             <a href="{{ route('products.filter', request()->query()) }}" class="back-to-results">
-                <i class="bi bi-arrow-left"></i> Natijalarga qaytish
+                <i class="bi bi-arrow-left"></i> {{ __('Natijalarga qaytish') }}
             </a>
         </div>
     </div>
@@ -149,22 +147,20 @@
 
 <section class="related-listings-section">
     <div class="container">
-        {{-- Joriy mahsulotning viloyati bo'yicha sarlavha --}}
-        <h2>{{ $product->region->name ?? 'Noma\'lum hudud' }} viloyatidagi boshqa e'lonlar</h2>
+        <h2>{{ ($product->region->name ?? __('Noma\'lum hudud')) . ' ' . __('viloyatidagi boshqa e\'lonlar') }}</h2>
         @if(isset($relatedProducts) && $relatedProducts->count() > 0)
             <div class="related-listings-grid">
                 @foreach($relatedProducts as $relatedProduct)
                     <a href="{{ route('products.show', $relatedProduct->id) }}" class="related-listing-card">
-                        {{-- `image_array` accessoridan foydalanamiz --}}
-                        <img src="{{ count($relatedProduct->image_array) > 0 ? asset('storage/' . $relatedProduct->image_array[0]) : 'https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yoq' }}"
+                        <img src="{{ count($relatedProduct->image_array) > 0 ? asset('storage/' . $relatedProduct->image_array[0]) : 'https://placehold.co/600x400/CCCCCC/333333?text=' . urlencode(__('Rasm Yoq')) }}"
                              alt="{{ $relatedProduct->name }}">
                         <h3>{{ $relatedProduct->name }}</h3>
-                        <p class="related-price">{{ number_format($relatedProduct->price, 0, '.', ' ') }} y.e.</p>
+                        <p class="related-price">{{ number_format($relatedProduct->price, 0, '.', ' ') }} {{ __('y.e.') }}</p>
                     </a>
                 @endforeach
             </div>
         @else
-            <p style="text-align: center; color: #666;">Ushbu hududda boshqa e'lonlar topilmadi.</p>
+            <p style="text-align: center; color: #666;">{{ __('Ushbu hududda boshqa e\'lonlar topilmadi.') }}</p>
         @endif
     </div>
 </section>
@@ -174,18 +170,18 @@
         <div class="container footer-content">
             <div class="footer-logo">
                 <img src="{{ asset('/logo/Estora Logo.png') }}" alt="Estora Logo">
-                <span>REAL ESTATE AGENCY</span>
+                <span>{{ __('REAL ESTATE AGENCY') }}</span>
             </div>
             <div class="footer-links">
                 <ul>
-                    <li><a href="#">BOSH SAHIFA</a></li>
-                    <li><a href="#">BIZ HAQIMIZDA</a></li>
-                    <li><a href="#">YANGLILIKLAR</a></li>
-                    <li><a href="{{route('login.index')}}">LOGIN</a></li>
+                    <li><a href="#">{{ __('BOSH SAHIFA') }}</a></li>
+                    <li><a href="#">{{ __('BIZ HAQIMIZDA') }}</a></li>
+                    <li><a href="#">{{ __('YANGLILIKLAR') }}</a></li>
+                    <li><a href="{{route('login.index')}}">{{ __('Login') }}</a></li>
                 </ul>
             </div>
             <div class="footer-contact">
-                <p>ALOQA UCHUN</p>
+                <p>{{ __('ALOQA UCHUN') }}</p>
                 <p>+998 95 160 64 46</p>
                 <p>info@estora.uz</p>
             </div>
@@ -196,7 +192,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2025 Estora. Barcha huquqlar himoyalangan</p>
+            <p>© 2025 Estora. {{ __('Barcha huquqlar himoyalangan') }}</p>
         </div>
     </div>
 </footer>
@@ -204,18 +200,18 @@
 <div id="quickContactModal" class="modal">
     <div class="modal-content">
         <span class="close-button">&times;</span>
-        <h3>Tezkor Bog'lanish</h3>
+        <h3>{{ __('Tezkor Bog\'lanish') }}</h3>
         <p class="modal-product-name"></p>
         <form id="contactForm">
             <div class="form-group">
-                <label for="contactName">Ismingiz:</label>
+                <label for="contactName">{{ __('Ismingiz:') }}</label>
                 <input type="text" id="contactName" name="name" required>
             </div>
             <div class="form-group">
-                <label for="contactPhone">Telefon raqamingiz:</label>
+                <label for="contactPhone">{{ __('Telefon raqamingiz:') }}</label>
                 <input type="tel" id="contactPhone" name="phone" placeholder="+998 XX YYY ZZ ZZ" required>
             </div>
-            <button type="submit" class="submit-contact-button">Yuborish</button>
+            <button type="submit" class="submit-contact-button">{{ __('Yuborish') }}</button>
         </form>
     </div>
 </div>
@@ -255,7 +251,7 @@
                 const productName = this.dataset.productName;
                 const productId = this.dataset.productId;
 
-                modalProductName.textContent = `E'lon: ${productName} (ID: ${productId})`;
+                modalProductName.textContent = `{{ __('E\'lon:') }} ${productName} (ID: ${productId})`;
                 const contactPhoneInput = quickContactModal.querySelector('#contactPhone');
                 contactPhoneInput.value = ''; // Ensure phone input is always empty
 
@@ -275,7 +271,7 @@
 
         contactForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            console.log('Murojaatingiz yuborildi! Tez orada siz bilan bog\'lanamiz.');
+            alert('{{ __('Murojaatingiz yuborildi! Tez orada siz bilan bog\'lanamiz.') }}');
             quickContactModal.style.display = 'none';
             contactForm.reset();
         });
@@ -290,12 +286,12 @@
                 "{{ asset('storage/' . $image) }}",
             @endforeach
         ];
-        let currentIndex = 0; 
+        let currentIndex = 0;
 
         function updateMainImageAndThumbnails(newIndex) {
             if (mainImage && allImages.length > 0) {
                 currentIndex = (newIndex + allImages.length) % allImages.length;
-                if (currentIndex < 0) { 
+                if (currentIndex < 0) {
                     currentIndex = allImages.length - 1;
                 }
 
@@ -313,12 +309,17 @@
                         thumb.style.borderColor = '#ddd';
                     }
                 });
+            } else if (mainImage) { // If no images provided, ensure placeholder remains
+                mainImage.src = "https://placehold.co/800x600/CCCCCC/333333?text={{ urlencode(__('Rasm Yoq')) }}";
             }
         }
 
         if (allImages.length > 0) {
-            updateMainImageAndThumbnails(0); 
+            updateMainImageAndThumbnails(0);
+        } else if (mainImage) { // Ensure initial display for no images
+            mainImage.src = "https://placehold.co/800x600/CCCCCC/333333?text={{ urlencode(__('Rasm Yoq')) }}";
         }
+
 
         thumbnails.forEach(thumbnail => {
             thumbnail.addEventListener('click', function () {
@@ -336,6 +337,14 @@
         if (nextButton) {
             nextButton.addEventListener('click', function () {
                 updateMainImageAndThumbnails(currentIndex + 1);
+            });
+        }
+
+        const langSwitcher = document.getElementById('language-switcher');
+        if (langSwitcher) {
+            langSwitcher.addEventListener('change', function () {
+                const selectedLang = this.value;
+                window.location.href = `/lang/${selectedLang}`;
             });
         }
     });
