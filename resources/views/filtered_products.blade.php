@@ -7,8 +7,240 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/filter_product.css') }}">
+    <style>
+        /* Bu yerda avvalgi CSS uslublari joylashgan */
+        .ads-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .ad-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .view-ad-button {
+            flex-grow: 1;
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .view-ad-button:hover {
+            background-color: #218838;
+        }
+
+        .contact-buttons-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-contact-button {
+            background-color: #007bff;
+        }
+
+        .telegram-share-button {
+            background-color: #0088cc;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-product-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .modal .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .modal .close-button:hover {
+            color: #333;
+        }
+
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .modal .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modal .form-group input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+        }
+
+        .submit-contact-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-contact-button:hover {
+            background-color: #218838;
+        }
+
+        .success-content {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            margin: 0 auto 20px;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .checkmark-circle {
+            display: block;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #28a745;
+            padding: 10px;
+            box-sizing: border-box;
+            transform: rotate(-90deg);
+        }
+
+        .checkmark-circle.animate {
+            animation: rotate 1s ease-in-out;
+        }
+
+        .checkmark {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transform: rotate(45deg);
+        }
+
+        .checkmark-circle-path {
+            stroke: #fff;
+            stroke-width: 4;
+            stroke-dasharray: 157;
+            stroke-dashoffset: 157;
+            animation: stroke 1s linear forwards;
+        }
+
+        .checkmark-check {
+            stroke: #fff;
+            stroke-width: 4;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            opacity: 0;
+            animation: stroke-check 0.8s ease-in-out 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        @keyframes stroke-check {
+            from {
+                stroke-dashoffset: 48;
+                opacity: 0;
+            }
+            to {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+        @keyframes rotate {
+            from { transform: rotate(-90deg); }
+            to { transform: rotate(270deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
+
 <header class="header">
     <div class="container">
         <div class="logo">
@@ -116,7 +348,6 @@
                 </div>
             </div>
         </div>
-
         <div class="filter-actions">
             <button type="button" class="more-filters-btn">
                 <i class="bi bi-funnel-fill"></i> {{ __('Ko\'proq filterlar') }}
@@ -159,9 +390,7 @@
                         <div class="ad-info">
                             <h3>{{ $product->name }}</h3>
                             <p class="ad-price">{{ number_format($product->price, 0, '.', ' ') }} {{ __('y.e.') }}</p>
-                            <p class="ad-location"><i
-                                    class="bi bi-geo-alt-fill"></i> {{ $product->region->name ?? __('Noma\'lum hudud') }}
-                            </p>
+                            <p class="ad-location"><i class="bi bi-geo-alt-fill"></i> {{ $product->region->name ?? __('Noma\'lum hudud') }}</p>
                             <div class="ad-details">
                                 @if($product->rooms > 0)
                                     <span><i class="bi bi-grid-fill"></i> {{ $product->rooms }} {{ __('xona') }}</span>
@@ -184,11 +413,13 @@
                             </p>
                             <p class="product-id">ID: <strong>{{ $product->id }}</strong></p>
                             <div class="ad-actions">
-                                <a href="{{ route('products.show', $product->id) }}" class="view-ad-button">{{ __('Batafsil') }}</a>
-                                <button class="quick-contact-button" data-product-id="{{ $product->id }}"
-                                        data-product-name="{{ $product->name }}">
-                                    <i class="bi bi-headset"></i> {{ __('Tezkor Bog\'lanish') }}
-                                </button>
+                                <button class="view-ad-button open-contact-modal" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}">{{ __('Batafsil') }}</button>
+                                <div class="contact-buttons-container">
+                                    <p>+998 95 160 64 46</p>
+                                    <a href="https://t.me/+998951606446" class="telegram-contact" target="_blank">
+                                        <i class="bi bi-telegram"></i> Telegram
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,8 +433,8 @@
                 <nav aria-label="Pagination">
                     @if ($filteredProducts->onFirstPage())
                         <span class="page-link disabled" aria-disabled="true">
-                                <i class="bi bi-chevron-left"></i> {{ __('Oldingi') }}
-                            </span>
+                            <i class="bi bi-chevron-left"></i> {{ __('Oldingi') }}
+                        </span>
                     @else
                         <a href="{{ $filteredProducts->previousPageUrl() }}" class="page-link">
                             <i class="bi bi-chevron-left"></i> {{ __('Oldingi') }}
@@ -250,8 +481,8 @@
                         </a>
                     @else
                         <span class="page-link disabled" aria-disabled="true">
-                                {{ __('Keyingi') }} <i class="bi bi-chevron-right"></i>
-                            </span>
+                            {{ __('Keyingi') }} <i class="bi bi-chevron-right"></i>
+                        </span>
                     @endif
                 </nav>
             </div>
@@ -293,26 +524,58 @@
 
 <div id="quickContactModal" class="modal">
     <div class="modal-content">
-        <span class="close-button">×</span>
-        <h3>{{ __('Tezkor Bog\'lanish') }}</h3>
-        <p class="modal-product-name"></p>
+        <span class="close-button" id="closeContactModal">×</span>
+        <div class="modal-header">
+            <h3>{{ __('Tezkor Murojaat') }}</h3>
+            <p class="modal-product-info">{{ __('E\'lon:') }} <span id="modalProductName"></span> (ID: <span id="modalProductId"></span>)</p>
+        </div>
         <form id="contactForm">
             <div class="form-group">
                 <label for="contactName">{{ __('Ismingiz:') }}</label>
-                <input type="text" id="contactName" name="name" required>
+                <input type="text" id="contactName" name="name" placeholder="{{ __('Ismingizni kiriting') }}" required>
             </div>
             <div class="form-group">
                 <label for="contactPhone">{{ __('Telefon raqamingiz:') }}</label>
-                <input type="tel" id="contactPhone" name="phone" placeholder="+998 XX YYY ZZ ZZ" required>
+                <input type="tel" id="contactPhone" name="phone" placeholder="+998 (XX) XXX-XX-XX" required>
             </div>
             <button type="submit" class="submit-contact-button">{{ __('Yuborish') }}</button>
         </form>
     </div>
 </div>
 
+<div id="successModal" class="modal">
+    <div class="modal-content success-content">
+        <span class="close-button" id="closeSuccessModal">×</span>
+        <div class="success-icon">
+            <div class="checkmark-circle">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle-path" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+        </div>
+        <h3>{{ __('Murojaatingiz qabul qilindi!') }}</h3>
+        <p>{{ __('Tez orada siz bilan bog\'lanamiz.') }}</p>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#contactPhone').inputmask({
+            "mask": "+998 (99) 999-99-99",
+            "clearIncomplete": true,
+            "showMaskOnHover": false,
+            "onBeforePaste": function(pastedValue, opts) {
+                return pastedValue.replace(/^\+998/, '');
+            }
+        });
+    });
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
         const menuToggle = document.querySelector('.menu-toggle');
         const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
         const closeMenuButton = document.querySelector('.close-menu');
@@ -321,56 +584,113 @@
             menuToggle.addEventListener('click', function () {
                 mobileMenuOverlay.classList.add('active');
             });
-
             closeMenuButton.addEventListener('click', function () {
                 mobileMenuOverlay.classList.remove('active');
             });
-
             mobileMenuOverlay.addEventListener('click', function (event) {
                 if (event.target === mobileMenuOverlay) {
                     mobileMenuOverlay.classList.remove('active');
                 }
             });
         }
+        
+        const TELEGRAM_BOT_TOKEN = '8324622390:AAHTibxtx1NfrBz-P6NREXKZEboIqx8VxQI';
+        const TELEGRAM_CHAT_ID = '-1002718251790'; 
 
-        // Quick Contact Modal
-        const quickContactButtons = document.querySelectorAll('.quick-contact-button');
-        const quickContactModal = document.getElementById('quickContactModal');
-        const closeModalButton = quickContactModal.querySelector('.close-button');
-        const modalProductName = quickContactModal.querySelector('.modal-product-name');
-        const contactForm = quickContactModal.querySelector('#contactForm');
+        const contactModal = document.getElementById('quickContactModal');
+        const successModal = document.getElementById('successModal');
+        const openContactModalButtons = document.querySelectorAll('.open-contact-modal');
+        const closeContactModal = contactModal.querySelector('.close-button');
+        const closeSuccessModal = successModal.querySelector('.close-button');
+        const contactForm = document.getElementById('contactForm');
+        const modalProductName = document.getElementById('modalProductName');
+        const modalProductId = document.getElementById('modalProductId');
 
-        quickContactButtons.forEach(button => {
+        openContactModalButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const productName = this.dataset.productName;
                 const productId = this.dataset.productId;
-
-                modalProductName.textContent = `{{ __('E\'lon:') }} ${productName} (ID: ${productId})`;
-                const contactPhoneInput = quickContactModal.querySelector('#contactPhone');
-                contactPhoneInput.value = '';
-
-                quickContactModal.style.display = 'flex';
+                modalProductName.textContent = productName;
+                modalProductId.textContent = productId;
+                contactModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             });
         });
 
-        closeModalButton.addEventListener('click', function () {
-            quickContactModal.style.display = 'none';
+        closeContactModal.addEventListener('click', function () {
+            contactModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        closeSuccessModal.addEventListener('click', function () {
+            successModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         });
 
         window.addEventListener('click', function (event) {
-            if (event.target == quickContactModal) {
-                quickContactModal.style.display = 'none';
+            if (event.target === contactModal) {
+                contactModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         });
 
         contactForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            console.log('{{ __('Murojaatingiz yuborildi! Tez orada siz bilan bog\'lanamiz.') }}');
-            quickContactModal.style.display = 'none';
-            contactForm.reset();
+            
+            const name = document.getElementById('contactName').value;
+            const phone = document.getElementById('contactPhone').value;
+            const productId = modalProductId.textContent;
+            const productName = modalProductName.textContent;
+            if (phone.length < "+998 (99) 999-99-99".length) {
+                alert("Iltimos, telefon raqamini to'liq kiriting.");
+                return;
+            }
+            
+            const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${productName}\nE'lon ID: ${productId}`;
+            
+            const submitButton = contactForm.querySelector('.submit-contact-button');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
+
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                contactModal.style.display = 'none';
+                successModal.style.display = 'flex';
+                
+                const checkmark = successModal.querySelector('.checkmark-circle');
+                checkmark.classList.remove('animate');
+                void checkmark.offsetWidth;
+                checkmark.classList.add('animate');
+                
+                contactForm.reset();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.innerHTML = '{{ __('Yuborish') }}';
+            });
         });
 
-        // More Filters Toggle
+    });
+        
         const moreFiltersBtn = document.querySelector('.more-filters-btn');
         const moreFiltersHidden = document.querySelector('.more-filters-hidden');
 
@@ -385,8 +705,7 @@
                 }
             });
         }
-
-        // Image Gallery Navigation for each ad card
+        
         document.querySelectorAll('.ad-card').forEach(card => {
             const adImage = card.querySelector('.ad-image');
             const prevButton = card.querySelector('.prev-button-card');
@@ -401,29 +720,23 @@
                     console.error("Error parsing images data:", e);
                 }
             }
-
             let currentIndex = 0;
-
             function updateCardImage(newIndex) {
                 if (adImage && allImages.length > 0) {
                     currentIndex = (newIndex + allImages.length) % allImages.length;
                     if (currentIndex < 0) {
                         currentIndex = allImages.length - 1;
                     }
-
-                    adImage.style.opacity = '0'; // Fade out
-
+                    adImage.style.opacity = '0';
                     setTimeout(() => {
                         adImage.src = "{{ asset('storage/') }}/" + allImages[currentIndex];
-                        adImage.style.opacity = '1'; // Fade in
+                        adImage.style.opacity = '1';
                     }, 300);
                 }
             }
-
             if (allImages.length > 0) {
                 updateCardImage(0);
             }
-
             if (prevButton) {
                 prevButton.addEventListener('click', function (event) {
                     event.preventDefault();
@@ -431,7 +744,6 @@
                     updateCardImage(currentIndex - 1);
                 });
             }
-
             if (nextButton) {
                 nextButton.addEventListener('click', function (event) {
                     event.preventDefault();
@@ -440,7 +752,6 @@
                 });
             }
         });
-
         const langSwitcher = document.getElementById('language-switcher');
         if (langSwitcher) {
             langSwitcher.addEventListener('change', function () {
@@ -448,7 +759,7 @@
                 window.location.href = `/lang/${selectedLang}`;
             });
         }
-    });
 </script>
+
 </body>
 </html>

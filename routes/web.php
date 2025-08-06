@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}/balls', [BallsController::class, 'updateBall'])->name('users.balls.update');
     Route::delete('products-delete/{id}', [ProductController::class, 'destroy'])->name('delete.product');
 
-    Route::get('/cities/{region_id}', function ($region_id) {
+    Route::get('/get-cities/{region_id}', function ($region_id) {
         return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
     });
 

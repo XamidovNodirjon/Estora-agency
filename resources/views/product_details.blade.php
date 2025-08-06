@@ -147,7 +147,7 @@
 
 <section class="related-listings-section">
     <div class="container">
-        <h2>{{ ($product->region->name ?? __('Noma\'lum hudud')) . ' ' . __('viloyatidagi boshqa e\'lonlar') }}</h2>
+        <h2>{{ ($product->region->name ?? __('Noma\'lum hudud')) . ' ' . __('dagi boshqa e\'lonlar') }}</h2>
         @if(isset($relatedProducts) && $relatedProducts->count() > 0)
             <div class="related-listings-grid">
                 @foreach($relatedProducts as $relatedProduct)

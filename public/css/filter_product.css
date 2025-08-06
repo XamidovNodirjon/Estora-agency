@@ -242,12 +242,6 @@ body {
     color: #1a3c34;
 }
 
-.ads-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
 .ad-card {
     background: #fff;
     border-radius: 10px;
@@ -265,30 +259,6 @@ body {
     width: 100%;
     height: 200px;
     overflow: hidden;
-}
-
-.ad-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.3s ease-in-out; /* Added for fade effect */
-}
-
-.nav-button-card {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 5px 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2em;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .prev-button-card {
@@ -346,12 +316,6 @@ body {
 .product-id {
     font-size: 0.85rem;
     color: #888;
-}
-
-.ad-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
 }
 
 .view-ad-button,
@@ -625,16 +589,64 @@ body {
 }
 
 @media (max-width: 480px) {
-    .ad-card {
-        margin: 0 auto;
-    }
-
-    .ad-actions {
-        flex-direction: column;
-    }
-
+   
     .view-ad-button,
     .quick-contact-button {
         width: 100%;
     }
 }
+ 
+.ads-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.ad-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.image-gallery-card-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-right: 20px;
+}
+.ad-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.nav-button-card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+.prev-button-card { left: 5px; }
+.next-button-card { right: 5px; }
+.ad-info {
+    flex-grow: 1;
+}
+.ad-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.telegram-contact {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #0088cc;
+    text-decoration: none;
+}
+ 
