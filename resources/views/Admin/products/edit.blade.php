@@ -136,7 +136,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="sotix" class="form-label fw-semibold">Sotix</label>
-                            <input type="text" name="sotix" id="sotix" value="{{ old('sotix', $product->sotix) }}"
+                            <input type="number" name="sotix" id="sotix" value="{{ old('sotix', $product->sotix) }}"
                                    class="form-control" placeholder="50">
                         </div>
                     </div>
