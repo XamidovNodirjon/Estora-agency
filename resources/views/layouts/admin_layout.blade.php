@@ -7,7 +7,7 @@
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
     <meta content="Coderthemes" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{asset('assets/logo/logo-white.png')}}">
 
     <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -50,7 +50,7 @@
             </li>
 
         </ul>
-    
+
     </div>
     <div class="left-side-menu">
         <div class="h-100" data-simplebar>
@@ -93,53 +93,6 @@
     </div>
 </div>
 
-<div class="right-bar">
-    <div data-simplebar class="h-100">
-        <div class="rightbar-title">
-            <a href="javascript:void(0);" class="right-bar-toggle float-end">
-                <i class="mdi mdi-close"></i>
-            </a>
-            <h4 class="font-16 m-0 text-white">Theme Customizer</h4>
-        </div>
-        <div class="tab-content pt-0">
-            <div class="tab-pane active" id="settings-tab" role="tabpanel">
-                <div class="p-3">
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Customize </strong> the overall color scheme, Layout, etc.
-                    </div>
-
-                    <!-- Color Scheme -->
-                    <h6 class="fw-medium font-14 mt-4 mb-2 pb-1">Color Scheme</h6>
-                    <div class="form-check form-switch mb-1">
-                        <input type="radio" class="form-check-input" name="layout-color" value="light"
-                               id="light-mode-check"/>
-                        <label class="form-check-label" for="light-mode-check">Light Mode</label>
-                    </div>
-                    <div class="form-check form-switch mb-1">
-                        <input type="radio" class="form-check-input" name="layout-color" value="dark"
-                               id="dark-mode-check"/>
-                        <label class="form-check-label" for="dark-mode-check">Dark Mode</label>
-                    </div>
-
-                    <!-- Left Sidebar Color -->
-                    <h6 class="fw-medium font-14 mt-4 mb-2 pb-1">Left Sidebar Color</h6>
-                    <div class="form-check form-switch mb-1">
-                        <input type="radio" class="form-check-input" name="leftbar-color" value="light"
-                               id="leftbar-light"/>
-                        <label class="form-check-label" for="leftbar-light">Light</label>
-                    </div>
-                    <div class="form-check form-switch mb-1">
-                        <input type="radio" class="form-check-input" name="leftbar-color" value="dark"
-                               id="leftbar-dark"/>
-                        <label class="form-check-label" for="leftbar-dark">Dark</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="rightbar-overlay"></div>
 <div id="morris-bar-chart" style="height: 250px;"></div>
 
 <script>

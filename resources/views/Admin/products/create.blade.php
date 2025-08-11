@@ -10,9 +10,14 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Product nomi"
-                                   required>
+                            <label for="type" class="form-label fw-semibold">E'lon turi</label>
+                            <select id="type" name="type" class="form-select" required>
+                                <option value="">{{__('-- Tanlang --')}}</option>
+                                <option value="rent">{{__('Rent')}}</option>
+                                <option value="sale">{{__('Sale')}}</option>
+                                <option value="expats">{{__('Expats')}}</option>
+                                <option value="sale">{{__('Sale')}}</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="category" class="form-label fw-semibold">Kategoriya</label>
@@ -27,14 +32,13 @@
                             <label for="subcategory" class="form-label fw-semibold">Subkategoriya</label>
                             <select id="subcategory" name="subcategory_id" class="form-select" required>
                                 <option value="">Subkategoriya tanlang</option>
-                                {{-- Subkategoriyalar shu yerda JavaScript orqali yuklanadi --}}
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="region_id" class="form-label fw-semibold">Viloyat</label>
                             <select id="region_id" name="region_id" class="form-select" required>
                                 <option value="">Viloyat tanlang</option>
-                                @foreach($address as $region) {{-- 'address' o'rniga 'regions' deb nomlash tavsiya etiladi --}}
+                                @foreach($address as $region)
                                     <option value="{{ $region->id }}">{{ $region->name }}</option>
                                 @endforeach
                             </select>
@@ -43,7 +47,6 @@
                             <label for="city_id" class="form-label fw-semibold">Tuman / Shahar</label>
                             <select id="city_id" name="city_id" class="form-select" required>
                                 <option value="">Tuman/shahar tanlang</option>
-                                {{-- Shaharlar shu yerda JavaScript orqali yuklanadi --}}
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -85,8 +88,14 @@
                         </div>
                         <div class="col-md-4">
                             <label for="repair" class="form-label fw-semibold">Remont</label>
-                            <input type="text" name="repair" id="repair" class="form-control"
-                                   placeholder="Yevro remont">
+                            <select id="type" name="type" class="form-select" required>
+                                <option value="">{{__('-- Tanlang --')}}</option>
+                                <option value="euro_repair">{{__('Euro repair')}}</option>
+                                <option value="medium_repair">{{__('Medium repair')}}</option>
+                                <option value="repair_required">{{__('Repair required')}}</option>
+                                <option value="white_box">{{__('White box')}}</option>
+                                <option value="box">{{__('Box without repair')}}</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label for="sotix" class="form-label fw-semibold">Sotix</label>
@@ -149,14 +158,14 @@
 
             regionSelect.addEventListener('change', function () {
                 const regionId = this.value;
-                citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>'; // Yuklanish xabari
+                citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
                 citySelect.disabled = true; // Shahar maydonini o'chirish
 
                 if (regionId) {
-                    fetch(`/cities/${regionId}`)
+                    fetch(`{{ route('get-cities', ['region_id' => 'PLACEHOLDER']) }}`.replace('PLACEHOLDER', regionId))
                         .then(response => response.json())
                         .then(data => {
-                            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>'; // Default option
+                            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
                             if (data.length > 0) {
                                 data.forEach(city => {
                                     const option = document.createElement('option');

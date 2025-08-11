@@ -26,7 +26,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nomi</th>
-                                    <th>Narxi (UZS)</th>
+                                    <th>Narxi USD</th>
                                     <th>Telefon</th>
                                     <th>Maydoni (m²)</th>
                                     <th>Xonalar</th>

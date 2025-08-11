@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'uz', 'ru'])) {
         session(['locale' => $locale]);
-//         dd(app()->getLocale());
     }
     return redirect()->back();
 })->name('lang.switch');
@@ -60,7 +59,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/get-cities/{region_id}', function ($region_id) {
         return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
-    });
+    })->name('get-cities');
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 

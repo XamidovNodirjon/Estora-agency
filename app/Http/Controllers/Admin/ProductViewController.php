@@ -12,17 +12,27 @@ class ProductViewController extends Controller
 {
     public function byUser(User $user)
     {
-        $products = ProductView::with('product')
-            ->where('manager_id', $user->id)
-            ->get();
+        try {
+            $products = ProductView::with('product')
+                ->where('manager_id', $user->id)
+                ->get();
 
-        return view('Admin.product_view.index', compact('user', 'products'));
+            return view('Admin.product_view.index', compact('user', 'products'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xatolik: ' . $e->getMessage());
+        }
+
     }
 
     public function deleteViewProduct($id)
     {
-        $view = ProductView::findOrFail($id);
-        $view->delete();
-        return back()->with('Product view success delete');
+        try {
+            $view = ProductView::findOrFail($id);
+            $view->delete();
+            return back()->with('Product view success delete');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xatolik: ' . $e->getMessage());
+        }
+
     }
 }

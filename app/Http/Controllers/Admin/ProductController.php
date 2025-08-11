@@ -10,7 +10,6 @@ use App\Models\SubCategory;
 use App\Services\ProductService;
 use App\Traits\ProductTrait;
 use Illuminate\Http\Request;
-use function dd;
 use function redirect;
 use function response;
 use function view;
@@ -53,11 +52,16 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['images'] = $request->file('images');
+        try {
+            $data = $request->all();
+            $data['images'] = $request->file('images');
 
-        $this->productService->storeProduct($data);
-        return redirect()->route('products')->with('success', 'Product created!');
+            $this->productService->storeProduct($data);
+
+            return redirect()->route('products')->with('success', 'Product created!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xatolik: ' . $e->getMessage());
+        }
     }
 
     public function edit(Request $request, $id)
@@ -86,22 +90,26 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::find($id);
 
-        if (!$product) {
-            return redirect()->route('products')->with('error', 'Product not found!');
-        }
-
-        if ($product->images) {
-            $images = json_decode($product->images, true);
-            foreach ($images as $imagePath) {
-
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
+            if (!$product) {
+                return redirect()->route('products')->with('error', 'Product not found!');
             }
-        }
-        $product->delete();
 
-        return redirect()->route('products')->with('success', 'Product deleted successfully!');
+            if ($product->images) {
+                $images = json_decode($product->images, true);
+                foreach ($images as $imagePath) {
+
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
+                }
+            }
+            $product->delete();
+
+            return redirect()->route('products')->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xatolik: ' . $e->getMessage());
+        }
     }
 
 }

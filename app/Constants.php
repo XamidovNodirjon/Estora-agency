@@ -7,7 +7,7 @@ class Constants
     // category
     const APARTMENT_SELLERS = 'apartment sellers';
     const APARTMENT_RENTERS = 'apartment renters ';
-    const HOME_LOT_SELLERS = 'home lot sellers '; //uy-uchastka sotuvchilari
+    const HOME_LOT_SELLERS = 'home lot sellers ';
     const COMMERCIAL_BUILDING_SALESPEOPLE = 'Commercial building salespeople ';  //tijoriy bino sotuvchilari
     const COMMERCIAL_BUILDING_LESSORS = 'Commercial building lessors ';  //tijoriy bino ijaraa beruvchilar
 
