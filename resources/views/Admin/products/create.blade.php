@@ -11,7 +11,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="type" class="form-label fw-semibold">E'lon turi</label>
-                            <select id="type" name="type" class="form-select" required>
+                            <select id="type" name="name" class="form-select" required>
                                 <option value="">{{__('-- Tanlang --')}}</option>
                                 <option value="rent">{{__('Rent')}}</option>
                                 <option value="sale">{{__('Sale')}}</option>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="repair" class="form-label fw-semibold">Remont</label>
-                            <select id="type" name="type" class="form-select" required>
+                            <select id="type" name="repair" class="form-select" required>
                                 <option value="">{{__('-- Tanlang --')}}</option>
                                 <option value="euro_repair">{{__('Euro repair')}}</option>
                                 <option value="medium_repair">{{__('Medium repair')}}</option>

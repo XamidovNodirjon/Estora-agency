@@ -1,18 +1,23 @@
-@extends('layouts.managers_layout')
+@extends('layouts.admin_layout')
 @section('content')
     <div class="container py-4">
         <div class="card shadow-sm rounded">
-            <div class="card-header text-center success">
+            <div class="card-header text-center">
                 <h4 class="mb-0 fw-bold">Create Product</h4>
             </div>
             <div class="card-body">
-                <form action="{{route('manager-store-products')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('store-product') }}" method="post" enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Product nomi"
-                                   required>
+                            <label for="type" class="form-label fw-semibold">E'lon turi</label>
+                            <select id="type" name="name" class="form-select" required>
+                                <option value="">{{__('-- Tanlang --')}}</option>
+                                <option value="rent">{{__('Rent')}}</option>
+                                <option value="sale">{{__('Sale')}}</option>
+                                <option value="expats">{{__('Expats')}}</option>
+                                <option value="sale">{{__('Sale')}}</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="category" class="form-label fw-semibold">Kategoriya</label>
@@ -83,8 +88,14 @@
                         </div>
                         <div class="col-md-4">
                             <label for="repair" class="form-label fw-semibold">Remont</label>
-                            <input type="text" name="repair" id="repair" class="form-control"
-                                   placeholder="Yevro remont">
+                            <select id="type" name="repair" class="form-select" required>
+                                <option value="">{{__('-- Tanlang --')}}</option>
+                                <option value="euro_repair">{{__('Euro repair')}}</option>
+                                <option value="medium_repair">{{__('Medium repair')}}</option>
+                                <option value="repair_required">{{__('Repair required')}}</option>
+                                <option value="white_box">{{__('White box')}}</option>
+                                <option value="box">{{__('Box without repair')}}</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label for="sotix" class="form-label fw-semibold">Sotix</label>
@@ -100,38 +111,87 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('category').addEventListener('change', function () {
-            var categoryId = this.value;
-            var subcategorySelect = document.getElementById('subcategory');
-            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
 
-            if (categoryId) {
-                fetch('/subcategories/' + categoryId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (subcategory) {
-                            subcategorySelect.innerHTML += `<option value="${subcategory.id}">${subcategory.name}</option>`;
-                        });
-                    });
-            }
-        });
-    </script>
     <script>
-        document.getElementById('region_id').addEventListener('change', function () {
-            var regionId = this.value;
-            var citySelect = document.getElementById('city_id');
-            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+        document.addEventListener('DOMContentLoaded', function () {
+            // Kategoriya va Subkategoriya uchun
+            const categorySelect = document.getElementById('category');
+            const subcategorySelect = document.getElementById('subcategory');
 
-            if (regionId) {
-                fetch('/get-cities/' + regionId)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(function (city) {
-                            citySelect.innerHTML += `<option value="${city.id}">${city.name}</option>`;
+            categorySelect.addEventListener('change', function () {
+                const categoryId = this.value;
+                subcategorySelect.innerHTML = '<option value="">Yuklanmoqda...</option>'; // Yuklanish xabari
+                subcategorySelect.disabled = true; // Subkategoriya maydonini o'chirish
+
+                if (categoryId) {
+                    fetch(`/subcategories/${categoryId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>'; // Default option
+                            if (data.length > 0) {
+                                data.forEach(subcategory => {
+                                    const option = document.createElement('option');
+                                    option.value = subcategory.id;
+                                    option.textContent = subcategory.name;
+                                    subcategorySelect.appendChild(option);
+                                });
+                                subcategorySelect.disabled = false; // Faollashtirish
+                            } else {
+                                subcategorySelect.innerHTML = '<option value="">Subkategoriyalar topilmadi</option>';
+                                subcategorySelect.disabled = true; // O'chirish
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Xatolik yuz berdi:', error);
+                            subcategorySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            subcategorySelect.disabled = true;
                         });
-                    });
-            }
+                } else {
+                    subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+                    subcategorySelect.disabled = true;
+                }
+            });
+
+            // Viloyat va Shahar uchun
+            const regionSelect = document.getElementById('region_id');
+            const citySelect = document.getElementById('city_id');
+
+            regionSelect.addEventListener('change', function () {
+                const regionId = this.value;
+                citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
+                citySelect.disabled = true; // Shahar maydonini o'chirish
+
+                if (regionId) {
+                    fetch(`{{ route('get-cities', ['region_id' => 'PLACEHOLDER']) }}`.replace('PLACEHOLDER', regionId))
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+                            if (data.length > 0) {
+                                data.forEach(city => {
+                                    const option = document.createElement('option');
+                                    option.value = city.id;
+                                    option.textContent = city.name;
+                                    citySelect.appendChild(option);
+                                });
+                                citySelect.disabled = false; // Faollashtirish
+                            } else {
+                                citySelect.innerHTML = '<option value="">Tuman/shahar topilmadi</option>';
+                                citySelect.disabled = true; // O'chirish
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Xatolik yuz berdi:', error);
+                            citySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            citySelect.disabled = true;
+                        });
+                } else {
+                    citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+                    citySelect.disabled = true;
+                }
+            });
+
+            subcategorySelect.disabled = true;
+            citySelect.disabled = true;
         });
     </script>
 @endsection
