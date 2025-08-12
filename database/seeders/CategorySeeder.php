@@ -19,7 +19,10 @@ class CategorySeeder extends Seeder
             Constants::APARTMENT_SELLERS,
             Constants::HOME_LOT_SELLERS,
             Constants::COMMERCIAL_BUILDING_LESSORS,
-            Constants::COMMERCIAL_BUILDING_SALESPEOPLE
+            Constants::COMMERCIAL_BUILDING_SALESPEOPLE,
+            Constants::EXCHANGE,
+            Constants::MORTGAGE_LOAN,
+            Constants::INSTALLMENT,
         ];
 
         foreach ($categories as $category) {
