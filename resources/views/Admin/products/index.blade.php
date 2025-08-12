@@ -30,7 +30,7 @@
                             <tr>
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ number_format($product->price, 0, '.', ' ') }} so'm</td>
+                                <td>{{ number_format($product->price, 0, '.', ' ') }} $</td>
                                 <td>{{ $product->phone }}</td>
                                 <td>{{ $product->square }} m²</td>
                                 <td>{{ $product->rooms }}</td>

@@ -116,10 +116,10 @@ class ProductController extends Controller
         $product = $this->getProductById($id);
         try {
             $newProduct = $this->productService->updateProduct($product, $request->all());
-            return redirect()->route('edit-product', ['id' => $newProduct->id])->with(['messages' => 'Product updated successfully!']);
+            return redirect()->route('products')->with(['messages' => 'Product updated successfully!']);
         }
         catch (\Exception $e) {
-            return redirect()->back()->with('errors', 'Xatolik: ' . $e->getMessage());
+            return redirect()->route('products')->with('errors', 'Xatolik: ' . $e->getMessage());
         }
     }
 
