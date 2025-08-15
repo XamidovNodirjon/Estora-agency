@@ -11,9 +11,13 @@
                     @method('PUT')
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Name</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}"
-                                   class="form-control" placeholder="Product nomi" required>
+                            <label for="name" class="form-label fw-medium">{{ __('Ad type') }}</label>
+                            <select id="name" name="name" class="form-select rounded-pill" required>
+                                <option value="">{{ __('Select ad type') }}</option>
+                                <option value="rent" {{ old('name', $product->name) == 'rent' ? 'selected' : '' }}>{{ __('Rent') }}</option>
+                                <option value="sale" {{ old('name', $product->name) == 'sale' ? 'selected' : '' }}>{{ __('Sale') }}</option>
+                                <option value="expats" {{ old('name', $product->name) == 'expats' ? 'selected' : '' }}>{{ __('Expats') }}</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="category" class="form-label fw-semibold">Kategoriya</label>
@@ -70,6 +74,26 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="d-block fw-medium mb-2">{{ __('Additional options') }}</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="exchange" name="exchange"
+                                           value="1" {{ old('exchange', $product->exchange) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="exchange">{{ __('Exchange') }}</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="credit" name="credit"
+                                           value="1" {{ old('credit', $product->credit) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="credit">{{ __('Ipoteka credit') }}</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="pay_in_installments" name="pay_in_installments"
+                                           value="1" {{ old('pay_in_installments', $product->pay_in_installments) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="pay_in_installments">{{ __('Installment / Payment in installments') }}</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="price" class="form-label fw-semibold">Narxi</label>
@@ -130,9 +154,15 @@
                                    class="form-control" placeholder="5" min="1">
                         </div>
                         <div class="col-md-4">
-                            <label for="repair" class="form-label fw-semibold">Remont</label>
-                            <input type="text" name="repair" id="repair" value="{{ old('repair', $product->repair) }}"
-                                   class="form-control" placeholder="Yevro remont">
+                            <label for="repair" class="form-label fw-medium">{{ __('Repair') }}</label>
+                            <select id="repair" name="repair" class="form-select rounded-pill" required>
+                                <option value="">{{ __('Repair status') }}</option>
+                                <option value="euro_repair" {{ old('repair', $product->repair) == 'euro_repair' ? 'selected' : '' }}>{{ __('Euro repair') }}</option>
+                                <option value="medium_repair" {{ old('repair', $product->repair) == 'medium_repair' ? 'selected' : '' }}>{{ __('Medium repair') }}</option>
+                                <option value="repair_required" {{ old('repair', $product->repair) == 'repair_required' ? 'selected' : '' }}>{{ __('Repair required') }}</option>
+                                <option value="white_box" {{ old('repair', $product->repair) == 'white_box' ? 'selected' : '' }}>{{ __('White box') }}</option>
+                                <option value="box" {{ old('repair', $product->repair) == 'box' ? 'selected' : '' }}>{{ __('Box without repair') }}</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label for="sotix" class="form-label fw-semibold">Sotix</label>
@@ -148,4 +178,23 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productImagesList = document.getElementById('product-images-list');
+            const removeImagesInput = document.getElementById('remove_images');
+            let removedImages = [];
+
+            productImagesList.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-image-btn')) {
+                    const imageIndex = e.target.dataset.index; // rasm index
+                    removedImages.push(imageIndex);
+
+                    removeImagesInput.value = JSON.stringify(removedImages);
+
+                    e.target.closest('.position-relative').remove();
+                }
+            });
+        });
+    </script>
+
 @endsection

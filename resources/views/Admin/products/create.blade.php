@@ -4,113 +4,114 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h4 class="text-center">Create Product</h4>
+                <h4 class="text-center">{{__('Create Product')}}</h4>
             </div>
 
             <div class="card-body">
-                <form id="product-form" action="{{ route('store-product') }}" method="post" enctype="multipart/form-data" novalidate>
-                @csrf
-
-                <!-- Wizard Navigation -->
+                <form id="product-form" action="{{ route('store-product') }}" method="post"
+                      enctype="multipart/form-data" novalidate>
+                    @csrf
                     <div class="wizard-nav">
                         <div class="wizard-step active" data-step="1">
                             <div class="step-number">1</div>
-                            <div class="step-title">Basic Information</div>
+                            <div class="step-title">{{__('Basic Information')}}</div>
                         </div>
                         <div class="wizard-step" data-step="2">
                             <div class="step-number">2</div>
-                            <div class="step-title">Location & Price</div>
+                            <div class="step-title">{{__('Location & Price')}}</div>
                         </div>
                         <div class="wizard-step" data-step="3">
                             <div class="step-number">3</div>
-                            <div class="step-title">Details</div>
+                            <div class="step-title">{{__('Details')}}</div>
                         </div>
                         <div class="wizard-step" data-step="4">
                             <div class="step-number">4</div>
-                            <div class="step-title">Media & Contact</div>
+                            <div class="step-title">{{__('Media & Contact')}}</div>
                         </div>
                     </div>
 
-                    <!-- Step 1: Basic Information -->
                     <div class="wizard-content active" data-step-content="1">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="type">E'lon turi <span class="text-danger">*</span></label>
+                                <label for="type">{{__('Ad type')}}<span class="text-danger"></span></label>
                                 <select id="type" name="name" class="form-control" required>
-                                    <option value="">{{__('-- Tanlang --')}}</option>
+                                    <option value="">{{__('Select ad type')}}</option>
                                     <option value="rent">{{__('Rent')}}</option>
                                     <option value="sale">{{__('Sale')}}</option>
                                     <option value="expats">{{__('Expats')}}</option>
                                 </select>
-                                <div class="invalid-feedback">Iltimos, e'lon turini tanlang</div>
+                                <div class="invalid-feedback">{{__("Please select ad type")}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="category">Kategoriya <span class="text-danger">*</span></label>
+                                <label for="category">{{__('Category')}}<span class="text-danger"></span></label>
                                 <select id="category" name="category_id" class="form-control" required>
-                                    <option value="">Kategoriya tanlang</option>
+                                    <option value="">{{__('Select a category')}}</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Iltimos, kategoriyani tanlang</div>
+                                <div class="invalid-feedback">{{__('Please select a category')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="subcategory">Subkategoriya <span class="text-danger">*</span></label>
+                                <label for="subcategory">{{__('Sub category')}}<span class="text-danger"></span></label>
                                 <select id="subcategory" name="subcategory_id" class="form-control" required disabled>
-                                    <option value="">Subkategoriya tanlang</option>
+                                    <option value="">{{__('Select a sub category')}}</option>
                                 </select>
-                                <div class="invalid-feedback">Iltimos, subkategoriyani tanlang</div>
+                                <div class="invalid-feedback">{{__('Please select a sub category')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="repair">Remont <span class="text-danger">*</span></label>
+                                <label for="repair">{{__("Repair")}}<span class="text-danger"></span></label>
                                 <select id="repair" name="repair" class="form-control" required>
-                                    <option value="">{{__('-- Tanlang --')}}</option>
+                                    <option value="">{{__("Repair status")}}</option>
                                     <option value="euro_repair">{{__('Euro repair')}}</option>
                                     <option value="medium_repair">{{__('Medium repair')}}</option>
                                     <option value="repair_required">{{__('Repair required')}}</option>
                                     <option value="white_box">{{__('White box')}}</option>
                                     <option value="box">{{__('Box without repair')}}</option>
                                 </select>
-                                <div class="invalid-feedback">Iltimos, remont turini tanlang</div>
+                                <div class="invalid-feedback">{{__('Please select a repair status')}}</div>
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label for="description">Tavsifi <span class="text-danger">*</span></label>
-                                <textarea name="description" id="description" class="form-control" placeholder="Mahsulot haqida qisqacha" rows="3" required></textarea>
-                                <div class="invalid-feedback">Iltimos, tavsifni kiriting</div>
+                                <label for="description">{{__('Description')}}<span class="text-danger"></span></label>
+                                <textarea name="description" id="description" class="form-control"
+                                          placeholder="{{__('Enter product information')}}" rows="3"
+                                          required></textarea>
+                                <div class="invalid-feedback">{{__('Please enter a description')}}</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 2: Location & Price -->
                     <div class="wizard-content" data-step-content="2">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="region_id">Viloyat <span class="text-danger">*</span></label>
+                                <label for="region_id">{{__('Province')}}<span class="text-danger"></span></label>
                                 <select id="region_id" name="region_id" class="form-control" required>
-                                    <option value="">Viloyat tanlang</option>
+                                    <option value="">{{__('Select province')}}</option>
                                     @foreach($address as $region)
                                         <option value="{{ $region->id }}">{{ $region->name }}</option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Iltimos, viloyatni tanlang</div>
+                                <div class="invalid-feedback">{{__('Please select a province')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="city_id">Tuman / Shahar <span class="text-danger">*</span></label>
+                                <label for="city_id">{{__('District / City')}} <span class="text-danger"></span></label>
                                 <select id="city_id" name="city_id" class="form-control" required disabled>
-                                    <option value="">Tuman/shahar tanlang</option>
+                                    <option value="">{{__('Select a district/city')}}</option>
                                 </select>
-                                <div class="invalid-feedback">Iltimos, tuman/shaharni tanlang</div>
+                                <div class="invalid-feedback">{{__('Please select a district/city')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="price">Narxi <span class="text-danger">*</span></label>
-                                <input type="number" name="price" id="price" class="form-control" placeholder="Narxi" required>
-                                <div class="invalid-feedback">Iltimos, narxni kiriting</div>
+                                <label for="price">{{__('Price')}}<span class="text-danger"></span></label>
+                                <input type="number" name="price" id="price" class="form-control"
+                                       placeholder="{{__('Price')}}"
+                                       required>
+                                <div class="invalid-feedback">{{__('Please select a price')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -119,32 +120,36 @@
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label class="d-block mb-3">Qo'shimcha imkoniyatlar</label>
+                                <label class="d-block mb-3">{{__('Additional options')}}</label>
                                 <div class="toggle-column">
                                     <div class="toggle-item">
                                         <input type="hidden" name="exchange" value="0">
-                                        <input type="checkbox" name="exchange" id="exchange" class="toggle-input" value="1" {{ old('exchange', $product->exchange ?? false) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="exchange" id="exchange" class="toggle-input"
+                                               value="1" {{ old('exchange', $product->exchange ?? false) ? 'checked' : '' }}>
                                         <label for="exchange" class="toggle-label">
                                             <span class="toggle-switch"></span>
-                                            <span class="toggle-text">Ayirboshlash</span>
+                                            <span class="toggle-text">{{__('Exchange')}}</span>
                                         </label>
                                     </div>
 
                                     <div class="toggle-item">
                                         <input type="hidden" name="credit" value="0">
-                                        <input type="checkbox" name="credit" id="credit" class="toggle-input" value="1" {{ old('credit', $product->credit ?? false) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="credit" id="credit" class="toggle-input"
+                                               value="1" {{ old('credit', $product->credit ?? false) ? 'checked' : '' }}>
                                         <label for="credit" class="toggle-label">
                                             <span class="toggle-switch"></span>
-                                            <span class="toggle-text">Ipoteka Krediti</span>
+                                            <span class="toggle-text">Ipoteka credit</span>
                                         </label>
                                     </div>
 
                                     <div class="toggle-item">
                                         <input type="hidden" name="pay_in_installments" value="0">
-                                        <input type="checkbox" name="pay_in_installments" id="pay_in_installments" class="toggle-input" value="1" {{ old('pay_in_installments', $product->pay_in_installments ?? false) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="pay_in_installments" id="pay_in_installments"
+                                               class="toggle-input"
+                                               value="1" {{ old('pay_in_installments', $product->pay_in_installments ?? false) ? 'checked' : '' }}>
                                         <label for="pay_in_installments" class="toggle-label">
                                             <span class="toggle-switch"></span>
-                                            <span class="toggle-text">Bo'lib to'lash / Rasrochka</span>
+                                            <span class="toggle-text">Installment / Payment in installments</span>
                                         </label>
                                     </div>
                                 </div>
@@ -155,61 +160,66 @@
                     <div class="wizard-content" data-step-content="3">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="floor">Qavat <span class="text-danger">*</span></label>
-                                <input type="number" name="floor" id="floor" class="form-control" placeholder="1" min="1" required>
-                                <div class="invalid-feedback">Iltimos, qavatni kiriting</div>
+                                <label for="floor">{{__('Floor')}}<span class="text-danger"></span></label>
+                                <input type="number" name="floor" id="floor" class="form-control" placeholder="1"
+                                       min="1" required>
+                                <div class="invalid-feedback">{{__('Please select a floor')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="building_floor">Bino qavati <span class="text-danger">*</span></label>
-                                <input type="number" name="building_floor" id="building_floor" class="form-control" placeholder="1" min="1" required>
-                                <div class="invalid-feedback">Iltimos, bino qavatini kiriting</div>
+                                <label for="building_floor">{{__('Building floor')}}<span
+                                        class="text-danger"></span></label>
+                                <input type="number" name="building_floor" id="building_floor" class="form-control"
+                                       placeholder="1" min="1" required>
+                                <div class="invalid-feedback">Please enter the building floor</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="square">Maydon (kv.m) <span class="text-danger">*</span></label>
-                                <input type="number" name="square" id="square" class="form-control" placeholder="50" min="1" required>
-                                <div class="invalid-feedback">Iltimos, maydonni kiriting</div>
+                                <label for="square">Area (m²)<span class="text-danger"></span></label>
+                                <input type="number" name="square" id="square" class="form-control" placeholder="50"
+                                       min="1" required>
+                                <div class="invalid-feedback">{{__('Please enter the field')}}</div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="rooms">Xonalar soni <span class="text-danger">*</span></label>
-                                <input type="number" name="rooms" id="rooms" class="form-control" placeholder="5" min="1" required>
-                                <div class="invalid-feedback">Iltimos, xonalar sonini kiriting</div>
+                                <label for="rooms">{{__('Number of rooms')}}<span class="text-danger"></span></label>
+                                <input type="number" name="rooms" id="rooms" class="form-control" placeholder="5"
+                                       min="1" required>
+                                <div class="invalid-feedback">{{__('Please enter the number of rooms.')}}</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 4: Media & Contact -->
                     <div class="wizard-content" data-step-content="4">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="images">Rasmlar <span class="text-danger">*</span></label>
-                                <input type="file" name="images[]" id="images" class="form-control-file" multiple required>
-                                <small class="form-text text-muted">Bir nechta rasm tanlashingiz mumkin.</small>
-                                <div class="invalid-feedback">Iltimos, kamida bitta rasm yuklang</div>
+                                <label for="images">{{__('Photos')}}<span class="text-danger"></span></label>
+                                <input type="file" name="images[]" id="images" class="form-control-file" multiple
+                                       required>
+                                <small class="form-text text-muted">You can select multiple images.</small>
+                                <div class="invalid-feedback">{{__('Please upload at least one image.')}}</div>
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label for="phone">Telefon <span class="text-danger">*</span></label>
-                                <input type="text" name="phone" id="phone" class="form-control" placeholder="+998901234567" maxlength="13" minlength="9" required>
-                                <div class="invalid-feedback">Iltimos, telefon raqamini kiriting</div>
+                                <label for="phone">{{__('Phone')}}<span class="text-danger"></span></label>
+                                <input type="text" name="phone" id="phone" class="form-control"
+                                       placeholder="+998901234567" maxlength="13" minlength="9" required>
+                                <div class="invalid-feedback">{{__('Please enter your phone number.')}}</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Wizard Controls -->
                     <div class="wizard-controls">
                         <button type="button" class="wizard-prev-btn btn btn-secondary" disabled>
-                            <i class="fas fa-arrow-left mr-2"></i> Orqaga
+                            <i class="fas fa-arrow-left mr-2"></i>{{__('To back')}}
                         </button>
 
                         <button type="button" class="wizard-next-btn btn btn-primary">
-                            Keyingi <i class="fas fa-arrow-right ml-2"></i>
+                            {{__('Next')}}<i class="fas fa-arrow-right ml-2"></i>
                         </button>
 
                         <button type="submit" class="wizard-submit-btn btn btn-success" style="display: none;">
-                            <i class="fas fa-check-circle mr-2"></i> Yaratish
+                            <i class="fas fa-check-circle mr-2"></i> {{__('Creat')}}
                         </button>
                     </div>
                 </form>
@@ -218,7 +228,6 @@
     </div>
 
     <style>
-        /* Wizard Navigation */
         .wizard-nav {
             display: flex;
             justify-content: space-between;
@@ -297,7 +306,7 @@
             background-color: #f9f9f9;
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .wizard-content.active {
@@ -306,8 +315,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Form Styling */
@@ -410,7 +425,7 @@
             background-color: #5a6268;
             border-color: #545b62;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn-primary {
@@ -455,12 +470,12 @@
             padding: 12px 15px;
             background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
         .toggle-item:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .toggle-input {
@@ -497,7 +512,7 @@
             top: 2px;
             left: 2px;
             transition: transform 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .toggle-input:checked + .toggle-label .toggle-switch {
@@ -555,9 +570,7 @@
             const submitBtn = document.querySelector('.wizard-submit-btn');
             let currentStep = 1;
 
-            // Initialize wizard
             function updateWizard() {
-                // Update step indicators
                 steps.forEach(step => {
                     const stepNum = parseInt(step.dataset.step);
                     if (stepNum === currentStep) {
@@ -589,23 +602,23 @@
                     submitBtn.style.display = 'none';
                 }
 
-                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                form.scrollIntoView({behavior: 'smooth', block: 'start'});
             }
 
-            nextBtn.addEventListener('click', function() {
+            nextBtn.addEventListener('click', function () {
                 if (validateStep(currentStep)) {
                     currentStep++;
                     updateWizard();
                 }
             });
 
-            prevBtn.addEventListener('click', function() {
+            prevBtn.addEventListener('click', function () {
                 currentStep--;
                 updateWizard();
             });
 
             steps.forEach(step => {
-                step.addEventListener('click', function() {
+                step.addEventListener('click', function () {
                     const stepNum = parseInt(this.dataset.step);
                     if (stepNum < currentStep) {
                         currentStep = stepNum;
@@ -629,7 +642,7 @@
                         isValid = false;
 
                         if (isValid === false) {
-                            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            field.scrollIntoView({behavior: 'smooth', block: 'center'});
                         }
                     }
                 });
@@ -637,7 +650,7 @@
                 return isValid;
             }
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 let allValid = true;
 
                 for (let i = 1; i <= steps.length; i++) {
@@ -651,11 +664,10 @@
 
                 if (!allValid) {
                     e.preventDefault();
-                    alert("Iltimos, barcha kerakli maydonlarni to'ldiring!");
+                    alert("Please fill in all required fields!");
                 }
             });
 
-            // Initialize dependent selects
             const categorySelect = document.getElementById('category');
             const subcategorySelect = document.getElementById('subcategory');
             const regionSelect = document.getElementById('region_id');
@@ -664,14 +676,14 @@
             // Category and Subcategory
             categorySelect.addEventListener('change', function () {
                 const categoryId = this.value;
-                subcategorySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
+                subcategorySelect.innerHTML = '<option value="">Loading...</option>';
                 subcategorySelect.disabled = true;
 
                 if (categoryId) {
                     fetch(`/subcategories/${categoryId}`)
                         .then(response => response.json())
                         .then(data => {
-                            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+                            subcategorySelect.innerHTML = '<option value="">Select a subcategory...</option>';
                             if (data.length > 0) {
                                 data.forEach(subcategory => {
                                     const option = document.createElement('option');
@@ -681,31 +693,31 @@
                                 });
                                 subcategorySelect.disabled = false;
                             } else {
-                                subcategorySelect.innerHTML = '<option value="">Subkategoriyalar topilmadi</option>';
+                                subcategorySelect.innerHTML = '<option value="">No subcategories found</option>';
                                 subcategorySelect.disabled = true;
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            subcategorySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            subcategorySelect.innerHTML = '<option value="">Loading error</option>';
                             subcategorySelect.disabled = true;
                         });
                 } else {
-                    subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+                    subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
                     subcategorySelect.disabled = true;
                 }
             });
 
             regionSelect.addEventListener('change', function () {
                 const regionId = this.value;
-                citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
+                citySelect.innerHTML = '<option value="">Loading...</option>';
                 citySelect.disabled = true;
 
                 if (regionId) {
                     fetch(`{{ route('get-cities', ['region_id' => 'PLACEHOLDER']) }}`.replace('PLACEHOLDER', regionId))
                         .then(response => response.json())
                         .then(data => {
-                            citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+                            citySelect.innerHTML = '<option value="">Select a district/city</option>';
                             if (data.length > 0) {
                                 data.forEach(city => {
                                     const option = document.createElement('option');
@@ -715,17 +727,17 @@
                                 });
                                 citySelect.disabled = false;
                             } else {
-                                citySelect.innerHTML = '<option value="">Tuman/shahar topilmadi</option>';
+                                citySelect.innerHTML = '<option value="">District/city not found</option>';
                                 citySelect.disabled = true;
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            citySelect.innerHTML = '<option value="">Yuklashda xato</option>';
+                            citySelect.innerHTML = '<option value="">Loading error</option>';
                             citySelect.disabled = true;
                         });
                 } else {
-                    citySelect.innerHTML = '<option value="">Tuman/shahar tanlang</option>';
+                    citySelect.innerHTML = '<option value="">Select a district/city</option>';
                     citySelect.disabled = true;
                 }
             });

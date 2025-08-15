@@ -49,6 +49,7 @@ class ProductService
         return $product;
     }
 
+
     public function updateProduct(Product $product, array $data)
     {
         $product->name = $data['name'] ?? $product->name;
@@ -66,27 +67,40 @@ class ProductService
         $product->repair = $data['repair'] ?? $product->repair;
         $product->sotix = $data['sotix'] ?? $product->sotix;
         $product->user_id = auth()->id();
-
         $product->exchange = $data['exchange'] ?? $product->exchange;
         $product->pay_in_installments = $data['pay_in_installments'] ?? $product->pay_in_installments;
         $product->credit = $data['credit'] ?? $product->credit;
 
-        if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
-            if (!empty($product->images)) {
-                $oldImages = json_decode($product->images, true);
-                foreach ($oldImages as $oldImage) {
-                    Storage::disk('public')->delete($oldImage);
+        $existingImages = !empty($product->images) ? json_decode($product->images, true) : [];
+
+        $removeImages = [];
+        if (!empty($data['remove_images'])) {
+            $removeImages = is_string($data['remove_images'])
+                ? json_decode($data['remove_images'], true)
+                : (is_array($data['remove_images']) ? $data['remove_images'] : []);
+        }
+
+        if (!empty($removeImages)) {
+            foreach ($removeImages as $index) {
+                if (isset($existingImages[$index])) {
+                    Storage::disk('public')->delete($existingImages[$index]);
+                    unset($existingImages[$index]);
                 }
             }
+            $existingImages = array_values($existingImages);
+        }
 
-            $imagePaths = [];
+        if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
             foreach ($data['images'] as $image) {
                 $path = $image->store('home', 'public');
-                $imagePaths[] = $path;
+                $existingImages[] = $path;
             }
-            $product->images = json_encode($imagePaths);
         }
+
+        $product->images = json_encode($existingImages);
+
         $product->save();
         return $product;
     }
+
 }
