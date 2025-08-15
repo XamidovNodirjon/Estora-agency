@@ -18,7 +18,6 @@
 
 </head>
 <body>
-@vite('resources/js/app.js')
 
 <div id="dashboard-app"></div>
 
@@ -216,7 +215,6 @@
             e.preventDefault();
             return;
         }
-        // tashqariga bosilsa hamma dropdownni yopin
         document.querySelectorAll('.dropdown-simple.open').forEach(d => d.classList.remove('open'));
     });
 </script>

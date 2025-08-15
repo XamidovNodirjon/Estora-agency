@@ -29,6 +29,8 @@ return new class extends Migration {
             $table->string('repair')->nullable();
             $table->unsignedBigInteger('sotix')->nullable();
             $table->boolean('status')->default(true);
+
+
             $table->timestamps();
         });
     }

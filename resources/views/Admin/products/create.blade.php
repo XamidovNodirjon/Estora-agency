@@ -1,110 +1,215 @@
 @extends('layouts.admin_layout')
+
 @section('content')
-    <div class="container py-4">
-        <div class="card shadow-sm rounded">
-            <div class="card-header text-center">
-                <h4 class="mb-0 fw-bold">Create Product</h4>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">Create Product</h4>
             </div>
+
             <div class="card-body">
-                <form action="{{ route('store-product') }}" method="post" enctype="multipart/form-data" novalidate>
-                    @csrf
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="type" class="form-label fw-semibold">E'lon turi</label>
-                            <select id="type" name="name" class="form-select" required>
-                                <option value="">{{__('-- Tanlang --')}}</option>
-                                <option value="rent">{{__('Rent')}}</option>
-                                <option value="sale">{{__('Sale')}}</option>
-                                <option value="expats">{{__('Expats')}}</option>
-                                <option value="sale">{{__('Sale')}}</option>
-                            </select>
+                <form id="product-form" action="{{ route('store-product') }}" method="post" enctype="multipart/form-data" novalidate>
+                @csrf
+
+                <!-- Wizard Navigation -->
+                    <div class="wizard-nav">
+                        <div class="wizard-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Basic Information</div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="category" class="form-label fw-semibold">Kategoriya</label>
-                            <select id="category" name="category_id" class="form-select" required>
-                                <option value="">Kategoriya tanlang</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
+                        <div class="wizard-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Location & Price</div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="subcategory" class="form-label fw-semibold">Subkategoriya</label>
-                            <select id="subcategory" name="subcategory_id" class="form-select" required>
-                                <option value="">Subkategoriya tanlang</option>
-                            </select>
+                        <div class="wizard-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Details</div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="region_id" class="form-label fw-semibold">Viloyat</label>
-                            <select id="region_id" name="region_id" class="form-select" required>
-                                <option value="">Viloyat tanlang</option>
-                                @foreach($address as $region)
-                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="city_id" class="form-label fw-semibold">Tuman / Shahar</label>
-                            <select id="city_id" name="city_id" class="form-select" required>
-                                <option value="">Tuman/shahar tanlang</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="price" class="form-label fw-semibold">Narxi</label>
-                            <input type="number" name="price" id="price" class="form-control" placeholder="Narxi">
-                        </div>
-                        <div class="col-md-12">
-                            <label for="description" class="form-label fw-semibold">Tavsifi</label>
-                            <textarea name="description" id="description" class="form-control"
-                                      placeholder="Mahsulot haqida qisqacha" rows="3"></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="images" class="form-label fw-semibold">Rasmlar</label>
-                            <input type="file" name="images[]" id="images" class="form-control" multiple required>
-                            <small class="form-text text-muted">Bir nechta rasm tanlashingiz mumkin.</small>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="phone" class="form-label fw-semibold">Telefon</label>
-                            <input type="text" name="phone" id="phone" class="form-control" placeholder="+998901234567"
-                                   maxlength="13" minlength="9">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="floor" class="form-label fw-semibold">Qavat</label>
-                            <input type="number" name="floor" id="floor" class="form-control" placeholder="1" min="1">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="building_floor" class="form-label fw-semibold">Bino qavati</label>
-                            <input type="number" name="building_floor" id="building_floor" class="form-control"
-                                   placeholder="1" min="1">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="square" class="form-label fw-semibold">Maydon (kv.m)</label>
-                            <input type="number" name="square" id="square" class="form-control" placeholder="50"
-                                   min="1">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="rooms" class="form-label fw-semibold">Xonalar soni</label>
-                            <input type="number" name="rooms" id="rooms" class="form-control" placeholder="5" min="1">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="repair" class="form-label fw-semibold">Remont</label>
-                            <select id="type" name="repair" class="form-select" required>
-                                <option value="">{{__('-- Tanlang --')}}</option>
-                                <option value="euro_repair">{{__('Euro repair')}}</option>
-                                <option value="medium_repair">{{__('Medium repair')}}</option>
-                                <option value="repair_required">{{__('Repair required')}}</option>
-                                <option value="white_box">{{__('White box')}}</option>
-                                <option value="box">{{__('Box without repair')}}</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="sotix" class="form-label fw-semibold">Sotix</label>
-                            <input type="text" name="sotix" id="sotix" class="form-control" placeholder="50">
+                        <div class="wizard-step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Media & Contact</div>
                         </div>
                     </div>
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold rounded-pill">Create
-                            product
+
+                    <!-- Step 1: Basic Information -->
+                    <div class="wizard-content active" data-step-content="1">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="type">E'lon turi <span class="text-danger">*</span></label>
+                                <select id="type" name="name" class="form-control" required>
+                                    <option value="">{{__('-- Tanlang --')}}</option>
+                                    <option value="rent">{{__('Rent')}}</option>
+                                    <option value="sale">{{__('Sale')}}</option>
+                                    <option value="expats">{{__('Expats')}}</option>
+                                </select>
+                                <div class="invalid-feedback">Iltimos, e'lon turini tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="category">Kategoriya <span class="text-danger">*</span></label>
+                                <select id="category" name="category_id" class="form-control" required>
+                                    <option value="">Kategoriya tanlang</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Iltimos, kategoriyani tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="subcategory">Subkategoriya <span class="text-danger">*</span></label>
+                                <select id="subcategory" name="subcategory_id" class="form-control" required disabled>
+                                    <option value="">Subkategoriya tanlang</option>
+                                </select>
+                                <div class="invalid-feedback">Iltimos, subkategoriyani tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="repair">Remont <span class="text-danger">*</span></label>
+                                <select id="repair" name="repair" class="form-control" required>
+                                    <option value="">{{__('-- Tanlang --')}}</option>
+                                    <option value="euro_repair">{{__('Euro repair')}}</option>
+                                    <option value="medium_repair">{{__('Medium repair')}}</option>
+                                    <option value="repair_required">{{__('Repair required')}}</option>
+                                    <option value="white_box">{{__('White box')}}</option>
+                                    <option value="box">{{__('Box without repair')}}</option>
+                                </select>
+                                <div class="invalid-feedback">Iltimos, remont turini tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="description">Tavsifi <span class="text-danger">*</span></label>
+                                <textarea name="description" id="description" class="form-control" placeholder="Mahsulot haqida qisqacha" rows="3" required></textarea>
+                                <div class="invalid-feedback">Iltimos, tavsifni kiriting</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Location & Price -->
+                    <div class="wizard-content" data-step-content="2">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="region_id">Viloyat <span class="text-danger">*</span></label>
+                                <select id="region_id" name="region_id" class="form-control" required>
+                                    <option value="">Viloyat tanlang</option>
+                                    @foreach($address as $region)
+                                        <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Iltimos, viloyatni tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="city_id">Tuman / Shahar <span class="text-danger">*</span></label>
+                                <select id="city_id" name="city_id" class="form-control" required disabled>
+                                    <option value="">Tuman/shahar tanlang</option>
+                                </select>
+                                <div class="invalid-feedback">Iltimos, tuman/shaharni tanlang</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="price">Narxi <span class="text-danger">*</span></label>
+                                <input type="number" name="price" id="price" class="form-control" placeholder="Narxi" required>
+                                <div class="invalid-feedback">Iltimos, narxni kiriting</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="sotix">Sotix</label>
+                                <input type="text" name="sotix" id="sotix" class="form-control" placeholder="50">
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label class="d-block mb-3">Qo'shimcha imkoniyatlar</label>
+                                <div class="toggle-column">
+                                    <div class="toggle-item">
+                                        <input type="hidden" name="exchange" value="0">
+                                        <input type="checkbox" name="exchange" id="exchange" class="toggle-input" value="1" {{ old('exchange', $product->exchange ?? false) ? 'checked' : '' }}>
+                                        <label for="exchange" class="toggle-label">
+                                            <span class="toggle-switch"></span>
+                                            <span class="toggle-text">Ayirboshlash</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="toggle-item">
+                                        <input type="hidden" name="credit" value="0">
+                                        <input type="checkbox" name="credit" id="credit" class="toggle-input" value="1" {{ old('credit', $product->credit ?? false) ? 'checked' : '' }}>
+                                        <label for="credit" class="toggle-label">
+                                            <span class="toggle-switch"></span>
+                                            <span class="toggle-text">Ipoteka Krediti</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="toggle-item">
+                                        <input type="hidden" name="pay_in_installments" value="0">
+                                        <input type="checkbox" name="pay_in_installments" id="pay_in_installments" class="toggle-input" value="1" {{ old('pay_in_installments', $product->pay_in_installments ?? false) ? 'checked' : '' }}>
+                                        <label for="pay_in_installments" class="toggle-label">
+                                            <span class="toggle-switch"></span>
+                                            <span class="toggle-text">Bo'lib to'lash / Rasrochka</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-content" data-step-content="3">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="floor">Qavat <span class="text-danger">*</span></label>
+                                <input type="number" name="floor" id="floor" class="form-control" placeholder="1" min="1" required>
+                                <div class="invalid-feedback">Iltimos, qavatni kiriting</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="building_floor">Bino qavati <span class="text-danger">*</span></label>
+                                <input type="number" name="building_floor" id="building_floor" class="form-control" placeholder="1" min="1" required>
+                                <div class="invalid-feedback">Iltimos, bino qavatini kiriting</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="square">Maydon (kv.m) <span class="text-danger">*</span></label>
+                                <input type="number" name="square" id="square" class="form-control" placeholder="50" min="1" required>
+                                <div class="invalid-feedback">Iltimos, maydonni kiriting</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="rooms">Xonalar soni <span class="text-danger">*</span></label>
+                                <input type="number" name="rooms" id="rooms" class="form-control" placeholder="5" min="1" required>
+                                <div class="invalid-feedback">Iltimos, xonalar sonini kiriting</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Media & Contact -->
+                    <div class="wizard-content" data-step-content="4">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="images">Rasmlar <span class="text-danger">*</span></label>
+                                <input type="file" name="images[]" id="images" class="form-control-file" multiple required>
+                                <small class="form-text text-muted">Bir nechta rasm tanlashingiz mumkin.</small>
+                                <div class="invalid-feedback">Iltimos, kamida bitta rasm yuklang</div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="phone">Telefon <span class="text-danger">*</span></label>
+                                <input type="text" name="phone" id="phone" class="form-control" placeholder="+998901234567" maxlength="13" minlength="9" required>
+                                <div class="invalid-feedback">Iltimos, telefon raqamini kiriting</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Controls -->
+                    <div class="wizard-controls">
+                        <button type="button" class="wizard-prev-btn btn btn-secondary" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i> Orqaga
+                        </button>
+
+                        <button type="button" class="wizard-next-btn btn btn-primary">
+                            Keyingi <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+
+                        <button type="submit" class="wizard-submit-btn btn btn-success" style="display: none;">
+                            <i class="fas fa-check-circle mr-2"></i> Yaratish
                         </button>
                     </div>
                 </form>
@@ -112,22 +217,461 @@
         </div>
     </div>
 
+    <style>
+        /* Wizard Navigation */
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .wizard-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .wizard-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60%;
+            width: 80%;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 0;
+        }
+
+        .wizard-step.active:not(:last-child):after {
+            background-color: #4CAF50;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #6c757d;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.active .step-number {
+            border-color: #4CAF50;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
+        }
+
+        .step-title {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6c757d;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.active .step-title {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        /* Wizard Content */
+        .wizard-content {
+            display: none;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .wizard-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Styling */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .form-group {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-bottom: 1.5rem;
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .form-group {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 120px;
+        }
+
+        .form-control-file {
+            display: block;
+            width: 100%;
+        }
+
+        /* Wizard Controls */
+        .wizard-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+            background-color: #5a6268;
+            border-color: #545b62;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #3d8b40;
+            border-color: #368239;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-success {
+            color: #fff;
+            background-color: #2196F3;
+            border-color: #2196F3;
+        }
+
+        .btn-success:hover {
+            color: #fff;
+            background-color: #0b7dda;
+            border-color: #0a76d1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        /* Toggle Switches Column */
+        .toggle-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .toggle-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 34px;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch:after {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-input:checked + .toggle-label .toggle-switch {
+            background-color: #4CAF50;
+        }
+
+        .toggle-input:checked + .toggle-label .toggle-switch:after {
+            transform: translateX(30px);
+        }
+
+        .toggle-text {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+            margin-right: 15px;
+        }
+
+        /* Validation */
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+
+        .invalid-feedback {
+            width: 100%;
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            color: #dc3545;
+            display: none;
+        }
+
+        .is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        /* Required field indicator */
+        label:has(+ .form-control[required])::after,
+        label:has(+ select[required])::after {
+            content: " *";
+            color: #dc3545;
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Kategoriya va Subkategoriya uchun
+            // Wizard functionality
+            const form = document.getElementById('product-form');
+            const steps = document.querySelectorAll('.wizard-step');
+            const stepContents = document.querySelectorAll('[data-step-content]');
+            const prevBtn = document.querySelector('.wizard-prev-btn');
+            const nextBtn = document.querySelector('.wizard-next-btn');
+            const submitBtn = document.querySelector('.wizard-submit-btn');
+            let currentStep = 1;
+
+            // Initialize wizard
+            function updateWizard() {
+                // Update step indicators
+                steps.forEach(step => {
+                    const stepNum = parseInt(step.dataset.step);
+                    if (stepNum === currentStep) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+
+                stepContents.forEach(content => {
+                    const contentStep = parseInt(content.dataset.stepContent);
+                    if (contentStep === currentStep) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+
+                if (currentStep === 1) {
+                    prevBtn.disabled = true;
+                    nextBtn.style.display = 'flex';
+                    submitBtn.style.display = 'none';
+                } else if (currentStep === steps.length) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'flex';
+                } else {
+                    prevBtn.disabled = false;
+                    nextBtn.style.display = 'flex';
+                    submitBtn.style.display = 'none';
+                }
+
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            nextBtn.addEventListener('click', function() {
+                if (validateStep(currentStep)) {
+                    currentStep++;
+                    updateWizard();
+                }
+            });
+
+            prevBtn.addEventListener('click', function() {
+                currentStep--;
+                updateWizard();
+            });
+
+            steps.forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNum = parseInt(this.dataset.step);
+                    if (stepNum < currentStep) {
+                        currentStep = stepNum;
+                        updateWizard();
+                    }
+                });
+            });
+
+            function validateStep(step) {
+                let isValid = true;
+                const currentContent = document.querySelector(`[data-step-content="${step}"]`);
+                const requiredFields = currentContent.querySelectorAll('[required]');
+
+                currentContent.querySelectorAll('.is-invalid').forEach(el => {
+                    el.classList.remove('is-invalid');
+                });
+
+                requiredFields.forEach(field => {
+                    if (!field.value || (field.type === 'file' && field.files.length === 0)) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+
+                        if (isValid === false) {
+                            field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+
+                return isValid;
+            }
+
+            form.addEventListener('submit', function(e) {
+                let allValid = true;
+
+                for (let i = 1; i <= steps.length; i++) {
+                    if (!validateStep(i)) {
+                        allValid = false;
+                        currentStep = i;
+                        updateWizard();
+                        break;
+                    }
+                }
+
+                if (!allValid) {
+                    e.preventDefault();
+                    alert("Iltimos, barcha kerakli maydonlarni to'ldiring!");
+                }
+            });
+
+            // Initialize dependent selects
             const categorySelect = document.getElementById('category');
             const subcategorySelect = document.getElementById('subcategory');
+            const regionSelect = document.getElementById('region_id');
+            const citySelect = document.getElementById('city_id');
 
+            // Category and Subcategory
             categorySelect.addEventListener('change', function () {
                 const categoryId = this.value;
-                subcategorySelect.innerHTML = '<option value="">Yuklanmoqda...</option>'; // Yuklanish xabari
-                subcategorySelect.disabled = true; // Subkategoriya maydonini o'chirish
+                subcategorySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
+                subcategorySelect.disabled = true;
 
                 if (categoryId) {
                     fetch(`/subcategories/${categoryId}`)
                         .then(response => response.json())
                         .then(data => {
-                            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>'; // Default option
+                            subcategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
                             if (data.length > 0) {
                                 data.forEach(subcategory => {
                                     const option = document.createElement('option');
@@ -135,14 +679,14 @@
                                     option.textContent = subcategory.name;
                                     subcategorySelect.appendChild(option);
                                 });
-                                subcategorySelect.disabled = false; // Faollashtirish
+                                subcategorySelect.disabled = false;
                             } else {
                                 subcategorySelect.innerHTML = '<option value="">Subkategoriyalar topilmadi</option>';
-                                subcategorySelect.disabled = true; // O'chirish
+                                subcategorySelect.disabled = true;
                             }
                         })
                         .catch(error => {
-                            console.error('Xatolik yuz berdi:', error);
+                            console.error('Error:', error);
                             subcategorySelect.innerHTML = '<option value="">Yuklashda xato</option>';
                             subcategorySelect.disabled = true;
                         });
@@ -152,14 +696,10 @@
                 }
             });
 
-            // Viloyat va Shahar uchun
-            const regionSelect = document.getElementById('region_id');
-            const citySelect = document.getElementById('city_id');
-
             regionSelect.addEventListener('change', function () {
                 const regionId = this.value;
                 citySelect.innerHTML = '<option value="">Yuklanmoqda...</option>';
-                citySelect.disabled = true; // Shahar maydonini o'chirish
+                citySelect.disabled = true;
 
                 if (regionId) {
                     fetch(`{{ route('get-cities', ['region_id' => 'PLACEHOLDER']) }}`.replace('PLACEHOLDER', regionId))
@@ -173,14 +713,14 @@
                                     option.textContent = city.name;
                                     citySelect.appendChild(option);
                                 });
-                                citySelect.disabled = false; // Faollashtirish
+                                citySelect.disabled = false;
                             } else {
                                 citySelect.innerHTML = '<option value="">Tuman/shahar topilmadi</option>';
-                                citySelect.disabled = true; // O'chirish
+                                citySelect.disabled = true;
                             }
                         })
                         .catch(error => {
-                            console.error('Xatolik yuz berdi:', error);
+                            console.error('Error:', error);
                             citySelect.innerHTML = '<option value="">Yuklashda xato</option>';
                             citySelect.disabled = true;
                         });
@@ -190,6 +730,7 @@
                 }
             });
 
+            updateWizard();
             subcategorySelect.disabled = true;
             citySelect.disabled = true;
         });

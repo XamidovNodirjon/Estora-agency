@@ -31,6 +31,10 @@ class ProductService
         $product->sotix = $data['sotix'];
         $product->user_id = $user->id;
 
+        $product->exchange = $data['exchange'] ?? false;
+        $product->pay_in_installments = $data['pay_in_installments'] ?? false;
+        $product->credit = $data['credit'] ?? false;
+
         $imagePaths = [];
         if (isset($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as $image) {
@@ -62,6 +66,11 @@ class ProductService
         $product->repair = $data['repair'] ?? $product->repair;
         $product->sotix = $data['sotix'] ?? $product->sotix;
         $product->user_id = auth()->id();
+
+        $product->exchange = $data['exchange'] ?? $product->exchange;
+        $product->pay_in_installments = $data['pay_in_installments'] ?? $product->pay_in_installments;
+        $product->credit = $data['credit'] ?? $product->credit;
+
         if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
             if (!empty($product->images)) {
                 $oldImages = json_decode($product->images, true);
@@ -80,5 +89,4 @@ class ProductService
         $product->save();
         return $product;
     }
-
 }
