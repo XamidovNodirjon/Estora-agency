@@ -293,9 +293,10 @@
 
     <!-- Hero Section with Search -->
     <div class="hero-section">
-        <div class="search-section py-6 md:py-8">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-6 text-white">
+        <div class="hero-section relative bg-cover bg-center" style="background-image: url('{{ asset('images/dashboard1.png') }}'); min-height: 100vh;">
+            <div class="inset-0 bg-blue-900 bg-opacity-60"></div>
+                <div class="container mx-auto px-4 text-center text-white mb-6 md:mb-8 relative z-10">
+                 <!-- Title -->        
                     <h1 class="hero-title text-2xl md:text-4xl font-bold mb-2">Ko'chmas mulk bozorining yetakchisi</h1>
                     <p class="hero-subtitle text-sm md:text-lg opacity-90">Eng yaxshi takliflarni toping</p>
                 </div>
@@ -354,6 +355,7 @@
                                     <option value="3" {{ $request->rooms == '3' ? 'selected' : '' }}>3</option>
                                     <option value="3+" {{ $request->rooms == '3+' ? 'selected' : '' }}>3+</option>
                                 </select>
+                                
                                 <i class="bi bi-chevron-down absolute right-3 top-4 text-gray-400"></i>
                             </div>
                         </div>
