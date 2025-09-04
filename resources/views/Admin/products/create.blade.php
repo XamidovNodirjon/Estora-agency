@@ -154,6 +154,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label class="d-block mb-3">{{__('Mahsulot xususiyatlari')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($product_features as $product_feature)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="features[]" id="feature_{{ $product_feature->id }}" value="{{ $product_feature->id }}">
+                                                <label class="form-check-label" for="feature_{{ $product_feature->id }}">
+                                                    {{ $product_feature->feature_name }}
+                                                </label>
+                                            </div>
+                                        
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
 

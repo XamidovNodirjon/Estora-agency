@@ -163,49 +163,11 @@
         </ul>
     </div>
 
-    <div class="left-side-menu">
-        <div class="h-100" data-simplebar>
-            <div id="sidebar-menu">
-                <ul id="side-menu">
-                    <li class="menu-title">{{__('Navigation')}}</li>
-                    <li>
-                        <a href="{{route('users')}}">
-                            <i class="mdi mdi-view-dashboard-outline"></i>
-                            <span class="badge bg-success rounded-pill float-end"></span>
-                            <span>{{__('Users')}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('products')}}">
-                            <i class="mdi mdi-view-dashboard-outline"></i>
-                            <span class="badge bg-success rounded-pill float-end"></span>
-                            <span> {{__('Products')}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('reservations') }}">
-                            <i class="mdi mdi-calendar-check"></i>
-                            <span>{{__('Reservation Products')}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('product.features') }}">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>{{__('Product Features')}}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-
     <div class="content-page">
         <div class="content">
             <navigation></navigation>
             @yield('content')
         </div>
-{{--        @include('layouts.footer')--}}
     </div>
 </div>
 

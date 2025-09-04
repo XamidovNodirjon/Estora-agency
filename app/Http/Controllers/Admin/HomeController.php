@@ -127,7 +127,8 @@ class HomeController extends Controller
                 }
             }
 
-            $filteredProducts = $products->latest()->paginate(10);
+            $filteredProducts = $products->with('features')->latest()->paginate(10);
+
 
             $categories = Category::all();
             $subCategories = SubCategory::all();

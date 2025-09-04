@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\HomeController;
 use \App\Http\Controllers\Admin\ProductViewController;
 use \App\Http\Controllers\Admin\ReservationProductController;
+use \App\Http\Controllers\ClientController;
+use App\Http\Controllers\Admin\ProductFeaturesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lang/{locale}', function ($locale) {
@@ -23,6 +25,8 @@ Route::get('/products/filter', [HomeController::class, 'filterProducts'])->name(
 Route::get('/products/{product}', [HomeController::class, 'showProduct'])->name('products.show');
 Route::get('login', [AuthController::class, 'index'])->name('login.index');
 Route::post('login', [AuthController::class, 'login'])->name('login.store');
+Route::get('register', [AuthController::class, 'getRegister'])->name('getRegister');
+Route::post('register/create', [AuthController::class, 'register'])->name('register');
 
 Route::middleware('auth')->group(function () {
 
@@ -56,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::post('create-ball/{id}', [BallsController::class, 'store'])->name('create-ball');
     Route::put('/users/{user}/balls', [BallsController::class, 'updateBall'])->name('users.balls.update');
     Route::delete('products-delete/{id}', [ProductController::class, 'destroy'])->name('delete.product');
+    Route::get('product-features', [ProductFeaturesController::class, 'index'])->name('product.features');
+    Route::post('product-features', [ProductFeaturesController::class, 'store'])->name('product.features.store');
+    Route::put('product-features/{id}', [ProductFeaturesController::class, 'update'])->name('product.features.update');
+    Route::delete('product-features/{id}', [ProductFeaturesController::class, 'destroy'])->name('product.features.destroy');
 
     Route::get('/get-cities/{region_id}', function ($region_id) {
         return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
@@ -64,4 +72,12 @@ Route::middleware('auth')->group(function () {
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::middleware('auth:client')->prefix('client')->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'index'])->name('get.client');
+    Route::get('addList', [ClientController::class, 'addList'])->name('client.addList');
+    Route::get('/products/create', [ClientController::class, 'createProduct'])->name('client.products.create');
+    Route::post('/products/store', [ClientController::class, 'storeProduct'])->name('client.products.store');
+
 });

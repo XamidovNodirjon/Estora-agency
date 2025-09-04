@@ -28,19 +28,65 @@ class ManagerController extends Controller
         $this->productService = $productService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('status', true)->with(['user', 'category', 'subcategory'])->get();
+        $query = Product::where('status', true)
+            ->with([
+                'user',
+                'category',
+                'subcategory',
+                'region',
+                'city'
+            ]);
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+
+            $query->where(function($q) use ($searchTerm) {
+                if (is_numeric($searchTerm)) {
+                    $q->where('id', $searchTerm);
+                }
+                $q->orWhere('name', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        $products = $query->select([
+            'id',
+            'name',
+            'price',
+            'phone',
+            'square',
+            'rooms',
+            'floor',
+            'sotix',
+            'building_floor',
+            'repair',
+            'exchange',
+            'pay_in_installments',
+            'credit',
+            'status',
+            'user_id',
+            'category_id',
+            'subcategory_id',
+            'region_id',
+            'city_id',
+            'created_at',
+            'images'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $categories = Category::with('subcategories')->get();
+        $regions = Region::all();
         $user = Auth::user();
 
         return view('managers.products.index', [
             'products' => $products,
+            'regions' => $regions,
             'categories' => $categories,
             'user' => $user
         ]);
     }
-
     public function create()
     {
         return view('managers.products.create', [

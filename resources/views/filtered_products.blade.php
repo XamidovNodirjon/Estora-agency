@@ -8,62 +8,2373 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/filter_product.css') }}">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 
+<style>
+    /* General Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+        background-color: #f5f6f5;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Header Styles */
+    .header {
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        padding: 15px 0;
+    }
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .logo span {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1a3c34;
+    }
+
+    .main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .contact-info a {
+        color: #1a3c34;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .contact-info a:hover {
+        color: #007bff;
+    }
+
+    .language-selector select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .menu-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .menu-toggle .bar {
+        width: 25px;
+        height: 3px;
+        background-color: #1a3c34;
+        transition: all 0.3s;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        z-index: 1001;
+    }
+
+    .mobile-menu-overlay.active {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .mobile-menu {
+        background: #fff;
+        width: 250px;
+        height: 100%;
+        padding: 20px;
+        position: relative;
+    }
+
+    .close-menu {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .mobile-menu ul {
+        list-style: none;
+        padding-top: 40px;
+    }
+
+    .mobile-menu ul li {
+        margin: 15px 0;
+    }
+
+    .mobile-menu ul li a {
+        color: #1a3c34;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .search-form-card {
+        background: #fff;
+        margin: 100px auto 30px;
+        padding: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .search-form-card h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #1a3c34;
+    }
+
+    .search-form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .form-group select,
+    .form-group input {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        background: #f9f9f9;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    .filter-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .more-filters-btn,
+    .map-view-btn,
+    .show-ads-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .more-filters-btn {
+        background: #f1f1f1;
+        color: #333;
+    }
+
+    .map-view-btn {
+        background: #007bff;
+        color: #fff;
+    }
+
+    /* Changed color for show-ads-btn */
+    .show-ads-btn {
+        background: #F7931E; /* Changed from #1a3c34 */
+        color: #fff;
+    }
+
+    .more-filters-btn:hover,
+    .map-view-btn:hover,
+    .show-ads-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* Ads Listing */
+    .ads-listing-section {
+        margin-bottom: 50px;
+    }
+
+    .ads-listing-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #1a3c34;
+    }
+
+    .ad-card {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+    .ad-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .image-gallery-card-container {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .prev-button-card {
+        left: 5px;
+    }
+
+    .next-button-card {
+        right: 5px;
+    }
+
+    .ad-info {
+        padding: 15px;
+    }
+
+    .ad-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: #1a3c34;
+    }
+
+    .ad-price {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+
+    .ad-location {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .ad-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .ad-details span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .ad-category {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .product-id {
+        font-size: 0.85rem;
+        color: #888;
+    }
+
+    .view-ad-button,
+    .quick-contact-button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .view-ad-button {
+        background: #007bff;
+        color: #fff;
+    }
+
+    /* Changed color for quick-contact-button */
+    .quick-contact-button {
+        background: #F7931E; /* Changed from #1a3c34 */
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .view-ad-button:hover,
+    .quick-contact-button:hover {
+        opacity: 0.9;
+    }
+
+    /* Pagination */
+    .pagination-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .pagination-info {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .pagination-links nav {
+        display: flex;
+        gap: 10px;
+    }
+
+    .page-link {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .page-link.active,
+    .page-link:hover {
+        background: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .page-link.disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .page-link.dots {
+        border: none;
+        background: none;
+    }
+
+    .footer {
+        width: 100%;
+        background-color: #293038;
+        color: #fff;
+        padding-top: 30px;
+        padding-bottom: 20px;
+    }
+
+    .footer-background {
+
+        padding-top: 0;
+        position: relative;
+        min-height: auto;
+    }
+
+    .footer-background::before {
+        display: none;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding-bottom: 20px; /* Padding kamaytirildi */
+        position: relative;
+        z-index: 2;
+        gap: 20px; /* Elementlar orasidagi bo'shliq */
+        flex-wrap: wrap; /* Kichik ekranlarda o'ralash uchun */
+    }
+
+    .footer-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        color: #fff;
+        font-weight: 600;
+        font-size: 1rem; /* Kichraytirildi */
+    }
+
+    .footer-logo img {
+        height: 55px; /* Logotip balandligi kichraytirildi */
+        margin-bottom: 5px;
+    }
+
+    .footer-logo span {
+        font-size: 0.6em; /* Kichraytirildi */
+        font-weight: 400;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links ul li {
+        margin-bottom: 8px; /* Bo'shliq kamaytirildi */
+    }
+
+    .footer-links ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        font-size: 0.9em; /* Kichraytirildi */
+    }
+
+    .footer-links ul li a:hover {
+        color: #f7a01d; /* Hover effekti */
+    }
+
+    .footer-contact p {
+        margin: 0 0 5px 0; /* Bo'shliq kamaytirildi */
+        font-weight: 500;
+        font-size: 0.9em; /* Kichraytirildi */
+    }
+
+    .footer-contact p:first-child {
+        font-weight: 600;
+        margin-bottom: 10px; /* Bo'shliq kamaytirildi */
+        font-size: 1em; /* Kichraytirildi */
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 12px; /* Bo'shliq kamaytirildi */
+        font-size: 1.3em; /* Ikonka o'lchami kichraytirildi */
+    }
+
+    .footer-social a {
+        color: #fff;
+        transition: color 0.3s ease;
+    }
+
+    .footer-social a:hover {
+        color: #f7a01d;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px 0;
+        text-align: center;
+        font-size: 0.8em;
+        color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        margin-top: 15px;
+        z-index: 2;
+    }
+
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1002;
+    }
+
+    .modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .modal-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: #1a3c34;
+    }
+
+    .modal-product-name {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .modal-content .form-group {
+        margin-bottom: 15px;
+    }
+
+    .modal-content .form-group label {
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .modal-content .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    /* Changed color for submit-contact-button */
+    .submit-contact-button {
+        width: 100%;
+        padding: 10px;
+        background: #1a3c34;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .submit-contact-button:hover {
+        background: #007bff;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-nav {
+            gap: 10px;
+        }
+
+        .contact-info {
+            display: none;
+        }
+
+        .menu-toggle {
+            display: flex;
+        }
+
+        .search-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-actions {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .map-view-btn,
+        .show-ads-btn {
+            flex: 1;
+        }
+
+        .pagination-links {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .view-ad-button,
+        .quick-contact-button {
+            width: 100%;
+        }
+    }
+
+    .ads-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .ad-card {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-gallery-card-container {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        margin-right: 20px;
+    }
+
+    .ad-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .nav-button-card {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .prev-button-card {
+        left: 5px;
+    }
+
+    .next-button-card {
+        right: 5px;
+    }
+
+    .ad-info {
+        flex-grow: 1;
+    }
+
+    .ad-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .telegram-contact {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #0088cc;
+        text-decoration: none;
+    }
+
+    .ads-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .ad-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .view-ad-button {
+        flex-grow: 1;
+        padding: 12px 20px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .view-ad-button:hover {
+        background-color: #218838;
+    }
+
+    .contact-buttons-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .phone-contact-button {
+        background-color: #007bff;
+    }
+
+    .telegram-share-button {
+        background-color: #0088cc;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal-content {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .modal-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+    }
+
+    .modal-product-info {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .modal .close-button {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 28px;
+        color: #aaa;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.3s ease;
+    }
+
+    .modal .close-button:hover {
+        color: #333;
+    }
+
+    .modal .form-group {
+        margin-bottom: 20px;
+    }
+
+    .modal .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .modal .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .modal .form-group input:focus {
+        outline: none;
+        border-color: #28a745;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+    }
+
+    .submit-contact-button {
+        width: 100%;
+        padding: 15px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-contact-button:hover {
+        background-color: #218838;
+    }
+
+    .success-content {
+        text-align: center;
+        padding: 40px;
+    }
+
+    .success-icon {
+        margin: 0 auto 20px;
+        width: 80px;
+        height: 80px;
+    }
+
+    .checkmark-circle {
+        display: block;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #28a745;
+        padding: 10px;
+        box-sizing: border-box;
+        transform: rotate(-90deg);
+    }
+
+    .checkmark-circle.animate {
+        animation: rotate 1s ease-in-out;
+    }
+
+    .checkmark {
+        width: 100%;
+        height: 100%;
+        display: block;
+        transform: rotate(45deg);
+    }
+
+    .checkmark-circle-path {
+        stroke: #fff;
+        stroke-width: 4;
+        stroke-dasharray: 157;
+        stroke-dashoffset: 157;
+        animation: stroke 1s linear forwards;
+    }
+
+    .checkmark-check {
+        stroke: #fff;
+        stroke-width: 4;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        opacity: 0;
+        animation: stroke-check 0.8s ease-in-out 0.8s forwards;
+    }
+
+    @keyframes stroke {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes stroke-check {
+        from {
+            stroke-dashoffset: 48;
+            opacity: 0;
+        }
+        to {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(-90deg);
+        }
+        to {
+            transform: rotate(270deg);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .header .container {
+        display: flex;
+        /*justify-content: space-between;*/
+        /*align-items: center;*/
+        padding: 15px 20px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo img {
+        height: 45px;
+    }
+
+    .logo-text {
+        font-size: 16px;
+        color: #0a0a0a;
+        font-weight: 500;
+    }
+
+    /* Telefon raqam */
+    .phone-btn {
+        background-color: #f59e0b;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+
+    .phone-btn:hover {
+        background-color: #d97706;
+    }
+
+    /* Language selector */
+    .language-selector {
+        position: relative;
+        margin-left: 15px;
+        z-index: 1000;
+    }
+
+    .select-language {
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        user-select: none;
+    }
+
+    .language-dropdown {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        display: none;
+        min-width: 150px;
+        animation: fadeDrop 0.3s ease-out forwards;
+        z-index: 1001;
+    }
+
+    .language-dropdown ul {
+        list-style: none;
+        padding: 10px;
+        margin: 0;
+    }
+
+    .language-dropdown ul li a {
+        display: block;
+        text-decoration: none;
+        color: #333;
+        padding: 5px 0;
+        font-weight: 500;
+    }
+
+    .language-dropdown ul li a:hover {
+        color: #007bff;
+    }
+
+    /* Menu icon */
+    .menu-icon {
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 6px;
+        display: flex; /* Always visible */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .menu-icon span {
+        width: 100%;
+        height: 3px;
+        background-color: #333;
+        border-radius: 2px;
+    }
+
+    /* Dropdown modal */
+    .dropdown-modal {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 15px 20px;
+        display: none;
+        animation: fadeDrop 0.3s ease-out forwards;
+        z-index: 999;
+        min-width: 180px;
+    }
+
+    .dropdown-modal ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dropdown-modal ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        display: block;
+        margin: 8px 0;
+        transition: 0.2s;
+    }
+
+    .dropdown-modal ul li a:hover {
+        color: #007bff;
+    }
+
+    /* Animation */
+    @keyframes fadeDrop {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .header .container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .phone-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .language-selector,
+        .menu-icon {
+            margin: 0;
+        }
+
+        .language-selector {
+            order: 2;
+            width: 50%;
+            justify-content: center;
+            display: flex;
+        }
+
+        .menu-icon {
+            order: 3;
+            justify-content: flex-end;
+            width: 50%;
+            display: flex;
+        }
+    }
+
+    .image-modal-content {
+        max-width: 90%;
+        width: 800px;
+        padding: 0;
+        background: #fff;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .image-modal-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-button-modal {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 24px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .prev-button-modal {
+        left: 10px;
+    }
+
+    .next-button-modal {
+        right: 10px;
+    }
+
+    .nav-button-modal:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+    /* Base Styles for all screen sizes */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #f7f9fc;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    /* Header */
+    .header {
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .logo-text {
+        font-weight: 700;
+        font-size: 18px;
+        color: #2c3e50;
+    }
+
+    .main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .contact-info .phone-btn {
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+
+    .contact-info .phone-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .language-selector {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .select-language {
+        background-color: #f0f0f0;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+
+    .language-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        min-width: 120px;
+        margin-top: 10px;
+    }
+
+    .language-dropdown ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .language-dropdown ul li a {
+        display: block;
+        padding: 10px 15px;
+        color: #333;
+        transition: background-color 0.2s;
+    }
+
+    .language-dropdown ul li a:hover {
+        background-color: #f0f0f0;
+    }
+
+    .menu-icon {
+        display: none; /* Hidden on desktop */
+        cursor: pointer;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .dropdown-modal {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 15px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+        z-index: 10;
+    }
+
+    .dropdown-modal ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dropdown-modal ul li a {
+        display: block;
+        padding: 12px 15px;
+        color: #333;
+        transition: background-color 0.2s;
+    }
+
+    .dropdown-modal ul li a:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        display: none;
+        justify-content: flex-end;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .mobile-menu-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .mobile-menu {
+        background-color: #fff;
+        width: 250px;
+        max-width: 80%;
+        height: 100%;
+        padding: 20px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-menu-overlay.active .mobile-menu {
+        transform: translateX(0);
+    }
+
+    .mobile-menu .close-menu {
+        background: none;
+        border: none;
+        font-size: 30px;
+        color: #333;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    .mobile-menu ul {
+        list-style: none;
+        padding: 40px 0 0;
+        margin: 0;
+    }
+
+    .mobile-menu ul li {
+        margin-bottom: 20px;
+    }
+
+    .mobile-menu ul li a {
+        font-size: 18px;
+        color: #333;
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mobile-menu .mobile-login-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+
+    /* Search Form Card */
+    .search-form-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        margin-top: 20px;
+    }
+
+    .search-form-card h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    .search-form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    .form-group select,
+    .form-group input {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .filter-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .filter-actions .more-filters-btn {
+        background-color: #f0f0f0;
+        color: #555;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filter-actions .more-filters-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .show-ads-btn {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .show-ads-btn:hover {
+        background-color: #218838;
+    }
+
+    .map-view-btn {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .map-view-btn:hover {
+        background-color: #5a6268;
+    }
+
+    /* Ads Listing Section */
+    .ads-listing-section {
+        padding: 40px 0;
+    }
+
+    .ads-listing-section h2 {
+        font-size: 28px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2c3e50;
+    }
+
+    .no-results {
+        text-align: center;
+        color: #777;
+        font-size: 18px;
+        margin-top: 50px;
+    }
+
+    .ads-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .ad-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ad-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-gallery-card-container {
+        position: relative;
+        width: 100%;
+        padding-top: 66.66%; /* 3:2 aspect ratio */
+        overflow: hidden;
+    }
+
+    .ad-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-button-card {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .ad-card:hover .nav-button-card {
+        opacity: 1;
+    }
+
+    .prev-button-card {
+        left: 10px;
+    }
+
+    .next-button-card {
+        right: 10px;
+    }
+
+    .ad-info {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .ad-info h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .ad-price {
+        font-size: 22px;
+        font-weight: 700;
+        color: #28a745;
+        margin-bottom: 10px;
+    }
+
+    .ad-location {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .ad-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .ad-details span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .ad-details i {
+        color: #007bff;
+    }
+
+    .ad-category {
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .product-id {
+        font-size: 12px;
+        color: #aaa;
+        margin-top: auto;
+        margin-bottom: 10px;
+    }
+
+    .ad-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 15px;
+    }
+
+    .view-ad-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+
+    .view-ad-button:hover {
+        background-color: #0056b3;
+    }
+
+    .contact-buttons-container {
+        text-align: right;
+    }
+
+    .contact-buttons-container p {
+        margin: 0 0 5px;
+        font-size: 14px;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .contact-buttons-container a {
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #0088cc;
+        transition: background-color 0.3s;
+    }
+
+    .contact-buttons-container a:hover {
+        background-color: #006b99;
+    }
+
+    /* Pagination */
+    .pagination-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .pagination-info {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .pagination-links nav {
+        display: flex;
+        gap: 5px;
+    }
+
+    .page-link {
+        display: block;
+        padding: 8px 12px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        color: #007bff;
+        transition: background-color 0.3s, color 0.3s;
+        font-weight: 500;
+    }
+
+    .page-link:hover {
+        background-color: #f0f0f0;
+    }
+
+    .page-link.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .page-link.disabled {
+        color: #ccc;
+        cursor: not-allowed;
+        background-color: #fff;
+    }
+
+    .page-link.dots {
+        border: none;
+        background: none;
+    }
+
+    /* Modals */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        animation: fadeIn 0.3s;
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 24px;
+    }
+
+    .modal-product-info {
+        font-size: 14px;
+        color: #777;
+        margin-top: 5px;
+    }
+
+    .modal .form-group {
+        margin-bottom: 20px;
+    }
+
+    .modal .form-group label {
+        font-weight: 600;
+    }
+
+    .modal .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .submit-contact-button {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .submit-contact-button:hover {
+        background-color: #218838;
+    }
+
+    .submit-contact-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .success-content {
+        text-align: center;
+    }
+
+    .success-icon {
+        margin-bottom: 20px;
+    }
+
+    .checkmark-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #28a745;
+        margin: 0 auto;
+        position: relative;
+        animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    .checkmark {
+        width: 52px;
+        height: 52px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .checkmark-circle-path {
+        stroke-dasharray: 157;
+        stroke-dashoffset: 157;
+        stroke-width: 4;
+        stroke-miterlimit: 10;
+        stroke: #fff;
+        fill: none;
+        animation: strokePath 1s cubic-bezier(0.65, 0, 0.45, 1) forwards 0.5s;
+    }
+
+    .checkmark-check {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        stroke-width: 4;
+        stroke-miterlimit: 10;
+        stroke: #fff;
+        fill: none;
+        animation: strokeCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards 1s;
+    }
+
+    .success-content h3 {
+        color: #28a745;
+    }
+
+    /* Image Modal */
+    .image-modal-content {
+        max-width: 800px;
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+        position: relative;
+    }
+
+    .image-modal-container {
+        position: relative;
+    }
+
+    .modal-image {
+        display: block;
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 10px;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-button-modal {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-button-modal:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .prev-button-modal {
+        left: 10px;
+    }
+
+    .next-button-modal {
+        right: 10px;
+    }
+
+    /* Animations */
+    .rotate-animation {
+        animation: rotate 1.5s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes strokePath {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes strokeCheck {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    /* --- Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+        .header .container {
+            flex-wrap: wrap;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .main-nav {
+            width: 100%;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+        }
+
+        .contact-info .phone-btn {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .select-language {
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+
+        .menu-icon {
+            display: block; /* Show hamburger menu on mobile */
+        }
+
+        .dropdown-modal {
+            display: none !important; /* Hide desktop dropdown on mobile */
+        }
+
+        /* Adjust search form for a single column layout */
+        .search-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .search-form-card {
+            padding: 20px;
+        }
+
+        .filter-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-buttons {
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .filter-actions .more-filters-btn,
+        .show-ads-btn,
+        .map-view-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Adjust ad grid for single column display */
+        .ads-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ad-card {
+            padding: 10px;
+        }
+
+        .ad-info h3 {
+            font-size: 18px;
+        }
+
+        .ad-price {
+            font-size: 20px;
+        }
+
+        .ad-details {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ad-actions {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .view-ad-button {
+            width: 100%;
+        }
+
+        .contact-buttons-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-buttons-container p {
+            text-align: center;
+        }
+
+        .pagination-links {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .pagination-links nav {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-link {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
+        .modal-content {
+            width: 95%;
+            padding: 20px;
+        }
+    }
+
+    /* Asosiy konteyner stillari */
+.search-hero {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.search-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.search-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.search-hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.search-hero-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Filtr formasi stillari */
+.search-form-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-top: -100px; /* Qisman fon ustiga chiqishi uchun */
+    position: relative;
+    z-index: 10;
+}
+
+.search-tabs {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+.search-tabs .tab {
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #555;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.search-tabs .tab.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+.main-filter-form {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.price-inputs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.price-inputs .small-input {
+    flex: 1;
+}
+
+.search-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Qo'shimcha filtrlar stillari */
+.more-filters-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+}
+
+.more-filters-toggle,
+.map-view-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.more-filters-toggle:hover,
+.map-view-btn:hover {
+    text-decoration: underline;
+}
+
+/* Javobgarlik (Responsiveness) */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+}
+</style>
 
 </head>
 <body>
+    @include('layouts.header')
 
-<header class="header">
-    <div class="container">
-        <div class="logo">
-            <a href="{{ route('dashboard') }}">
-                <img src="/logo/logo-dashboard.png" alt="Estora Logo">
-            </a>
-            <span class="logo-text">{{ __('REAL ESTATE AGENCY') }}</span>
+    <div class="search-hero" style="background-image: url('{{ asset('images/dashboard.png') }}');">
+        <div class="search-hero-overlay"></div>
+        <div class="search-hero-content">
+            <h1>Jami natijalar: {{ $filteredProducts->total() }}</h1>
+            <p>Qayerda yashashni emas, qanday yashashni birga tanlaymiz.</p>
         </div>
-
-        <nav class="main-nav">
-            <div class="contact-info">
-                <a href="tel:+998951606446" class="phone-btn">+998 95 160 64 46</a>
-            </div>
-
-            <div class="language-selector">
-                <div class="select-language" onclick="toggleLanguageDropdown()">
-                    🌐 {{ strtoupper(app()->getLocale()) }}
-                    <i class="arrow-down"></i>
-                </div>
-                <div class="language-dropdown" id="languageDropdown">
-                    <ul>
-                        <li><a href="{{ route('lang.switch', 'en') }}">🇬🇧 English</a></li>
-                        <li><a href="{{ route('lang.switch', 'uz') }}">🇺🇿 Uzbek</a></li>
-                        <li><a href="{{ route('lang.switch', 'ru') }}">🇷🇺 Russian</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="menu-icon" onclick="toggleDropdownModal()">
-                <i class="fas fa-bars fa-lg"></i>
-            </div>
-
-            <div class="dropdown-modal" id="dropdownModal">
-                <ul>
-                    <li><a href="#">📰 Yangiliklar</a></li>
-                    <li><a href="#">ℹ️ Biz haqimizda</a></li>
-                </ul>
-            </div>
-        </nav>
     </div>
-</header>
-
-<div class="mobile-menu-overlay">
-    <div class="mobile-menu">
-        <button class="close-menu">×</button>
-        <ul>
-            <li><a href="#" class="mobile-login-btn">{{ __('Login') }}</a></li>
-        </ul>
-    </div>
-</div>
-
 <div class="search-form-card">
     <h2>{{ __('Qidiruv natijalari') }}</h2>
     <form action="{{ route('products.filter') }}" method="GET">
@@ -166,142 +2477,173 @@
     </form>
 </div>
 
-<section class="ads-listing-section">
-    <div class="container">
-        <h2>{{ __('Topilgan e\'lonlar') }}</h2>
+
+<!-- Alpine.js ulashni unutmang (agar layout.blade.php da yo'q bo'lsa) -->
+<script src="//unpkg.com/alpinejs" defer></script>
+
+<section class="ads-listing-section py-6">
+    <div class="container mx-auto px-4">
+        <h2 class="text-xl font-semibold mb-4">{{ __('Topilgan e\'lonlar') }}</h2>
+
         @if($filteredProducts->isEmpty())
-            <p class="no-results">{{ __('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.') }}</p>
+            <p class="text-gray-500">{{ __('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.') }}</p>
         @else
-            <div class="ads-grid">
+            <div class="space-y-6">
                 @foreach($filteredProducts as $product)
-                    <div class="ad-card" data-images="{{ json_encode($product->image_array) }}">
-                        <div class="image-gallery-card-container">
+                    <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
+
+                        {{-- Chap qism - rasm galereyasi --}}
+                        <div class="relative md:w-1/3 w-full h-56 md:h-auto" 
+                             x-data="{ currentIndex: 0 }">
                             @php
-                                $firstImage = count($product->image_array) > 0 ? $product->image_array[0] : null;
+                                $images = $product->image_array ?? [];
                             @endphp
-                            <img
-                                src="{{ $firstImage ? asset('storage/' . $firstImage) : 'https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yoq' }}"
-                                alt="{{ $product->name }}"
-                                class="ad-image open-image-modal" data-product-id="{{ $product->id }}">
-                            <button class="nav-button-card prev-button-card">
-                                <i class="bi bi-chevron-left"></i>
-                            </button>
-                            <button class="nav-button-card next-button-card">
-                                <i class="bi bi-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="ad-info" style="cursor: pointer">
-                            <h3>{{ $product->name }}</h3>
-                            <p class="ad-price">{{ number_format($product->price, 0, '.', ' ') }} {{ __('y.e.') }}</p>
-                            <p class="ad-location"><i
-                                    class="bi bi-geo-alt-fill"></i> {{ $product->region->name ?? __('Noma\'lum hudud') }}
-                            </p>
-                            <div class="ad-details">
-                                @if($product->rooms > 0)
-                                    <span><i class="bi bi-grid-fill"></i> {{ $product->rooms }} {{ __('xona') }}</span>
-                                @endif
-                                @if($product->building_floor > 0)
-                                    <span><i
-                                            class="bi bi-building"></i> {{ $product->floor }}/{{ $product->building_floor }} {{ __('Qavat') }}</span>
-                                @endif
-                                @if($product->square > 0)
-                                    <span><i class="bi bi-rulers"></i> {{ $product->square }} {{ __('m²') }}</span>
-                                @endif
-                                @if($product->sotix > 0)
-                                    <span><i
-                                            class="bi bi-bounding-box"></i> {{ $product->sotix }} {{ __('sotix') }}</span>
+
+                            <span class="absolute top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">
+                                {{ __('Yaxshi Taklif') }}
+                            </span>
+
+                            <div class="overflow-hidden w-full h-full">
+                                @foreach($images as $index => $img)
+                                    <img 
+                                        src="{{ asset('storage/' . $img) }}" 
+                                        alt="{{ $product->name }}" 
+                                        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+                                        x-show="currentIndex === {{ $index }}"
+                                        x-transition
+                                    >
+                                @endforeach
+
+                                @if(empty($images))
+                                    <img src="https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q"
+                                         class="w-full h-full object-cover">
                                 @endif
                             </div>
-                            <p class="ad-category">
-                                {{ __('Category:') }} {{ __($product->category->name ?? 'Unknown') }}
-                                @if($product->subcategory)
-                                    / {{ __($product->subcategory->name) }}
-                                @endif
-                            </p>
 
-                            <p class="product-id">ID: <strong>{{ $product->id }}</strong></p>
-                            <div class="ad-actions">
-                                <button class="view-ad-button open-contact-modal" data-product-id="{{ $product->id }}"
-                                        data-product-name="{{ $product->name }}">{{ __('Batafsil') }}</button>
-                                <div class="contact-buttons-container">
-                                    <p>
-                                        <a href="tel:+998951606446">
-                                            +998 95 160 64 46
-                                        </a>
-                                    </p>
-                                    <a href="https://t.me/+998951606446" class="telegram-contact" target="_blank">
-                                        <i class="bi bi-telegram"></i> Telegram
-                                    </a>
+                            {{-- Chap tugma --}}
+                            @if(count($images) > 1)
+                                <button 
+                                    @click="currentIndex = (currentIndex === 0) ? {{ count($images) - 1 }} : currentIndex - 1" 
+                                    class="absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow">
+                                    ‹
+                                </button>
+
+                                {{-- Ong tugma --}}
+                                <button 
+                                    @click="currentIndex = (currentIndex === {{ count($images) - 1 }}) ? 0 : currentIndex + 1" 
+                                    class="absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow">
+                                    ›
+                                </button>
+
+                                {{-- Pastki indikator --}}
+                                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
+                                    @foreach($images as $index => $img)
+                                        <span 
+                                            class="w-2 h-2 rounded-full"
+                                            :class="currentIndex === {{ $index }} ? 'bg-yellow-500' : 'bg-gray-300'">
+                                        </span>
+                                    @endforeach
                                 </div>
+                            @endif
+                        </div>
+
+                        {{-- O‘rta qism - asosiy info --}}
+                        <div class="flex-1 p-4 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs text-white bg-yellow-600 px-2 py-1 rounded-md">
+                                        ID {{ $product->id }}
+                                    </span>
+                                    <span class="text-lg font-bold text-green-700">
+                                        {{ number_format($product->price, 0, '.', ' ') }} USD
+                                    </span>
+                                </div>
+                                <h3 class="text-base font-semibold text-gray-800">
+                                    {{ $product->category->name ?? __('Kategoriya yo‘q') }}
+                                </h3>
+                                <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    {{ $product->region->name ?? __('Hudud topilmadi') }},
+                                    {{ $product->city->name ?? $product->district->name ?? __('Shahar topilmadi') }}
+                                </p>
+                                <p class="text-gray-500 text-sm mt-1">
+                                    {{ __('Mo‘ljal:') }} {{ $product->landmark ?? __('Ko‘rsatilmagan') }}
+                                </p>
+                            </div>
+                            <p class="text-gray-400 text-xs mt-3">
+                                {{ __('E\'lon joylangan sana:') }} {{ $product->created_at->format('d.m.Y') }}
+                            </p>
+                        </div>
+
+                        {{-- O‘ng qism - tugmalar va atributlar --}}
+                        <div class="md:w-1/4 w-full border-t md:border-t-0 md:border-l border-gray-200 p-4 flex flex-col justify-between">
+                            <div>
+                                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                                    {{ __('Telefon raqam') }}
+                                </button>
+                                <button class="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300">
+                                    {{ __('Telegram orqali yozish') }}
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mt-4">
+                                @if($product->floor > 0)
+                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                        <img src="{{ asset('images/4465213.png') }}" alt="icon" class="w-4 h-4">
+                                        {{ $product->floor }}/{{ $product->building_floor }} etaj
+                                    </span>
+                                @endif
+                                @if($product->rooms > 0)
+                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                        <img src="{{ asset('images/2800060.png') }}" alt="icon" class="w-4 h-4">
+                                        {{ $product->rooms }} xona
+                                    </span>
+                                @endif
+                                @if($product->square > 0)
+                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                        <img src="{{ asset('images/5024066.png') }}" alt="icon" class="w-4 h-4">
+                                        {{ $product->square }} m²
+                                    </span>
+                                @endif
+                            </div>
+
+                            {{-- Features --}}
+                            @if($product->features && $product->features->count())
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    @foreach($product->features as $feature)
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md">
+                                            {{ $feature->feature_name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            {{-- Extra labels --}}
+                            <div class="flex gap-2 mt-3">
+                                @if($product->exchange)
+                                    <span class="text-xs border border-yellow-500 text-yellow-600 px-2 py-1 rounded-md">Ayirboshlash</span>
+                                @endif
+                                @if($product->pay_in_installments)
+                                    <span class="text-xs border border-green-500 text-green-600 px-2 py-1 rounded-md">Bo'lib to'lash</span>
+                                @endif
+                                @if($product->credit)
+                                    <span class="text-xs border border-blue-500 text-blue-600 px-2 py-1 rounded-md">Ipoteka</span>
+                                @endif
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-            <div class="pagination-links">
-                <div class="pagination-info">
-                    {{ $filteredProducts->firstItem() }} {{ __('dan') }} {{ $filteredProducts->lastItem() }} {{ __('gacha,') }}
-                    {{ __('jami') }} {{ $filteredProducts->total() }} {{ __('natija') }}
-                </div>
-                <nav aria-label="Pagination">
-                    @if ($filteredProducts->onFirstPage())
-                        <span class="page-link disabled" aria-disabled="true">
-                            <i class="bi bi-chevron-left"></i> {{ __('Oldingi') }}
-                        </span>
-                    @else
-                        <a href="{{ $filteredProducts->previousPageUrl() }}" class="page-link">
-                            <i class="bi bi-chevron-left"></i> {{ __('Oldingi') }}
-                        </a>
-                    @endif
 
-                    @php
-                        $start = max(1, $filteredProducts->currentPage() - 2);
-                        $end = min($filteredProducts->lastPage(), $filteredProducts->currentPage() + 2);
-                        if ($end - $start < 4) {
-                            if ($start == 1) {
-                                $end = min($start + 4, $filteredProducts->lastPage());
-                            } else {
-                                $start = max(1, $end - 4);
-                            }
-                        }
-                    @endphp
-
-                    @if ($start > 1)
-                        <a href="{{ $filteredProducts->url(1) }}" class="page-link">1</a>
-                        @if ($start > 2)
-                            <span class="page-link dots">...</span>
-                        @endif
-                    @endif
-
-                    @foreach (range($start, $end) as $page)
-                        <a href="{{ $filteredProducts->url($page) }}"
-                           class="page-link {{ $page == $filteredProducts->currentPage() ? 'active' : '' }}">
-                            {{ $page }}
-                        </a>
-                    @endforeach
-
-                    @if ($end < $filteredProducts->lastPage())
-                        @if ($end < $filteredProducts->lastPage() - 1)
-                            <span class="page-link dots">...</span>
-                        @endif
-                        <a href="{{ $filteredProducts->url($filteredProducts->lastPage()) }}"
-                           class="page-link">{{ $filteredProducts->lastPage() }}</a>
-                    @endif
-
-                    @if ($filteredProducts->hasMorePages())
-                        <a href="{{ $filteredProducts->nextPageUrl() }}" class="page-link">
-                            {{ __('Keyingi') }} <i class="bi bi-chevron-right"></i>
-                        </a>
-                    @else
-                        <span class="page-link disabled" aria-disabled="true">
-                            {{ __('Keyingi') }} <i class="bi bi-chevron-right"></i>
-                        </span>
-                    @endif
-                </nav>
+            {{-- Pagination --}}
+            <div class="mt-6">
+                {{ $filteredProducts->links() }}
             </div>
         @endif
     </div>
 </section>
+
+
 <div id="quickContactModal" class="modal">
     <div class="modal-content">
         <span class="close-button" id="closeContactModal">×</span>
@@ -354,6 +2696,8 @@
         </div>
     </div>
 </div>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
@@ -636,6 +2980,85 @@
         }
     });
 </script>
+<script>
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const closeMenuToggle = document.getElementById('close-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const languageSelector = document.querySelector('.language-selector');
+        const currencySelector = document.querySelector('.currency-selector');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+        });
+
+        closeMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!languageSelector.contains(e.target)) {
+                document.querySelector('.language-menu').classList.add('hidden');
+            }
+            if (!currencySelector.contains(e.target)) {
+                document.querySelector('.currency-menu').classList.add('hidden');
+            }
+        });
+
+        languageSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelector('.language-menu').classList.toggle('hidden');
+        });
+
+        currencySelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelector('.currency-menu').classList.toggle('hidden');
+        });
+
+
+
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const regionSelect = document.getElementById('regionSelect');
+            const citySelect = document.getElementById('citySelect');
+
+            regionSelect.addEventListener('change', function () {
+                const regionId = this.value;
+                citySelect.innerHTML = '<option value="">Loading...</option>';
+                citySelect.disabled = true;
+
+                if (regionId) {
+                    fetch(`/get-cities/${regionId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">Select a district/city</option>';
+                            if (data.length > 0) {
+                                data.forEach(city => {
+                                    const option = document.createElement('option');
+                                    option.value = city.id;
+                                    option.textContent = city.name;
+                                    citySelect.appendChild(option);
+                                });
+                                citySelect.disabled = false;
+                            } else {
+                                citySelect.innerHTML = '<option value="">District/city not found</option>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            citySelect.innerHTML = '<option value="">Loading error</option>';
+                        });
+                } else {
+                    citySelect.innerHTML = '<option value="">Select a district/city</option>';
+                    citySelect.disabled = true;
+                }
+            });
+        });
+
+    </script>
 
 </body>
 </html>

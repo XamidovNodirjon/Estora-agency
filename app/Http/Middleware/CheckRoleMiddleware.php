@@ -11,11 +11,11 @@ class CheckRoleMiddleware
 {
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $user = Auth::user();
-
-        if (!$user) {
-            return redirect('/login');
+        if (!Auth::check()) {
+            return redirect()->route('login.index');
         }
+
+        $user = Auth::user();
 
         if (!in_array($user->position_id, $roles)) {
             abort(403, 'Unauthorized action.');

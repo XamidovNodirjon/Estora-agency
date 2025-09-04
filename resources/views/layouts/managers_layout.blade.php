@@ -48,7 +48,7 @@
                 </a>
             </li>
         </ul>
-    
+
     </div>
     <div class="left-side-menu">
         <div class="h-100" data-simplebar>
@@ -79,7 +79,7 @@
         <div class="content">
             @yield('content')
         </div>
-        @include('layouts.footer')
+{{--        @include('layouts.footer')--}}
     </div>
 </div>
 

@@ -30,7 +30,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('sotix')->nullable();
             $table->boolean('status')->default(true);
 
-
             $table->timestamps();
         });
     }

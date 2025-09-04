@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Container\Attributes\Tag;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -71,7 +72,7 @@ class Product extends Model
     {
         return $this->hasMany(ReservationProduct::class);
     }
-    
+
 
     protected $appends = ['image_array'];
 
@@ -80,7 +81,7 @@ class Product extends Model
         if (is_array($this->images)) {
             return $this->images;
         }
-        
+
         $decoded = json_decode($this->images, true);
         return is_array($decoded) ? $decoded : [];
     }
@@ -89,6 +90,17 @@ class Product extends Model
     {
         return $this->belongsToMany(Tag::class, 'product_tag', 'product_id', 'tag_id');
     }
+
+    public function features()
+    {
+        return $this->belongsToMany(
+            ProductFeatures::class,           // bog‘lanadigan model
+            'product_feature_product',       // pivot table nomi
+            'product_id',                    // product_id ustuni
+            'product_feature_id'             // feature_id ustuni
+        );
+    }
+
 
 
 }

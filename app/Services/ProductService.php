@@ -38,10 +38,13 @@ class ProductService
         $imagePaths = [];
         if (isset($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as $image) {
-                $path = $image->store('home', 'public');
-                $imagePaths[] = $path;
+                if ($image instanceof \Illuminate\Http\UploadedFile) {
+                    $path = $image->store('home', 'public');
+                    $imagePaths[] = $path;
+                }
             }
         }
+
 
         $product->images = json_encode($imagePaths);
         $product->save();
