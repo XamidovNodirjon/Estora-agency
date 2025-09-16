@@ -65,14 +65,17 @@ Route::middleware('auth')->group(function () {
     Route::put('product-features/{id}', [ProductFeaturesController::class, 'update'])->name('product.features.update');
     Route::delete('product-features/{id}', [ProductFeaturesController::class, 'destroy'])->name('product.features.destroy');
 
-    Route::get('/get-cities/{region_id}', function ($region_id) {
-        return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
-    })->name('get-cities');
+   
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+    Route::get('/get-cities/{region_id}', function ($region_id) {
+        return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
+    })->name('get-cities');
+
 
 Route::middleware('auth:client')->prefix('client')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'index'])->name('get.client');

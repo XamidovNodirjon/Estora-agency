@@ -417,13 +417,13 @@
             }
         });
         document.addEventListener('click', (e) => {
-        if (!languageSelector.contains(e.target) && !languageMenu.contains(e.target)) {
-            languageMenu.classList.add('hidden');
-        }
-        if (!currencySelector.contains(e.target) && !currencyMenu.contains(e.target)) {
-            currencyMenu.classList.add('hidden');
-        }
-    });
+    if (!languageSelector.contains(e.target) && !languageMenu.contains(e.target)) {
+        languageMenu.classList.add('hidden');
+    }
+    if (!currencySelector.contains(e.target) && !currencyMenu.contains(e.target)) {
+        currencyMenu.classList.add('hidden');
+    }
+});
 
     </script>
     </body>

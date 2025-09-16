@@ -2375,690 +2375,441 @@
             <p>Qayerda yashashni emas, qanday yashashni birga tanlaymiz.</p>
         </div>
     </div>
-<div class="search-form-card">
-    <h2>{{ __('Qidiruv natijalari') }}</h2>
-    <form action="{{ route('products.filter') }}" method="GET">
-        <div class="search-form-grid">
-            <div class="form-group">
-                <label for="type">{{ __("E'lon turi") }}</label>
-                <select name="type" id="type">
-                    <option value="">{{ __('Hammasi') }}</option>
-                    <option value="sale" {{ request('type') == 'sale' ? 'selected' : '' }}>{{ __('Sotish') }}</option>
-                    <option value="rent" {{ request('type') == 'rent' ? 'selected' : '' }}>{{ __('Ijaraga') }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="category">{{ __('Mulk turi') }}</label>
-                <select name="category" id="category">
-                    <option value="">{{ __('Hammasi') }}</option>
-                    <option
-                        value="apartment" {{ $request->property_type == 'apartment' ? 'selected' : '' }}>{{ __('Kvartira') }}</option>
-                    <option
-                        value="house" {{ $request->property_type == 'house' ? 'selected' : '' }}>{{ __('Uy/Hovli') }}</option>
-                    <option
-                        value="land" {{ $request->property_type == 'land' ? 'selected' : '' }}>{{ __('Yer') }}</option>
-                    <option
-                        value="commercial" {{ $request->property_type == 'commercial' ? 'selected' : '' }}>{{ __('Tijorat binosi') }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="rooms">{{ __('Xonalar soni') }}</label>
-                <select name="rooms" id="rooms">
-                    <option value="">{{ __('Hammasi') }}</option>
-                    @for ($i = 1; $i <= 5; $i++)
-                        <option
-                            value="{{ $i }}" {{ request('rooms') == $i ? 'selected' : '' }}>{{ $i }} {{ __('xona') }}</option>
-                    @endfor
-                    <option value="5+" {{ request('rooms') == '5+' ? 'selected' : '' }}>5+ {{ __('xona') }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="price_from">{{ __('Narx (dan)') }}</label>
-                <input type="text" name="price_from" id="price_from" value="{{ request('price_from') }}"
-                       placeholder="{{ __('minimal narx') }}">
-            </div>
-            <div class="form-group">
-                <label for="price_to">{{ __('Narx (gacha)') }}</label>
-                <input type="text" name="price_to" id="price_to" value="{{ request('price_to') }}"
-                       placeholder="{{ __('maksimal narx') }}">
-            </div>
-            <div class="form-group">
-                <label for="region">{{ __('Hudud') }}</label>
-                <select name="region" id="region">
-                    <option value="">{{ __('Hammasi') }}</option>
-                    @foreach($regions as $region)
-                        <option
-                            value="{{ $region->id }}" {{ request('region') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="more-filters-hidden" style="display: none;">
+
+    <div class="search-form-card">
+        <h2>{{ __('Qidiruv natijalari') }}</h2>
+        <form action="{{ route('products.filter') }}" method="GET" id="searchForm">
+            <div class="search-form-grid">
                 <div class="form-group">
-                    <label for="floors">{{ __('Qavatlar soni') }}</label>
-                    <select name="floors" id="floors">
-                        <option value="">{{ __('Hammasi') }}</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option
-                                value="{{ $i }}" {{ request('floors') == $i ? 'selected' : '' }}>{{ $i }} {{ __('Qavat') }}</option>
-                        @endfor
-                        <option value="6+" {{ request('floors') == '6+' ? 'selected' : '' }}>
-                            6+ {{ __('Qavat') }}</option>
+                    <label for="ad_type">{{ __('E\'lon turi') }}</label>
+                    <select name="ad_type" id="ad_type">
+                        <option value="All">{{ __('Hammasi') }}</option>
+                        <option value="sale" {{ request('ad_type') == 'sale' ? 'selected' : '' }}>{{ __('Sotish') }}</option>
+                        <option value="rent" {{ request('ad_type') == 'rent' ? 'selected' : '' }}>{{ __('Ijaraga') }}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="property_type">{{ __('Uy turi') }}</label>
+                    <label for="property_type">{{ __('Mulk turi') }}</label>
                     <select name="property_type" id="property_type">
-                        <option value="">{{ __('Hammasi') }}</option>
-                        <option
-                            value="apartment" {{ request('property_type') == 'apartment' ? 'selected' : '' }}>{{ __('Kvartira') }}</option>
-                        <option
-                            value="apartment" {{ $request->property_type == 'apartment rents' ? 'selected' : '' }}>{{ __('apartment renters') }}</option>
-                        <option
-                            value="house" {{ request('property_type') == 'house' ? 'selected' : '' }}>{{ __('Uy / Yer') }}</option>
-                        <option
-                            value="commercial" {{ request('property_type') == 'commercial' ? 'selected' : '' }}>{{ __('Tijorat binosi') }}</option>
+                        <option value="All">{{ __('Hammasi') }}</option>
+                        <option value="apartment" {{ request('property_type') == 'apartment' ? 'selected' : '' }}>{{ __('Kvartira') }}</option>
+                        <option value="house" {{ request('property_type') == 'house' ? 'selected' : '' }}>{{ __('Uy/Hovli') }}</option>
+                        <option value="land" {{ request('property_type') == 'land' ? 'selected' : '' }}>{{ __('Yer') }}</option>
+                        <option value="commercial" {{ request('property_type') == 'commercial' ? 'selected' : '' }}>{{ __('Tijorat binosi') }}</option>
                     </select>
                 </div>
-            </div>
-        </div>
-        <div class="filter-actions">
-            <button type="button" class="more-filters-btn">
-                <i class="bi bi-funnel-fill"></i> {{ __('Ko\'proq filterlar') }}
-            </button>
-            <div class="filter-buttons">
-                <button type="button" class="map-view-btn">
-                    <i class="bi bi-geo-alt-fill"></i> {{ __('Xaritadan ko\'rish') }}
-                </button>
-                <button type="submit" class="show-ads-btn">
-                    <i class="bi bi-search"></i> {{ __('Ko\'rish') }} {{ $filteredProducts->total() }} {{ __('e\'lonlar') }}
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-<!-- Alpine.js ulashni unutmang (agar layout.blade.php da yo'q bo'lsa) -->
-<script src="//unpkg.com/alpinejs" defer></script>
-
-<section class="ads-listing-section py-6">
-    <div class="container mx-auto px-4">
-        <h2 class="text-xl font-semibold mb-4">{{ __('Topilgan e\'lonlar') }}</h2>
-
-        @if($filteredProducts->isEmpty())
-            <p class="text-gray-500">{{ __('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.') }}</p>
-        @else
-            <div class="space-y-6">
-                @foreach($filteredProducts as $product)
-                    <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
-
-                        {{-- Chap qism - rasm galereyasi --}}
-                        <div class="relative md:w-1/3 w-full h-56 md:h-auto" 
-                             x-data="{ currentIndex: 0 }">
-                            @php
-                                $images = $product->image_array ?? [];
-                            @endphp
-
-                            <span class="absolute top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">
-                                {{ __('Yaxshi Taklif') }}
-                            </span>
-
-                            <div class="overflow-hidden w-full h-full">
-                                @foreach($images as $index => $img)
-                                    <img 
-                                        src="{{ asset('storage/' . $img) }}" 
-                                        alt="{{ $product->name }}" 
-                                        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-                                        x-show="currentIndex === {{ $index }}"
-                                        x-transition
-                                    >
-                                @endforeach
-
-                                @if(empty($images))
-                                    <img src="https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q"
-                                         class="w-full h-full object-cover">
-                                @endif
-                            </div>
-
-                            {{-- Chap tugma --}}
-                            @if(count($images) > 1)
-                                <button 
-                                    @click="currentIndex = (currentIndex === 0) ? {{ count($images) - 1 }} : currentIndex - 1" 
-                                    class="absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow">
-                                    ‹
-                                </button>
-
-                                {{-- Ong tugma --}}
-                                <button 
-                                    @click="currentIndex = (currentIndex === {{ count($images) - 1 }}) ? 0 : currentIndex + 1" 
-                                    class="absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow">
-                                    ›
-                                </button>
-
-                                {{-- Pastki indikator --}}
-                                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
-                                    @foreach($images as $index => $img)
-                                        <span 
-                                            class="w-2 h-2 rounded-full"
-                                            :class="currentIndex === {{ $index }} ? 'bg-yellow-500' : 'bg-gray-300'">
-                                        </span>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-
-                        {{-- O‘rta qism - asosiy info --}}
-                        <div class="flex-1 p-4 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-xs text-white bg-yellow-600 px-2 py-1 rounded-md">
-                                        ID {{ $product->id }}
-                                    </span>
-                                    <span class="text-lg font-bold text-green-700">
-                                        {{ number_format($product->price, 0, '.', ' ') }} USD
-                                    </span>
-                                </div>
-                                <h3 class="text-base font-semibold text-gray-800">
-                                    {{ $product->category->name ?? __('Kategoriya yo‘q') }}
-                                </h3>
-                                <p class="text-gray-600 text-sm mt-1 flex items-center gap-1">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                    {{ $product->region->name ?? __('Hudud topilmadi') }},
-                                    {{ $product->city->name ?? $product->district->name ?? __('Shahar topilmadi') }}
-                                </p>
-                                <p class="text-gray-500 text-sm mt-1">
-                                    {{ __('Mo‘ljal:') }} {{ $product->landmark ?? __('Ko‘rsatilmagan') }}
-                                </p>
-                            </div>
-                            <p class="text-gray-400 text-xs mt-3">
-                                {{ __('E\'lon joylangan sana:') }} {{ $product->created_at->format('d.m.Y') }}
-                            </p>
-                        </div>
-
-                        {{-- O‘ng qism - tugmalar va atributlar --}}
-                        <div class="md:w-1/4 w-full border-t md:border-t-0 md:border-l border-gray-200 p-4 flex flex-col justify-between">
-                            <div>
-                                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-                                    {{ __('Telefon raqam') }}
-                                </button>
-                                <button class="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300">
-                                    {{ __('Telegram orqali yozish') }}
-                                </button>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mt-4">
-                                @if($product->floor > 0)
-                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                        <img src="{{ asset('images/4465213.png') }}" alt="icon" class="w-4 h-4">
-                                        {{ $product->floor }}/{{ $product->building_floor }} etaj
-                                    </span>
-                                @endif
-                                @if($product->rooms > 0)
-                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                        <img src="{{ asset('images/2800060.png') }}" alt="icon" class="w-4 h-4">
-                                        {{ $product->rooms }} xona
-                                    </span>
-                                @endif
-                                @if($product->square > 0)
-                                    <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                        <img src="{{ asset('images/5024066.png') }}" alt="icon" class="w-4 h-4">
-                                        {{ $product->square }} m²
-                                    </span>
-                                @endif
-                            </div>
-
-                            {{-- Features --}}
-                            @if($product->features && $product->features->count())
-                                <div class="flex flex-wrap gap-2 mt-3">
-                                    @foreach($product->features as $feature)
-                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md">
-                                            {{ $feature->feature_name }}
-                                        </span>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            {{-- Extra labels --}}
-                            <div class="flex gap-2 mt-3">
-                                @if($product->exchange)
-                                    <span class="text-xs border border-yellow-500 text-yellow-600 px-2 py-1 rounded-md">Ayirboshlash</span>
-                                @endif
-                                @if($product->pay_in_installments)
-                                    <span class="text-xs border border-green-500 text-green-600 px-2 py-1 rounded-md">Bo'lib to'lash</span>
-                                @endif
-                                @if($product->credit)
-                                    <span class="text-xs border border-blue-500 text-blue-600 px-2 py-1 rounded-md">Ipoteka</span>
-                                @endif
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label for="rooms">{{ __('Xonalar soni') }}</label>
+                    <select name="rooms" id="rooms">
+                        <option value="All">{{ __('Hammasi') }}</option>
+                        @for ($i = 1; $i <= 5; $i++)
+                            <option value="{{ $i }}" {{ request('rooms') == $i ? 'selected' : '' }}>{{ $i }} {{ __('xona') }}</option>
+                        @endfor
+                        <option value="5+" {{ request('rooms') == '5+' ? 'selected' : '' }}>5+ {{ __('xona') }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="price_from">{{ __('Narx (dan)') }}</label>
+                    <input type="number" name="price_from" id="price_from" value="{{ request('price_from') }}" placeholder="{{ __('minimal narx') }}" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="price_to">{{ __('Narx (gacha)') }}</label>
+                    <input type="number" name="price_to" id="price_to" value="{{ request('price_to') }}" placeholder="{{ __('maksimal narx') }}" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="region">{{ __('Hudud') }}</label>
+                    <select name="region" id="region" onchange="fetchCities()">
+                        <option value="All">{{ __('Hammasi') }}</option>
+                        @foreach($regions as $region)
+                            <option value="{{ $region->id }}" {{ request('region') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="city">{{ __('Shahar') }}</label>
+                    <select name="city" id="city">
+                        <option value="All">{{ __('Hammasi') }}</option>
+                        @foreach($cities as $city)
+                            <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="more-filters-hidden" style="display: none;">
+                    <div class="form-group">
+                        <label for="floors">{{ __('Qavatlar soni') }}</label>
+                        <select name="floors" id="floors">
+                            <option value="All">{{ __('Hammasi') }}</option>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <option value="{{ $i }}" {{ request('floors') == $i ? 'selected' : '' }}>{{ $i }} {{ __('Qavat') }}</option>
+                            @endfor
+                            <option value="6+" {{ request('floors') == '6+' ? 'selected' : '' }}>6+ {{ __('Qavat') }}</option>
+                        </select>
                     </div>
-                @endforeach
+                </div>
             </div>
-
-            {{-- Pagination --}}
-            <div class="mt-6">
-                {{ $filteredProducts->links() }}
+            <div class="filter-actions">
+                <button type="button" class="more-filters-btn" id="moreFiltersBtn">
+                    <i class="bi bi-funnel-fill"></i> {{ __('Ko\'proq filterlar') }}
+                </button>
+                <div class="filter-buttons">
+                    <button type="button" class="map-view-btn">
+                        <i class="bi bi-geo-alt-fill"></i> {{ __('Xaritadan ko\'rish') }}
+                    </button>
+                    <button type="submit" class="show-ads-btn">
+                        <i class="bi bi-search"></i> {{ __('Ko\'rish') }} {{ $filteredProducts->total() }} {{ __('e\'lonlar') }}
+                    </button>
+                </div>
             </div>
-        @endif
-    </div>
-</section>
-
-
-<div id="quickContactModal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" id="closeContactModal">×</span>
-        <div class="modal-header">
-            <h3>{{ __('Tezkor Murojaat') }}</h3>
-            <p class="modal-product-info">{{ __('E\'lon:') }} <span id="modalProductName"></span> (ID: <span
-                    id="modalProductId"></span>)</p>
-        </div>
-        <form id="contactForm">
-            <div class="form-group">
-                <label for="contactName">{{ __('Ismingiz:') }}</label>
-                <input type="text" id="contactName" name="name" placeholder="{{ __('Ismingizni kiriting') }}" required>
-            </div>
-            <div class="form-group">
-                <label for="contactPhone">{{ __('Telefon raqamingiz:') }}</label>
-                <input type="tel" id="contactPhone" name="phone" placeholder="+998 (XX) XXX-XX-XX" required>
-            </div>
-            <button type="submit" class="submit-contact-button">{{ __('Yuborish') }}</button>
         </form>
     </div>
-</div>
 
-<div id="successModal" class="modal">
-    <div class="modal-content success-content">
-        <span class="close-button" id="closeSuccessModal">×</span>
-        <div class="success-icon">
-            <div class="checkmark-circle">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark-circle-path" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+    <section class="ads-listing-section py-6">
+        <div class="container mx-auto px-4">
+            <h2 class="text-xl font-semibold mb-4">{{ __('Topilgan e\'lonlar') }}</h2>
+            @if($filteredProducts->isEmpty())
+                <p class="text-gray-500">{{ __('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.') }}</p>
+            @else
+                <div class="space-y-6">
+                    @foreach($filteredProducts as $product)
+                        <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition ad-card"
+                             data-images='{{ json_encode($product->image_array ?? []) }}'>
+                            <div class="relative md:w-1/3 w-full h-56 md:h-auto open-image-modal" x-data="{ currentIndex: 0 }">
+                              @php $images = $product->image ? [$product->image] : []; @endphp
+                                <span class="absolute top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
+                                <div class="overflow-hidden w-full h-full">
+                                    @if(!empty($images))
+                                        @foreach($images as $index => $img)
+                                            <img src="{{ asset('storage/' . $img) }}" alt="{{ $product->name }}"
+                                                 class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ad-image"
+                                                 x-show="currentIndex === {{ $index }}" x-transition:enter="opacity-0" x-transition:leave="opacity-100"
+                                                 onerror="this.src='https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q';">
+                                        @endforeach
+                                    @else
+                                        <img src="https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q123" class="w-full h-full object-cover">
+                                    @endif
+                                </div>
+                                @if(count($images) > 1)
+                                    <button class="prev-button-card absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                                            @click="currentIndex = (currentIndex === 0) ? {{ count($images) - 1 }} : currentIndex - 1">‹</button>
+                                    <button class="next-button-card absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                                            @click="currentIndex = (currentIndex === {{ count($images) - 1 }}) ? 0 : currentIndex + 1">›</button>
+                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
+                                        @foreach($images as $index => $img)
+                                            <span class="w-2 h-2 rounded-full" :class="currentIndex === {{ $index }} ? 'bg-yellow-500' : 'bg-gray-300'"></span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-4 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs text-white bg-yellow-600 px-2 py-1 rounded-md">ID {{ $product->id }}</span>
+                                        <span class="text-lg font-bold text-green-700">{{ number_format($product->price, 0, '.', ' ') }} USD</span>
+                                    </div>
+                                    <h3 class="text-base font-semibold text-gray-800">{{ $product->category->name ?? __('Kategoriya yo‘q') }}</h3>
+                                    <p class="text-gray-600 text-sm mt-1 flex items-center gap-1"><i class="bi bi-geo-alt-fill"></i>
+                                        {{ $product->region->name ?? __('Hudud topilmadi') }},
+                                        {{ $product->city->name ?? $product->district->name ?? __('Shahar topilmadi') }}</p>
+                                    <p class="text-gray-500 text-sm mt-1">{{ __('Mo‘ljal:') }} {{ $product->landmark ?? __('Ko‘rsatilmagan') }}</p>
+                                </div>
+                                <p class="text-gray-400 text-xs mt-3">{{ __('E\'lon joylangan sana:') }} {{ $product->created_at->format('d.m.Y') }}</p>
+                            </div>
+                            <div class="md:w-1/4 w-full border-t md:border-t-0 md:border-l border-gray-200 p-4 flex flex-col justify-between">
+                                <div>
+                                    <a href="tel:+998951606446">
+                                        <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">{{ __('Telefon raqam') }}</button>
+                                    </a>
+                                    <button class="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 open-contact-modal"
+                                            data-product-name="{{ $product->name }}" data-product-id="{{ $product->id }}">{{ __('Biz bilan bog\'lanish') }}</button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mt-4">
+                                    @if($product->floor > 0)
+                                        <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                            <img src="{{ asset('images/4465213.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            {{ $product->floor }}/{{ $product->building_floor }} etaj
+                                        </span>
+                                    @endif
+                                    @if($product->rooms > 0)
+                                        <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                            <img src="{{ asset('images/2800060.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            {{ $product->rooms }} xona
+                                        </span>
+                                    @endif
+                                    @if($product->square > 0)
+                                        <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                                            <img src="{{ asset('images/5024066.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            {{ $product->square }} m²
+                                        </span>
+                                    @endif
+                                </div>
+                                @if($product->features && $product->features->count())
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        @foreach($product->features as $feature)
+                                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md">{{ $feature->feature_name }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                                <div class="flex gap-2 mt-3">
+                                    @if($product->exchange)<span class="text-xs border border-yellow-500 text-yellow-600 px-2 py-1 rounded-md">Ayirboshlash</span>@endif
+                                    @if($product->pay_in_installments)<span class="text-xs border border-green-500 text-green-600 px-2 py-1 rounded-md">Bo'lib to'lash</span>@endif
+                                    @if($product->credit)<span class="text-xs border border-blue-500 text-blue-600 px-2 py-1 rounded-md">Ipoteka</span>@endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-6">{{ $filteredProducts->links() }}</div>
+            @endif
+        </div>
+    </section>
+
+    <div id="quickContactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeContactModal">×</span>
+            <div class="modal-header">
+                <h3>{{ __('Tezkor Murojaat') }}</h3>
+                <p class="modal-product-info">{{ __('E\'lon:') }} <span id="modalProductName"></span> (ID: <span id="modalProductId"></span>)</p>
+            </div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">{{ __('Ismingiz:') }}</label>
+                    <input type="text" id="contactName" name="name" placeholder="{{ __('Ismingizni kiriting') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">{{ __('Telefon raqamingiz:') }}</label>
+                    <input type="tel" id="contactPhone" name="phone" placeholder="+998 (XX) XXX-XX-XX" required>
+                </div>
+                <button type="submit" class="submit-contact-button">{{ __('Yuborish') }}</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content success-content">
+            <span class="close-button" id="closeSuccessModal">×</span>
+            <div class="success-icon">
+                <div class="checkmark-circle">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle-path" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+            </div>
+            <h3>{{ __('Murojaatingiz qabul qilindi!') }}</h3>
+            <p>{{ __('Tez orada siz bilan bog\'lanamiz.') }}</p>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content image-modal-content">
+            <span class="close-button" id="closeImageModal">×</span>
+            <div class="image-modal-container">
+                <img src="" alt="Property Image" class="modal-image" id="modalImage">
+                <button class="nav-button-modal prev-button-modal"><i class="bi bi-chevron-left"></i></button>
+                <button class="nav-button-modal next-button-modal"><i class="bi bi-chevron-right"></i></button>
             </div>
         </div>
-        <h3>{{ __('Murojaatingiz qabul qilindi!') }}</h3>
-        <p>{{ __('Tez orada siz bilan bog\'lanamiz.') }}</p>
     </div>
-</div>
 
-<div id="imageModal" class="modal">
-    <div class="modal-content image-modal-content">
-        <span class="close-button" id="closeImageModal">×</span>
-        <div class="image-modal-container">
-            <img src="" alt="Property Image" class="modal-image" id="modalImage">
-            <button class="nav-button-modal prev-button-modal">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-            <button class="nav-button-modal next-button-modal">
-                <i class="bi bi-chevron-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
+    <script>
+        $(document).ready(() => $('#contactPhone').inputmask({
+            mask: "+998 (99) 999-99-99",
+            clearIncomplete: true,
+            showMaskOnHover: false,
+            onBeforePaste: pastedValue => pastedValue.replace(/^\+998/, '')
+        }));
 
+        const fetchCities = () => {
+            const regionId = document.getElementById('region').value;
+            const citySelect = document.getElementById('city');
+            citySelect.innerHTML = '<option value="All">{{ __('Loading...') }}</option>';
+            citySelect.disabled = true;
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#contactPhone').inputmask({
-            "mask": "+998 (99) 999-99-99",
-            "clearIncomplete": true,
-            "showMaskOnHover": false,
-            "onBeforePaste": function (pastedValue, opts) {
-                return pastedValue.replace(/^\+998/, '');
-            }
-        });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-        const closeMenuButton = document.querySelector('.close-menu');
-
-        if (menuToggle && mobileMenuOverlay && closeMenuButton) {
-            menuToggle.addEventListener('click', function () {
-                mobileMenuOverlay.classList.add('active');
-            });
-            closeMenuButton.addEventListener('click', function () {
-                mobileMenuOverlay.classList.remove('active');
-            });
-            mobileMenuOverlay.addEventListener('click', function (event) {
-                if (event.target === mobileMenuOverlay) {
-                    mobileMenuOverlay.classList.remove('active');
-                }
-            });
-        }
-
-        const TELEGRAM_BOT_TOKEN = '8324622390:AAHTibxtx1NfrBz-P6NREXKZEboIqx8VxQI';
-        const TELEGRAM_CHAT_ID = '-1002718251790';
-
-        const contactModal = document.getElementById('quickContactModal');
-        const successModal = document.getElementById('successModal');
-        const imageModal = document.getElementById('imageModal');
-        const openContactModalButtons = document.querySelectorAll('.open-contact-modal');
-        const openImageModalButtons = document.querySelectorAll('.open-image-modal');
-        const closeContactModal = contactModal.querySelector('.close-button');
-        const closeSuccessModal = successModal.querySelector('.close-button');
-        const closeImageModal = imageModal.querySelector('.close-button');
-        const contactForm = document.getElementById('contactForm');
-        const modalProductName = document.getElementById('modalProductName');
-        const modalProductId = document.getElementById('modalProductId');
-        const modalImage = document.getElementById('modalImage');
-        const prevButtonModal = imageModal.querySelector('.prev-button-modal');
-        const nextButtonModal = imageModal.querySelector('.next-button-modal');
-
-        let currentImages = [];
-        let currentImageIndex = 0;
-
-        openContactModalButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const productName = this.dataset.productName;
-                const productId = this.dataset.productId;
-                modalProductName.textContent = productName;
-                modalProductId.textContent = productId;
-                contactModal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            });
-        });
-
-        openImageModalButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const card = this.closest('.ad-card');
-                const imagesData = card.dataset.images;
-                try {
-                    currentImages = JSON.parse(imagesData);
-                } catch (e) {
-                    console.error("Error parsing images data:", e);
-                    currentImages = [];
-                }
-                currentImageIndex = 0;
-                if (currentImages.length > 0) {
-                    modalImage.src = "{{ asset('storage/') }}/" + currentImages[currentImageIndex];
-                    imageModal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                }
-            });
-        });
-
-        closeContactModal.addEventListener('click', function () {
-            contactModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        closeSuccessModal.addEventListener('click', function () {
-            successModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        closeImageModal.addEventListener('click', function () {
-            imageModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        window.addEventListener('click', function (event) {
-            if (event.target === contactModal) {
-                contactModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-            if (event.target === successModal) {
-                successModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-            if (event.target === imageModal) {
-                imageModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        prevButtonModal.addEventListener('click', function () {
-            if (currentImages.length > 0) {
-                currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-                modalImage.style.opacity = '0';
-                setTimeout(() => {
-                    modalImage.src = "{{ asset('storage/') }}/" + currentImages[currentImageIndex];
-                    modalImage.style.opacity = '1';
-                }, 300);
-            }
-        });
-
-        nextButtonModal.addEventListener('click', function () {
-            if (currentImages.length > 0) {
-                currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-                modalImage.style.opacity = '0';
-                setTimeout(() => {
-                    modalImage.src = "{{ asset('storage/') }}/" + currentImages[currentImageIndex];
-                    modalImage.style.opacity = '1';
-                }, 300);
-            }
-        });
-
-        contactForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const name = document.getElementById('contactName').value;
-            const phone = document.getElementById('contactPhone').value;
-            const productId = modalProductId.textContent;
-            const productName = modalProductName.textContent;
-            if (phone.length < "+998 (99) 999-99-99".length) {
-                alert("Iltimos, telefon raqamini to'liq kiriting.");
-                return;
-            }
-
-            const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${productName}\nE'lon ID: ${productId}`;
-
-            const submitButton = contactForm.querySelector('.submit-contact-button');
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
-
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    contactModal.style.display = 'none';
-                    successModal.style.display = 'flex';
-
-                    const checkmark = successModal.querySelector('.checkmark-circle');
-                    checkmark.classList.remove('animate');
-                    void checkmark.offsetWidth;
-                    checkmark.classList.add('animate');
-
-                    contactForm.reset();
+            if (regionId && regionId !== 'All') {
+                fetch(`/get-cities/${regionId}`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
                 })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
-                })
-                .finally(() => {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = '{{ __('Yuborish') }}';
-                });
-        });
-
-    });
-
-    const moreFiltersBtn = document.querySelector('.more-filters-btn');
-    const moreFiltersHidden = document.querySelector('.more-filters-hidden');
-
-    if (moreFiltersBtn && moreFiltersHidden) {
-        moreFiltersBtn.addEventListener('click', function () {
-            if (moreFiltersHidden.style.display === 'none' || moreFiltersHidden.style.display === '') {
-                moreFiltersHidden.style.display = 'grid';
-                moreFiltersBtn.innerHTML = '<i class="bi bi-funnel-fill"></i> {{ __('Kamroq filterlar') }}';
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        citySelect.innerHTML = '<option value="All">{{ __('Hammasi') }}</option>';
+                        if (data.length) {
+                            data.forEach(city => {
+                                const option = new Option(city.name, city.id);
+                                option.selected = '{{ request('city') }}' == city.id;
+                                citySelect.add(option);
+                            });
+                            citySelect.disabled = false;
+                        } else {
+                            citySelect.innerHTML = '<option value="All">{{ __('No cities found') }}</option>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cities:', error);
+                        citySelect.innerHTML = '<option value="All">{{ __('Error loading cities') }}</option>';
+                    });
             } else {
-                moreFiltersHidden.style.display = 'none';
-                moreFiltersBtn.innerHTML = '<i class="bi bi-funnel-fill"></i> {{ __('Ko\'proq filterlar') }}';
-            }
-        });
-    }
-
-    document.querySelectorAll('.ad-card').forEach(card => {
-        const adImage = card.querySelector('.ad-image');
-        const prevButton = card.querySelector('.prev-button-card');
-        const nextButton = card.querySelector('.next-button-card');
-        const allImagesData = card.dataset.images;
-
-        let allImages = [];
-        if (allImagesData) {
-            try {
-                allImages = JSON.parse(allImagesData);
-            } catch (e
-
-                ) {
-                console.error("Error parsing images data:", e);
-            }
-        }
-        let currentIndex = 0;
-
-        function updateCardImage(newIndex) {
-            if (adImage && allImages.length > 0) {
-                currentIndex = (newIndex + allImages.length) % allImages.length;
-                if (currentIndex < 0) {
-                    currentIndex = allImages.length - 1;
-                }
-                adImage.style.opacity = '0';
-                setTimeout(() => {
-                    adImage.src = "{{ asset('storage/') }}/" + allImages[currentIndex];
-                    adImage.style.opacity = '1';
-                }, 300);
-            }
-        }
-
-        if (allImages.length > 0) {
-            updateCardImage(0);
-        }
-        if (prevButton) {
-            prevButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                updateCardImage(currentIndex - 1);
-            });
-        }
-        if (nextButton) {
-            nextButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                updateCardImage(currentIndex + 1);
-            });
-        }
-    });
-
-    function toggleDropdownModal() {
-        const modal = document.querySelector('.dropdown-modal');
-        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function toggleLanguageDropdown() {
-        const langDropdown = document.querySelector('.language-dropdown');
-        langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
-    }
-
-    document.addEventListener('click', function (event) {
-        const langSelector = document.querySelector('.language-selector');
-        const langDropdown = document.querySelector('.language-dropdown');
-        const dropdownModal = document.querySelector('.dropdown-modal');
-
-        if (!langSelector.contains(event.target)) {
-            langDropdown.style.display = 'none';
-        }
-
-        if (!dropdownModal.contains(event.target) && !event.target.closest('.menu-icon')) {
-            dropdownModal.style.display = 'none';
-        }
-    });
-</script>
-<script>
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const closeMenuToggle = document.getElementById('close-menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const languageSelector = document.querySelector('.language-selector');
-        const currencySelector = document.querySelector('.currency-selector');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-        });
-
-        closeMenuToggle.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!languageSelector.contains(e.target)) {
-                document.querySelector('.language-menu').classList.add('hidden');
-            }
-            if (!currencySelector.contains(e.target)) {
-                document.querySelector('.currency-menu').classList.add('hidden');
-            }
-        });
-
-        languageSelector.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.querySelector('.language-menu').classList.toggle('hidden');
-        });
-
-        currencySelector.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.querySelector('.currency-menu').classList.toggle('hidden');
-        });
-
-
-
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const regionSelect = document.getElementById('regionSelect');
-            const citySelect = document.getElementById('citySelect');
-
-            regionSelect.addEventListener('change', function () {
-                const regionId = this.value;
-                citySelect.innerHTML = '<option value="">Loading...</option>';
+                citySelect.innerHTML = '<option value="All">{{ __('Hammasi') }}</option>';
                 citySelect.disabled = true;
+            }
+        };
 
-                if (regionId) {
-                    fetch(`/get-cities/${regionId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            citySelect.innerHTML = '<option value="">Select a district/city</option>';
-                            if (data.length > 0) {
-                                data.forEach(city => {
-                                    const option = document.createElement('option');
-                                    option.value = city.id;
-                                    option.textContent = city.name;
-                                    citySelect.appendChild(option);
-                                });
-                                citySelect.disabled = false;
-                            } else {
-                                citySelect.innerHTML = '<option value="">District/city not found</option>';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            citySelect.innerHTML = '<option value="">Loading error</option>';
-                        });
-                } else {
-                    citySelect.innerHTML = '<option value="">Select a district/city</option>';
-                    citySelect.disabled = true;
+        document.addEventListener('DOMContentLoaded', () => {
+            const modals = { contact: '#quickContactModal', success: '#successModal', image: '#imageModal' };
+            const buttons = {
+                openContact: document.querySelectorAll('.open-contact-modal'),
+                openImage: document.querySelectorAll('.open-image-modal'),
+                close: document.querySelector('#closeContactModal'),
+                closeSuccess: document.querySelector('#closeSuccessModal'),
+                closeImage: document.querySelector('#closeImageModal'),
+                prevImage: document.querySelector('.prev-button-modal'),
+                nextImage: document.querySelector('.next-button-modal')
+            };
+            const form = document.getElementById('contactForm');
+            const elements = {
+                productName: document.getElementById('modalProductName'),
+                productId: document.getElementById('modalProductId'),
+                modalImage: document.getElementById('modalImage'),
+                submitBtn: form.querySelector('.submit-contact-button')
+            };
+
+            let currentImages = [], currentIndex = 0;
+            const TELEGRAM_BOT_TOKEN = '8324622390:AAHTibxtx1NfrBz-P6NREXKZEboIqx8VxQI';
+            const TELEGRAM_CHAT_ID = '-1002718251790';
+
+            buttons.openContact.forEach(btn => btn.addEventListener('click', () => {
+                elements.productName.textContent = btn.dataset.productName || 'Noma’lum e’lon';
+                elements.productId.textContent = btn.dataset.productId || 'Noma’lum ID';
+                document.querySelector(modals.contact).style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }));
+
+            buttons.openImage.forEach(btn => btn.addEventListener('click', e => {
+                if (e.target.tagName === 'BUTTON') return;
+                const card = btn.closest('.ad-card');
+                currentImages = JSON.parse(card.dataset.images || '[]') || [];
+                currentIndex = 0;
+                elements.modalImage.src = currentImages.length ? "{{ asset('storage/') }}" + currentImages[currentIndex] : "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                document.querySelector(modals.image).style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }));
+
+            [buttons.close, buttons.closeSuccess, buttons.closeImage].forEach(closeBtn => closeBtn.addEventListener('click', () => {
+                closeBtn.closest('.modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }));
+
+            window.addEventListener('click', e => Object.values(modals).forEach(modal => {
+                if (e.target === document.querySelector(modal)) {
+                    document.querySelector(modal).style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }));
+
+            buttons.prevImage.addEventListener('click', () => {
+                if (currentImages.length) {
+                    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+                    elements.modalImage.style.opacity = '0';
+                    setTimeout(() => {
+                        elements.modalImage.src = "{{ asset('storage/') }}" + currentImages[currentIndex];
+                        elements.modalImage.style.opacity = '1';
+                    }, 300);
+                    elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
                 }
             });
+
+            buttons.nextImage.addEventListener('click', () => {
+                if (currentImages.length) {
+                    currentIndex = (currentIndex + 1) % currentImages.length;
+                    elements.modalImage.style.opacity = '0';
+                    setTimeout(() => {
+                        elements.modalImage.src = "{{ asset('storage/') }}" + currentImages[currentIndex];
+                        elements.modalImage.style.opacity = '1';
+                    }, 300);
+                    elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                }
+            });
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const name = document.getElementById('contactName').value;
+                const phone = document.getElementById('contactPhone').value;
+                if (phone.length < "+998 (99) 999-99-99".length) {
+                    alert("Iltimos, telefon raqamini to'liq kiriting.");
+                    return;
+                }
+
+                const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${elements.productName.textContent}\nE'lon ID: ${elements.productId.textContent}`;
+                elements.submitBtn.disabled = true;
+                elements.submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
+
+                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+                })
+                    .then(response => response.json())
+                    .then(() => {
+                        document.querySelector(modals.contact).style.display = 'none';
+                        document.querySelector(modals.success).style.display = 'flex';
+                        document.querySelector(modals.success).querySelector('.checkmark-circle').classList.add('animate');
+                        form.reset();
+                    })
+                    .catch(() => alert('Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.'))
+                    .finally(() => {
+                        elements.submitBtn.disabled = false;
+                        elements.submitBtn.innerHTML = '{{ __('Yuborish') }}';
+                    });
+            });
+
+            document.querySelectorAll('.ad-card').forEach(card => {
+                const images = card.querySelectorAll('.ad-image');
+                const [prevBtn, nextBtn] = [card.querySelector('.prev-button-card'), card.querySelector('.next-button-card')];
+                const allImages = JSON.parse(card.dataset.images || '[]') || [];
+                let currentIndex = 0;
+
+                const updateImage = index => {
+                    if (allImages.length) {
+                        currentIndex = (index + allImages.length) % allImages.length;
+                        images.forEach((img, i) => {
+                            img.style.opacity = i === currentIndex ? '1' : '0';
+                            img.onerror = () => img.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                        });
+                    }
+                };
+
+                if (allImages.length) updateImage(0);
+                [prevBtn, nextBtn].forEach((btn, i) => btn?.addEventListener('click', () => updateImage(currentIndex + (i ? 1 : -1))));
+            });
+
+            const moreFiltersBtn = document.getElementById('moreFiltersBtn');
+    
+
+            fetchCities();
+
+            const toggleDropdown = (selector, menuClass) => {
+                document.querySelector(selector)?.addEventListener('click', e => {
+                    e.stopPropagation();
+                    document.querySelector(menuClass)?.classList.toggle('hidden');
+                });
+            };
+
+            toggleDropdown('.language-selector', '.language-menu');
+            toggleDropdown('.currency-selector', '.currency-menu');
+
+            document.querySelectorAll('.menu-icon, .dropdown-modal')?.forEach(el => el.addEventListener('click', e => e.stopPropagation()));
+            document.addEventListener('click', () => {
+                ['.language-menu', '.currency-menu', '.dropdown-modal'].forEach(cls => document.querySelector(cls)?.classList.add('hidden'));
+            });
         });
-
     </script>
-
 </body>
 </html>

@@ -44,105 +44,52 @@ class HomeController extends Controller
         try {
             $products = Product::query();
 
-            if ($request->filled('ad_type')) {
+            if ($request->filled('ad_type') && $request->input('ad_type') !== 'All') {
                 $adType = $request->input('ad_type');
-                $categoryNames = [];
+                $categoryNames = $adType === 'sale' ? [
+                    Constants::APARTMENT_SELLERS,
+                    Constants::HOME_LOT_SELLERS,
+                    Constants::COMMERCIAL_BUILDING_SALESPEOPLE
+                ] : ($adType === 'rent' ? [
+                    Constants::APARTMENT_RENTERS,
+                    Constants::COMMERCIAL_BUILDING_LESSORS
+                ] : []);
 
-                if ($adType === 'sale') {
-                    $categoryNames = [
-                        Constants::APARTMENT_SELLERS,
-                        Constants::HOME_LOT_SELLERS,
-                        Constants::COMMERCIAL_BUILDING_SALESPEOPLE
-                    ];
-                } elseif ($adType === 'rent') {
-                    $categoryNames = [
-                        Constants::APARTMENT_RENTERS,
-                        Constants::COMMERCIAL_BUILDING_LESSORS
-                    ];
-                }
-
-                $trimmedCategoryNames = array_map('trim', $categoryNames);
-                $categoryIds = Category::whereIn('name', $trimmedCategoryNames)->pluck('id')->toArray();
-
-                if (!empty($categoryIds)) {
-                    $products->whereIn('category_id', $categoryIds);
-                }
+                $categoryIds = !empty($categoryNames) ? Category::whereIn('name', array_map('trim', $categoryNames))->pluck('id')->toArray() : [];
+                if (!empty($categoryIds)) $products->whereIn('category_id', $categoryIds);
             }
 
-            if ($request->filled('category')) {
-                $products->where('category_id', $request->input('category'));
+            if ($request->filled('category')) $products->where('category_id', $request->input('category'));
+            if ($request->filled('region') && $request->input('region') !== 'All') $products->where('region_id', $request->input('region'));
+            if ($request->filled('city') && $request->input('city') !== 'All') $products->where('city_id', $request->input('city'));
+            if ($request->filled('rooms') && $request->input('rooms') !== 'All') $products->where('rooms', $request->input('rooms') === '5+' ? '>=' : '=', $request->input('rooms') === '5+' ? 5 : (int)$request->input('rooms'));
+            if ($request->filled('floors') && $request->input('floors') !== 'All') $products->where('building_floor', $request->input('floors') === '6+' ? '>=' : '=', $request->input('floors') === '6+' ? 6 : (int)$request->input('floors'));
+
+            if ($request->filled('price_from') || $request->filled('price_to')) {
+                $priceFrom = $request->filled('price_from') ? (float)$request->input('price_from') : 0;
+                $priceTo = $request->filled('price_to') ? (float)$request->input('price_to') : PHP_FLOAT_MAX;
+                $products->whereBetween('price', [$priceFrom, $priceTo]);
             }
 
-            if ($request->filled('region')) {
-                $products->where('region_id', $request->input('region'));
-            }
-
-            if ($request->filled('rooms')) {
-                if ($request->input('rooms') === '3+') {
-                    $products->where('rooms', '>=', 3);
-                } else {
-                    $products->where('rooms', (int)$request->input('rooms'));
-                }
-            }
-
-            if ($request->filled('floors')) {
-                if ($request->input('floors') === '3+') {
-                    $products->where('building_floor', '>=', 3);
-                } else {
-                    $products->where('building_floor', (int)$request->input('floors'));
-                }
-            }
-
-            if ($request->filled('budget')) {
-                $budgetRange = explode('-', str_replace(' ', '', $request->input('budget')));
-                if (count($budgetRange) == 2) {
-                    $priceFrom = (float)$budgetRange[0];
-                    $priceTo = (float)$budgetRange[1];
-                    $products->whereBetween('price', [$priceFrom, $priceTo]);
-                } elseif (count($budgetRange) == 1 && is_numeric($budgetRange[0])) {
-                    $products->where('price', '>=', (float)$budgetRange[0]);
-                }
-            }
-
-            if ($request->filled('property_type')) {
+            if ($request->filled('property_type') && $request->input('property_type') !== 'All') {
                 $propertyType = $request->input('property_type');
-                $categoryIdsForPropertyType = [];
-
-                if ($propertyType === 'apartment') {
-                    $categoryIdsForPropertyType = Category::whereIn('name', [
-                        trim(Constants::APARTMENT_SELLERS),
-                        trim(Constants::APARTMENT_RENTERS)
-                    ])->pluck('id')->toArray();
-                } elseif ($propertyType === 'house' || $propertyType === 'land') {
-                    $categoryIdsForPropertyType = Category::where('name', trim(Constants::HOME_LOT_SELLERS))->pluck('id')->toArray();
-                } elseif ($propertyType === 'commercial') {
-                    $categoryIdsForPropertyType = Category::whereIn('name', [
-                        trim(Constants::COMMERCIAL_BUILDING_SALESPEOPLE),
-                        trim(Constants::COMMERCIAL_BUILDING_LESSORS)
-                    ])->pluck('id')->toArray();
-                }
-
-                if (!empty($categoryIdsForPropertyType)) {
-                    $products->whereIn('category_id', $categoryIdsForPropertyType);
-                }
+                $categoryIds = $propertyType === 'apartment' ? Category::whereIn('name', [trim(Constants::APARTMENT_SELLERS), trim(Constants::APARTMENT_RENTERS)])->pluck('id')->toArray()
+                    : ($propertyType === 'house' || $propertyType === 'land' ? Category::where('name', trim(Constants::HOME_LOT_SELLERS))->pluck('id')->toArray()
+                    : ($propertyType === 'commercial' ? Category::whereIn('name', [trim(Constants::COMMERCIAL_BUILDING_SALESPEOPLE), trim(Constants::COMMERCIAL_BUILDING_LESSORS)])->pluck('id')->toArray() : []));
+                if (!empty($categoryIds)) $products->whereIn('category_id', $categoryIds);
             }
 
             $filteredProducts = $products->with('features')->latest()->paginate(10);
-
-
             $categories = Category::all();
             $subCategories = SubCategory::all();
             $regions = Region::all();
-            $cities = City::all();
-
+            $cities = $request->filled('region') && $request->input('region') !== 'All' ? City::where('region_id', $request->input('region'))->get() : [];
 
             return view('filtered_products', compact('filteredProducts', 'categories', 'subCategories', 'regions', 'cities', 'request'));
-
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Xatolik: ' . $e->getMessage());
         }
     }
-
 
     public function showProduct(Product $product)
     {
