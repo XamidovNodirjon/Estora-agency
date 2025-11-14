@@ -30,104 +30,52 @@ class ManagerController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::where('status', true)
-            ->with([
-                'user',
-                'category',
-                'subcategory',
-                'region',
-                'city'
-            ]);
+        try {
+            $data = $this->productService->getManagerIndexData($request);
 
-        if ($request->filled('search')) {
-            $searchTerm = $request->search;
+            return view('managers.products.index', $data);
 
-            $query->where(function($q) use ($searchTerm) {
-                if (is_numeric($searchTerm)) {
-                    $q->where('id', $searchTerm);
-                }
-                $q->orWhere('name', 'LIKE', '%' . $searchTerm . '%');
-            });
+        } catch (\Exception $e) {
+            return back()->with('error', 'Ro‘yxatni yuklashda xatolik: ' . $e->getMessage());
         }
-
-        $products = $query->select([
-            'id',
-            'name',
-            'price',
-            'phone',
-            'square',
-            'rooms',
-            'floor',
-            'sotix',
-            'building_floor',
-            'repair',
-            'exchange',
-            'pay_in_installments',
-            'credit',
-            'status',
-            'user_id',
-            'category_id',
-            'subcategory_id',
-            'region_id',
-            'city_id',
-            'created_at',
-            'images'
-        ])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        $categories = Category::with('subcategories')->get();
-        $regions = Region::all();
-        $user = Auth::user();
-
-        return view('managers.products.index', [
-            'products' => $products,
-            'regions' => $regions,
-            'categories' => $categories,
-            'user' => $user
-        ]);
     }
+
     public function create()
     {
-        return view('managers.products.create', [
-            'categories' => Category::with('subcategories')->get(),
-            'address' => Region::with('cities')->get()
-        ]);
+        try {
+            $data = $this->productService->getProductCreationData();
+
+            return view('managers.products.create', $data);
+        } catch (Exception $e) {
+            return back()->with('error', 'Formani yuklashda xatolik: ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['images'] = $request->file('images'); // Filelarni to'g'ridan-to'g'ri Service'ga uzatamiz
 
-        $data['images'] = $request->file('images');
+        try {
+            $this->productService->storeProduct($data);
 
-        $this->productService->storeProduct($data);
-
-        return redirect()->route('manager')->with('success', 'Product created!');
+            return redirect()->route('manager')->with('success', 'Product created!');
+        } catch (Exception $e) {
+            return back()->withInput()->with('error', 'Mahsulot yaratishda xatolik: ' . $e->getMessage());
+        }
     }
 
     public function revealPhone(Product $product)
     {
-        $manager = Auth::user();
-        $alreadySeen = ProductView::where('manager_id', $manager->id)
-            ->where('product_id', $product->id)
-            ->exists();
+        $managerId = Auth::id();
 
-        if (!$alreadySeen) {
-            $ball = Balls::where('user_id', $manager->id)->first();
-            if (!$ball || $ball->amount < 1) {
-                return back()->with('error', 'Sizda yetarli ball mavjud emas.');
-            }
+        try {
+            $this->productService->revealPhoneLogic($product, $managerId);
 
-            $ball->decrement('amount');
-
-            ProductView::create([
-                'manager_id' => $manager->id,
-                'product_id' => $product->id,
-            ]);
+            return back()->with('success', 'Telefon raqam ko‘rsatildi.');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        return back()->with('success', 'Telefon raqam ko‘rsatildi.');
     }
 
     public function seenProducts()

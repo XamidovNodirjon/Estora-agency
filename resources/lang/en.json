@@ -125,5 +125,13 @@
     "view": "View",
     "delete": "Delete",
     "confirm_delete": "Are you sure?",
-    "no_products_found": "No products found."
+    "no_products_found": "No products found.",
+    "Shahar" : "City",
+    "E'lon ID bo‘yicha qidiruv": "Search by Ad ID",
+    "E'lon ID kiriting": "Enter Ad ID",
+    "Jami natijalar": "Total results",
+    "Qayerda yashashni emas, qanday yashashni birga tanlaymiz.": "Together we choose how to live, not where to live.",
+    "Telefon raqam": "Phone number",
+    "Telegram orqali yozish": "Write use Telegram",
+    "sotib olish": "purchase"
 }

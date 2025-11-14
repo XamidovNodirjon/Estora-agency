@@ -27,6 +27,7 @@ class Product extends Model
         'repair',
         'sotix',
         'status',
+        'landmark',
     ];
 
 
@@ -99,6 +100,16 @@ class Product extends Model
             'product_id',                    // product_id ustuni
             'product_feature_id'             // feature_id ustuni
         );
+    }
+
+    public function metros()
+    {
+        return $this->hasMany(Metro::class);
+    }
+
+    public function universities()
+    {
+        return $this->hasMany(University::class);
     }
 
 

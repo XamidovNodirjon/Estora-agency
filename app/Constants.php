@@ -13,7 +13,7 @@ class Constants
     const HOME_LOT_SELLERS = 'home lot sellers ';
     const COMMERCIAL_BUILDING_SALESPEOPLE = 'Commercial building salespeople ';  //tijoriy bino sotuvchilari
     const COMMERCIAL_BUILDING_LESSORS = 'Commercial building lessors ';  //tijoriy bino ijaraa beruvchilar
-
+    
     // sub category
     const NEW_APARTMENT = 'new apartment';
     const OLD_APARTMENT = 'old apartment';

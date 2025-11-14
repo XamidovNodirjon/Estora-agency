@@ -130,5 +130,14 @@
     "delete": "Удалить",
     "confirm_delete": "Вы уверены?",
     "no_products_found": "Продукты не найдены.",
-    "rooms": "Комнаты"
+    "rooms": "Комнаты",
+    "Shahar": "Город",
+    "Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\\'ring.": "Произошла ошибка при отправке запроса. Попробуйте ещё раз.",
+    "E'lon ID bo‘yicha qidiruv": "Поиск по идентификатору объявления",
+    "E'lon ID kiriting": "Введите идентификатор объявления",
+    "Jami natijalar": "Всего результатов",
+    "Qayerda yashashni emas, qanday yashashni birga tanlaymiz.": "Вместе мы выбираем, как жить, а не где жить.",
+    "Telefon raqam": "Номер телефона",
+    "Telegram orqali yozish": "Написать через Telegram",
+    "Sotib olish": "Покупка"
 }

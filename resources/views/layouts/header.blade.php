@@ -38,78 +38,89 @@
 
         @guest
             <nav class="desktop-nav hidden md:flex space-x-6">
-            <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">Ijara</a>
-            <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">Sotib olish</a>
-            <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">NoBroker</a>
-            <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">Expats</a>
-            <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">Business Space</a>
-        </nav>
+                <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">{{__('Ijaraga')}}</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">{{__('Sotib olish')}}</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">{{__('NoBroker')}}</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">{{__('Expats')}}</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-yellow-600">{{__('Business Space')}}</a>
+            </nav>
         @endguest
         @auth
-            
+
         @endauth
-        
+
 
         <div class="header-actions flex items-center gap-4 lg:gap-6">
 
             @guest
                 <div class="action-item flex items-center gap-2 text-gray-600 hover:text-yellow-600">
-                <i class="fas fa-heart"></i>
-                <span>Favourites</span>
-            </div>
+                    <i class="fas fa-heart"></i>
+                    <span>Favourites</span>
+                </div>
 
-            <div class="currency-selector relative">
-                <div class="action-item flex items-center gap-1 text-gray-600 hover:text-yellow-600 cursor-pointer">
-                    <span class="font-medium">UZS</span>
-                    <i class="fas fa-chevron-down text-xs"></i>
+                <div class="currency-selector relative">
+                    <div class="action-item flex items-center gap-1 text-gray-600 hover:text-yellow-600 cursor-pointer">
+                        <span class="font-medium">{{ session('currency', 'USD') }}</span>
+                        <!-- <i class="fas fa-chevron-down text-xs"></i> -->
+                    </div>
+                    <!-- <div class="currency-menu absolute right-0 mt-2 w-16 bg-white shadow-lg rounded hidden">
+                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'USD']) }}"
+                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">USD</a>
+                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'RUB']) }}"
+                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">RUB</a>
+                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'UZS']) }}"
+                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">UZS</a>
+                    </div> -->
                 </div>
-                <div class="currency-menu absolute right-0 mt-2 w-16 bg-white shadow-lg rounded hidden">
-                    <a href="#" class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">USD</a>
-                    <a href="#" class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">RUB</a>
-                </div>
-            </div>
+
             @endguest
             @auth
-                
+
             @endauth
 
-            <!-- <a href="{{ route('login.index') }}" class="post-ad-btn flex items-center gap-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+        <!-- <a href="{{ route('login.index') }}" class="post-ad-btn flex items-center gap-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
                 <i class="fas fa-plus"></i>
                 <span>E'lon joylashtirish</span>
             </a> -->
 
             @guest
-            <a href="{{ route('login.index') }}" class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
-                <i class="fas fa-user-circle text-2xl"></i>
-                <span>Login</span>
-            </a>
+                <a href="{{ route('login.index') }}"
+                   class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                    <span>Login</span>
+                </a>
             @endguest
             @auth
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
-                <i class="fas fa-sign-out-alt text-2xl"></i>
-                <span>Logout</span>
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
+                    <i class="fas fa-sign-out-alt text-2xl"></i>
+                    <span>Logout</span>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             @endauth
-            
+
             <div class="language-selector relative">
-                <div class="language-btn flex items-center gap-1 text-gray-600 hover:text-yellow-600 cursor-pointer">
-                    <span class="flag-icon flag-icon-{{ app()->getLocale() === 'en' ? 'gb' : app()->getLocale() }}"></span>
+                <div
+                    class="language-btn flex items-center gap-1 text-gray-600 hover:text-yellow-600 cursor-pointer select-none">
+                    <span
+                        class="flag-icon flag-icon-{{ app()->getLocale() === 'en' ? 'gb' : app()->getLocale() }}"></span>
                     <span>{{ strtoupper(app()->getLocale()) }}</span>
                     <i class="fas fa-chevron-down text-xs"></i>
                 </div>
+
                 <div class="language-menu absolute right-0 mt-2 w-28 bg-white shadow-lg rounded hidden">
-                    <a href="{{ route('lang.switch', 'uz') }}" class="language-option flex items-center gap-2 px-2 py-1 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'uz') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-uz"></span>
                         <span>O'zbek</span>
                     </a>
-                    <a href="{{ route('lang.switch', 'ru') }}" class="language-option flex items-center gap-2 px-2 py-1 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'ru') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-ru"></span>
                         <span>Русский</span>
                     </a>
-                    <a href="{{ route('lang.switch', 'en') }}" class="language-option flex items-center gap-2 px-2 py-1 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'en') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-gb"></span>
                         <span>English</span>
                     </a>
@@ -136,16 +147,19 @@
         </nav>
         <div class="mobile-actions p-4 border-t">
             @guest
-            <a href="{{ route('login.index') }}" class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
-                <i class="fas fa-user-circle"></i>
-                <span>Login</span>
-            </a>
+                <a href="{{ route('login.index') }}"
+                   class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Login</span>
+                </a>
             @endguest
             @auth
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </a>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
             @endauth
             <a href="#" class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
                 <i class="fas fa-heart"></i>
@@ -162,3 +176,20 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.querySelector('.language-btn');
+        const menu = document.querySelector('.language-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-selector')) {
+                menu.classList.add('hidden');
+            }
+        });
+    });
+
+</script>

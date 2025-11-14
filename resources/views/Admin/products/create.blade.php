@@ -74,8 +74,14 @@
                                 </select>
                                 <div class="invalid-feedback">{{__('Please select a repair status')}}</div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="landmark">{{__('Landmark')}}<span class="text-danger"></span></label>
+                                <textarea name="landmark" id="landmark" class="form-control"
+                                          placeholder="{{__('Enter landmark')}}" required></textarea>
+                                <div class="invalid-feedback">{{__('Please enter a landmark')}}</div>
+                            </div>
 
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">           
                                 <label for="description">{{__('Description')}}<span class="text-danger"></span></label>
                                 <textarea name="description" id="description" class="form-control"
                                           placeholder="{{__('Enter product information')}}" rows="3"
@@ -158,13 +164,41 @@
                                 <label class="d-block mb-3">{{__('Mahsulot xususiyatlari')}}</label>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach($product_features as $product_feature)
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" name="features[]" id="feature_{{ $product_feature->id }}" value="{{ $product_feature->id }}">
-                                                <label class="form-check-label" for="feature_{{ $product_feature->id }}">
-                                                    {{ $product_feature->feature_name }}
-                                                </label>
-                                            </div>
-                                        
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="features[]" id="feature_{{ $product_feature->id }}" value="{{ $product_feature->id }}">
+                                            <label class="form-check-label" for="feature_{{ $product_feature->id }}">
+                                                {{ $product_feature->feature_name }}
+                                            </label>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="d-block mb-3">{{__('Qaysi metroga bekati yaqin ?')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($metros as $m)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="metro[]" id="feature_{{ $m->id }}" value="{{ $m->id }}">
+                                            <label class="form-check-label" for="feature_{{ $m->id }}">
+                                                {{ $m->metro_name }}
+                                            </label>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="d-block mb-3">{{__('Qaysi Universitetga yaqin ?')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($university as $unver)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="university[]" id="feature_{{ $unver->id }}" value="{{ $unver->id }}">
+                                            <label class="form-check-label" for="feature_{{ $unver->id }}">
+                                                {{ $unver->university_name }}
+                                            </label>
+                                        </div>
+
                                     @endforeach
                                 </div>
                             </div>
@@ -182,7 +216,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="building_floor">{{__('Building floor')}}<span
-                                        class="text-danger"></span></label>
+                                            class="text-danger"></span></label>
                                 <input type="number" name="building_floor" id="building_floor" class="form-control"
                                        placeholder="1" min="1" required>
                                 <div class="invalid-feedback">Please enter the building floor</div>

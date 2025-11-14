@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -29,9 +30,15 @@ return new class extends Migration {
             $table->string('repair')->nullable();
             $table->unsignedBigInteger('sotix')->nullable();
             $table->boolean('status')->default(true);
+            $table->string('landmark')->nullable();
+            $table->boolean('exchange')->default(false);
+            $table->boolean('pay_in_installments')->default(false);
+            $table->boolean('credit')->default(false);
 
             $table->timestamps();
         });
+        DB::statement("ALTER SEQUENCE products_id_seq RESTART WITH 10000;");
+
     }
 
     /**

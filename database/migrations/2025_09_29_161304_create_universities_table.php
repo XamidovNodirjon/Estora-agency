@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER SEQUENCE products_id_seq RESTART WITH 10000;");
+        Schema::create('universities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
+            $table->string('university_name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -20,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-
+        Schema::dropIfExists('universities');
     }
 };

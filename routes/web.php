@@ -1,15 +1,17 @@
 <?php
 
 use App\Http\Controllers\Admin\BallsController;
+use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Admin\HomeController;
-use \App\Http\Controllers\Admin\ProductViewController;
-use \App\Http\Controllers\Admin\ReservationProductController;
-use \App\Http\Controllers\ClientController;
 use App\Http\Controllers\Admin\ProductFeaturesController;
+use App\Http\Controllers\Admin\ProductViewController;
+use App\Http\Controllers\Admin\ReservationProductController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\UserController;
+use \App\Http\Controllers\Admin\MetroController;
+use \App\Http\Controllers\Admin\UniversityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lang/{locale}', function ($locale) {
@@ -65,16 +67,22 @@ Route::middleware('auth')->group(function () {
     Route::put('product-features/{id}', [ProductFeaturesController::class, 'update'])->name('product.features.update');
     Route::delete('product-features/{id}', [ProductFeaturesController::class, 'destroy'])->name('product.features.destroy');
 
-   
+    Route::post('/admin/metros', [MetroController::class, 'storeMetro'])->name('metro.store');
+    Route::put('/admin/metros/{id}', [MetroController::class, 'updateMetro'])->name('metro.update');
+    Route::delete('/admin/metros/{id}', [MetroController::class, 'destroyMetro'])->name('metro.destroy');
+
+    Route::post('/admin/universities', [UniversityController::class, 'storeUniversity'])->name('university.store');
+    Route::put('/admin/universities/{id}', [UniversityController::class, 'updateUniversity'])->name('university.update');
+    Route::delete('/admin/universities/{id}', [UniversityController::class, 'destroyUniversity'])->name('university.destroy');
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-    Route::get('/get-cities/{region_id}', function ($region_id) {
-        return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
-    })->name('get-cities');
+Route::get('/get-cities/{region_id}', function ($region_id) {
+    return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
+})->name('get-cities');
 
 
 Route::middleware('auth:client')->prefix('client')->group(function () {

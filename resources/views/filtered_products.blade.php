@@ -2478,18 +2478,32 @@
                         <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition ad-card"
                              data-images='{{ json_encode($product->image_array ?? []) }}'>
                             <div class="relative md:w-1/3 w-full h-56 md:h-auto open-image-modal" x-data="{ currentIndex: 0 }">
-                              @php $images = $product->image ? [$product->image] : []; @endphp
-                                <span class="absolute top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
-                                <div class="overflow-hidden w-full h-full">
-                                    @if(!empty($images))
+                                @php
+                                    $images = [];
+                                    
+                                    if (!empty($product->images)) {
+                                        if (is_array($product->images)) {
+                                            $images = $product->images;
+                                        } elseif (is_string($product->images)) {
+                                            $decoded = json_decode($product->images, true);
+                                            $images = is_array($decoded) ? $decoded : [];
+                                        }
+                                    }
+                                @endphp
+
+                                <span class="top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
+                                <div class="overflow-hidden w-full h-full relative">
+                                    @if(count($images) > 0)
                                         @foreach($images as $index => $img)
-                                            <img src="{{ asset('storage/' . $img) }}" alt="{{ $product->name }}"
-                                                 class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ad-image"
-                                                 x-show="currentIndex === {{ $index }}" x-transition:enter="opacity-0" x-transition:leave="opacity-100"
-                                                 onerror="this.src='https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q';">
+                                            <img src="{{ asset('storage/' . $img) }}"
+                                                alt="{{ $product->name }}"
+                                                class="w-full h-full object-cover transition-opacity duration-500 ad-image"
+                                                x-show="currentIndex === {{ $index }}"
+                                                onerror="this.src='https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q';">
                                         @endforeach
                                     @else
-                                        <img src="https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q123" class="w-full h-full object-cover">
+                                        <img src="https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q"
+                                            class="w-full h-full object-cover">
                                     @endif
                                 </div>
                                 @if(count($images) > 1)

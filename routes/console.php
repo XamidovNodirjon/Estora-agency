@@ -12,6 +12,9 @@ Artisan::command('inspire', function () {
 
 Schedule::call(function () {
     DB::table('product_views')
-        ->where('created_at', '<',Carbon::now()->subHours(24))
+        ->where('created_at', '<', Carbon::now()->subHours(24))
         ->delete();
 })->daily();
+
+Schedule::command('fetch:exchange-rates')->hourly();
+
