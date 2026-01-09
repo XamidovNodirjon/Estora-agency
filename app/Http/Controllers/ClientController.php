@@ -49,8 +49,4 @@ class ClientController extends Controller
     return redirect()->route('get.client')->with('success', 'Mahsulot muvaffaqiyatli yaratildi!');
     }
 
-    public function addList(){
-        return view('clients.addList');
-    }
-
 }

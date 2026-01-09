@@ -31,7 +31,7 @@
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 <!-- Yangilangan Header -->
-@include('layouts.header')
+<?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <main class="main-container flex-grow container mx-auto p-4 md:p-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -43,9 +43,9 @@
                         IMG
                     </div>
                     <div>
-                        <p class="font-bold text-lg text-gray-800">{{ $client->name }}</p>
-                        <p class="text-gray-600">{{ $client->sure_name }}</p>
-                        <p class="text-gray-500">{{ $client->phone }}</p>
+                        <p class="font-bold text-lg text-gray-800"><?php echo e($client->name); ?></p>
+                        <p class="text-gray-600"><?php echo e($client->sure_name); ?></p>
+                        <p class="text-gray-500"><?php echo e($client->phone); ?></p>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('client.addList') }}" class="flex items-center space-x-2 hover:text-amber-500">
+                        <a href="<?php echo e(route('client.addList')); ?>" class="flex items-center space-x-2 hover:text-amber-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -139,7 +139,7 @@
     <div class="container mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-                <img src="{{asset('logo/logo-white.png')}}" alt="Estora Logo" class="h-12 mb-4">
+                <img src="<?php echo e(asset('logo/logo-white.png')); ?>" alt="Estora Logo" class="h-12 mb-4">
                 <p class="text-sm">
                     YTT "Estora", 2025 y. Barcha huquqlar himoyalangan.
                     Saytdan foydalanish orqali <a href="#" class="underline">Foydalanuvchi shartnomasi</a> va <a
@@ -185,3 +185,4 @@
 </footer>
 </body>
 </html>
+<?php /**PATH C:\Users\Asus\Desktop\Projects\UyTop\resources\views/clients/index.blade.php ENDPATH**/ ?>

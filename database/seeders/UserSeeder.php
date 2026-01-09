@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
                     'phone' => '+998935273335' . $id,
                     'passport' => 'AB7938253' . $id,
                     'jshshir' => '50510016810045' . $id,
+                    
                 ]
             );
         }

@@ -18,7 +18,6 @@ class Product extends Model
         'city_id',
         'price',
         'description',
-        'images',
         'phone',
         'floor',
         'building_floor',
@@ -32,7 +31,6 @@ class Product extends Model
 
 
     protected $casts = [
-        'images' => 'array',
         'status' => 'boolean',
     ];
 
@@ -75,8 +73,6 @@ class Product extends Model
     }
 
 
-    protected $appends = ['image_array'];
-
     public function getImageArrayAttribute()
     {
         if (is_array($this->images)) {
@@ -110,6 +106,11 @@ class Product extends Model
     public function universities()
     {
         return $this->hasMany(University::class);
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 
 

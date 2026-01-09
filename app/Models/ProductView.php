@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductView extends Model
 {
-
     protected $fillable = [
         'manager_id',
         'product_id',

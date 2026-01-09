@@ -11,7 +11,8 @@ class UniversityController extends Controller
 {
     protected $universityService;
 
-    public function __construct(UniversityService $universityService){
+    public function __construct(UniversityService $universityService)
+    {
         $this->universityService = $universityService;
     }
 

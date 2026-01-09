@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,7 +206,7 @@
                     <span class="sm:hidden">E'lon</span>
                 </button>
 
-                <a href="{{route('login.index')}}" class="flex items-center gap-2 text-gray-700 hover:text-secondary-gold text-sm md:text-base">
+                <a href="<?php echo e(route('login.index')); ?>" class="flex items-center gap-2 text-gray-700 hover:text-secondary-gold text-sm md:text-base">
                     <i class="fas fa-user-circle text-xl md:text-2xl"></i>
                     <span class="hidden sm:inline">Login</span>
                 </a>
@@ -268,7 +268,7 @@
                 </div>
                 <!-- Search Form -->
                 <div class="bg-white p-4 md:p-6">
-                    <form action="{{ route('products.filter') }}" method="GET">
+                    <form action="<?php echo e(route('products.filter')); ?>" method="GET">
                         <!-- Filter Row -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 mb-6">
                             <div class="filter-item">
@@ -276,10 +276,10 @@
                                 <div class="relative">
                                     <select name="property_type" class="w-full p-2 text-sm bg-transparent border-0 border-b-2 border-gray-300 focus:border-primary-blue focus:outline-none appearance-none">
                                         <option value="">Tanlang</option>
-                                        <option value="apartment" {{ $request->property_type == 'apartment' ? 'selected' : '' }}>Kvartira</option>
-                                        <option value="house" {{ $request->property_type == 'house' ? 'selected' : '' }}>Uy/Hovli</option>
-                                        <option value="land" {{ $request->property_type == 'land' ? 'selected' : '' }}>Yer</option>
-                                        <option value="commercial" {{ $request->property_type == 'commercial' ? 'selected' : '' }}>Tijorat</option>
+                                        <option value="apartment" <?php echo e($request->property_type == 'apartment' ? 'selected' : ''); ?>>Kvartira</option>
+                                        <option value="house" <?php echo e($request->property_type == 'house' ? 'selected' : ''); ?>>Uy/Hovli</option>
+                                        <option value="land" <?php echo e($request->property_type == 'land' ? 'selected' : ''); ?>>Yer</option>
+                                        <option value="commercial" <?php echo e($request->property_type == 'commercial' ? 'selected' : ''); ?>>Tijorat</option>
                                     </select>
                                     <i class="fas fa-chevron-down absolute right-0 top-2 text-gray-400 text-xs pointer-events-none"></i>
                                 </div>
@@ -290,11 +290,12 @@
                                 <div class="relative">
                                     <select name="region" class="w-full p-2 text-sm bg-transparent border-0 border-b-2 border-gray-300 focus:border-primary-blue focus:outline-none appearance-none">
                                         <option value="">Tanlang</option>
-                                        @foreach($regions as $region)
-                                            <option value="{{ $region->id }}" {{ $request->region == $region->id ? 'selected' : '' }}>
-                                                {{ $region->name }}
+                                        <?php $__currentLoopData = $regions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $region): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($region->id); ?>" <?php echo e($request->region == $region->id ? 'selected' : ''); ?>>
+                                                <?php echo e($region->name); ?>
+
                                             </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <i class="fas fa-chevron-down absolute right-0 top-2 text-gray-400 text-xs pointer-events-none"></i>
                                 </div>
@@ -305,13 +306,14 @@
                                 <div class="relative">
                                     <select name="city" id="city-select" class="w-full p-2 text-sm bg-transparent border-0 border-b-2 border-gray-300 focus:border-primary-blue focus:outline-none appearance-none">
                                         <option value="">Tanlang</option>
-                                        @if($request->city)
-                                            @foreach($cities->where('region_id', $request->region) as $city)
-                                                <option value="{{ $city->id }}" {{ $request->city == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->name }}
+                                        <?php if($request->city): ?>
+                                            <?php $__currentLoopData = $cities->where('region_id', $request->region); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($city->id); ?>" <?php echo e($request->city == $city->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($city->name); ?>
+
                                                 </option>
-                                            @endforeach
-                                        @endif
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
                                     </select>
                                     <i class="fas fa-chevron-down absolute right-0 top-2 text-gray-400 text-xs pointer-events-none"></i>
                                 </div>
@@ -335,10 +337,10 @@
                                 <div class="relative">
                                     <select name="rooms" class="w-full p-2 text-sm bg-transparent border-0 border-b-2 border-gray-300 focus:border-primary-blue focus:outline-none appearance-none">
                                         <option value="">Tanlang</option>
-                                        <option value="1" {{ $request->rooms == '1' ? 'selected' : '' }}>1</option>
-                                        <option value="2" {{ $request->rooms == '2' ? 'selected' : '' }}>2</option>
-                                        <option value="3" {{ $request->rooms == '3' ? 'selected' : '' }}>3</option>
-                                        <option value="3+" {{ $request->rooms == '3+' ? 'selected' : '' }}>3+</option>
+                                        <option value="1" <?php echo e($request->rooms == '1' ? 'selected' : ''); ?>>1</option>
+                                        <option value="2" <?php echo e($request->rooms == '2' ? 'selected' : ''); ?>>2</option>
+                                        <option value="3" <?php echo e($request->rooms == '3' ? 'selected' : ''); ?>>3</option>
+                                        <option value="3+" <?php echo e($request->rooms == '3+' ? 'selected' : ''); ?>>3+</option>
                                     </select>
                                     <i class="fas fa-chevron-down absolute right-0 top-2 text-gray-400 text-xs pointer-events-none"></i>
                                 </div>
@@ -428,19 +430,19 @@
             <!-- Carousel Track -->
             <div class="overflow-hidden rounded-2xl">
                 <div id="carouselTrack" class="flex transition-transform duration-500 ease-in-out">
-                    @foreach($bestOffers as $index => $product)
-                        <div class="w-full md:w-1/3 flex-shrink-0 px-3" data-index="{{ $index }}">
+                    <?php $__currentLoopData = $bestOffers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="w-full md:w-1/3 flex-shrink-0 px-3" data-index="<?php echo e($index); ?>">
                             <div class="property-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden h-full">
                                 <div class="relative">
-                                    @php
+                                    <?php
                                         $images = $product->image_array ?? [];
-                                    @endphp
+                                    ?>
 
-                                    @if(!empty($images))
-                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="Property" class="w-full h-56 object-cover">
-                                    @else
+                                    <?php if(!empty($images)): ?>
+                                        <img src="<?php echo e(asset('storage/' . $images[0])); ?>" alt="Property" class="w-full h-56 object-cover">
+                                    <?php else: ?>
                                         <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop" alt="Property" class="w-full h-56 object-cover">
-                                @endif
+                                <?php endif; ?>
 
                                 <!-- TOP Badge -->
                                     <div class="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
@@ -454,16 +456,17 @@
 
                                     <!-- Price Badge -->
                                     <div class="absolute bottom-3 left-3">
-                                        @php
+                                        <?php
                                             $badges = [
                                                 ['class' => 'bg-yellow-500', 'text' => 'Yaxshi Taklif'],
                                                 ['class' => 'bg-red-500', 'text' => 'Zudlik bilan'],
                                                 ['class' => 'bg-green-500', 'text' => 'Super Narx']
                                             ];
                                             $randomBadge = $badges[array_rand($badges)];
-                                        @endphp
-                                        <span class="px-3 py-1 rounded-full text-white text-xs font-medium {{ $randomBadge['class'] }}">
-                                            {{ $randomBadge['text'] }}
+                                        ?>
+                                        <span class="px-3 py-1 rounded-full text-white text-xs font-medium <?php echo e($randomBadge['class']); ?>">
+                                            <?php echo e($randomBadge['text']); ?>
+
                                         </span>
                                     </div>
                                 </div>
@@ -474,14 +477,16 @@
                                     <div class="flex justify-between items-start mb-3">
                                         <div>
                                             <h3 class="text-xl font-bold text-primary-blue mb-1">
-                                                {{ number_format($product->price) }}
-                                                @if($product->currency == 'USD') y.e @else USD @endif
+                                                <?php echo e(number_format($product->price)); ?>
+
+                                                <?php if($product->currency == 'USD'): ?> y.e <?php else: ?> USD <?php endif; ?>
                                             </h3>
-                                            <p class="text-gray-600 font-medium text-sm">{{ $product->category->name ?? 'Mulk' }}</p>
+                                            <p class="text-gray-600 font-medium text-sm"><?php echo e($product->category->name ?? 'Mulk'); ?></p>
                                         </div>
                                         <div class="text-right">
                                             <div class="bg-primary-blue text-white px-2 py-1 rounded-lg text-xs font-medium">
-                                                <i class="fas fa-eye mr-1"></i>{{ rand(1000, 15000) }}
+                                                <i class="fas fa-eye mr-1"></i><?php echo e(rand(1000, 15000)); ?>
+
                                             </div>
                                         </div>
                                     </div>
@@ -489,22 +494,22 @@
                                     <!-- Location -->
                                     <div class="flex items-center text-gray-500 text-sm mb-4">
                                         <i class="fas fa-map-marker-alt text-primary-blue mr-2"></i>
-                                        <span>{{ $product->region->name ?? 'Toshkent' }}, {{ $product->city->name ?? 'Shahar' }}</span>
+                                        <span><?php echo e($product->region->name ?? 'Toshkent'); ?>, <?php echo e($product->city->name ?? 'Shahar'); ?></span>
                                     </div>
 
                                     <!-- Property Details -->
                                     <div class="grid grid-cols-3 gap-3 mb-4 text-xs text-gray-600">
                                         <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
                                             <i class="fas fa-building text-primary-blue"></i>
-                                            <span>{{ $product->floor ?? '1' }}/{{ $product->building_floor ?? '5' }}</span>
+                                            <span><?php echo e($product->floor ?? '1'); ?>/<?php echo e($product->building_floor ?? '5'); ?></span>
                                         </div>
                                         <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
                                             <i class="fas fa-door-open text-primary-blue"></i>
-                                            <span>{{ $product->rooms ?? '2' }} xona</span>
+                                            <span><?php echo e($product->rooms ?? '2'); ?> xona</span>
                                         </div>
                                         <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
                                             <i class="fas fa-expand-arrows-alt text-primary-blue"></i>
-                                            <span>{{ $product->square ?? '45' }}m²</span>
+                                            <span><?php echo e($product->square ?? '45'); ?>m²</span>
                                         </div>
                                     </div>
 
@@ -512,7 +517,7 @@
                                     <div class="flex justify-between items-center text-xs text-gray-500 border-t pt-3">
                                         <div class="flex items-center gap-1">
                                             <i class="fas fa-tools text-primary-blue"></i>
-                                            <span>{{ $product->repair_type ?? 'Yaxshi ta\'mir' }}</span>
+                                            <span><?php echo e($product->repair_type ?? 'Yaxshi ta\'mir'); ?></span>
                                         </div>
                                         <div class="flex items-center gap-1">
                                             <i class="fas fa-subway text-primary-blue"></i>
@@ -522,15 +527,15 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
 
             <!-- Carousel Indicators -->
             <div class="flex justify-center mt-6 space-x-2">
-                @for($i = 0; $i < ceil(count($bestOffers) / 3); $i++)
-                    <button class="carousel-indicator w-3 h-3 rounded-full transition-all duration-300 {{ $i === 0 ? 'bg-primary-blue' : 'bg-gray-300' }}" data-slide="{{ $i }}"></button>
-                @endfor
+                <?php for($i = 0; $i < ceil(count($bestOffers) / 3); $i++): ?>
+                    <button class="carousel-indicator w-3 h-3 rounded-full transition-all duration-300 <?php echo e($i === 0 ? 'bg-primary-blue' : 'bg-gray-300'); ?>" data-slide="<?php echo e($i); ?>"></button>
+                <?php endfor; ?>
             </div>
         </div>
     </div>
@@ -542,22 +547,22 @@
         <div class="bg-primary-blue text-white rounded-xl shadow-lg p-6 md:p-8 text-center">
             <h3 class="text-lg md:text-xl font-bold mb-2">Sotuvdagi Uylar</h3>
             <p class="text-sm opacity-80 mb-4">Barcha e'lonlar</p>
-            <span class="text-3xl md:text-5xl font-bold">{{ number_format($statistics['sale_apartments']) }}</span>
+            <span class="text-3xl md:text-5xl font-bold"><?php echo e(number_format($statistics['sale_apartments'])); ?></span>
         </div>
         <div class="bg-primary-blue text-white rounded-xl shadow-lg p-6 md:p-8 text-center">
             <h3 class="text-lg md:text-xl font-bold mb-2">Arenda Uylar</h3>
             <p class="text-sm opacity-80 mb-4">Barcha e'lonlar</p>
-            <span class="text-3xl md:text-5xl font-bold">{{ number_format($statistics['rent_apartments']) }}</span>
+            <span class="text-3xl md:text-5xl font-bold"><?php echo e(number_format($statistics['rent_apartments'])); ?></span>
         </div>
         <div class="bg-primary-blue text-white rounded-xl shadow-lg p-6 md:p-8 text-center">
             <h3 class="text-lg md:text-xl font-bold mb-2">Xonadosh</h3>
             <p class="text-sm opacity-80 mb-4">Barcha e'lonlar</p>
-            <span class="text-3xl md:text-5xl font-bold">{{ number_format($statistics['roommates']) }}</span>
+            <span class="text-3xl md:text-5xl font-bold"><?php echo e(number_format($statistics['roommates'])); ?></span>
         </div>
         <div class="bg-primary-blue text-white rounded-xl shadow-lg p-6 md:p-8 text-center">
             <h3 class="text-lg md:text-xl font-bold mb-2">Business Space</h3>
             <p class="text-sm opacity-80 mb-4">Barcha e'lonlar</p>
-            <span class="text-3xl md:text-5xl font-bold">{{ number_format($statistics['business_space']) }}</span>
+            <span class="text-3xl md:text-5xl font-bold"><?php echo e(number_format($statistics['business_space'])); ?></span>
         </div>
     </div>
 </div>
@@ -567,7 +572,7 @@
     <div class="container mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
             <div class="lg:w-1/2">
-                <img src="{{asset('logo/contract.png')}}" alt="Partnership" class="max-w-xs md:max-w-md mx-auto">
+                <img src="<?php echo e(asset('logo/contract.png')); ?>" alt="Partnership" class="max-w-xs md:max-w-md mx-auto">
             </div>
             <div class="lg:w-1/2 text-center lg:text-left">
                 <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary-blue mb-6">
@@ -608,7 +613,7 @@
     <div class="container mx-auto px-4 py-8 md:py-16">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
             <div class="text-center lg:text-left">
-                <img src="{{ asset('logo/footer-logo.png') }}" alt="Estora Logo" class="mb-4 md:mb-6 footer-logo mx-auto lg:mx-0">
+                <img src="<?php echo e(asset('logo/footer-logo.png')); ?>" alt="Estora Logo" class="mb-4 md:mb-6 footer-logo mx-auto lg:mx-0">
                 <p class="text-xs md:text-sm text-footer-primary mb-4">YTT "Estora", 2025 yy. Barcha huquqlar himoyalangan</p>
                 <p class="text-xs text-footer-primary">
                     Saytdan foydalanish orqali <strong>Foydalanuvchi shartnomasi</strong> va
@@ -697,7 +702,7 @@
                 <i class="fas fa-heart text-secondary-gold"></i>
                 <span>Favourites</span>
             </a>
-            <a href="{{ route('login.index') }}" class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-secondary-gold">
+            <a href="<?php echo e(route('login.index')); ?>" class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-secondary-gold">
                 <i class="fas fa-user-circle text-secondary-gold"></i>
                 <span>Login</span>
             </a>
@@ -785,7 +790,7 @@
 
     // Carousel functionality
     let currentSlide = 0;
-    const totalProducts = {{ count($bestOffers) }};
+    const totalProducts = <?php echo e(count($bestOffers)); ?>;
     const carouselTrack = document.getElementById('carouselTrack');
     const indicators = document.querySelectorAll('.carousel-indicator');
 
@@ -871,3 +876,4 @@
 </script>
 </body>
 </html>
+<?php /**PATH C:\Users\Asus\Desktop\Projects\UyTop\resources\views/dashboard.blade.php ENDPATH**/ ?>

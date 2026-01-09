@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BallsController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Admin\ProductController;
@@ -32,6 +33,7 @@ Route::post('register/create', [AuthController::class, 'register'])->name('regis
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('admin-dashboard', [DashboardController::class, 'index'])->name('admin-dashboard');
     Route::get('users', [UserController::class, 'index'])->name('users');
     Route::post('user-store', [UserController::class, 'store'])->name('store-users');
     Route::get('user-edit/{id}', [UserController::class, 'edit'])->name('user-edit');

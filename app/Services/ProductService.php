@@ -7,7 +7,9 @@ use App\Models\Product;
 use App\Models\University;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -18,7 +20,7 @@ class ProductService
         $this->productRepository = $productRepository;
     }
 
-    public function getIndexData(): arrayr
+    public function getIndexData(): array
     {
         $products = $this->productRepository->getAllPublishedWithRelations();
 
@@ -29,34 +31,68 @@ class ProductService
         ];
     }
 
-    public function storeProduct(array $data) : Product
-    {
-        $features = $data['features'] ?? [];
-        $metor = $data['metro'] ?? [];
-        $universities = $data['university'] ?? [];
-        
-        $productData = collect($data)->except(['features','metro','university'])->toArray();
 
-        return DB::transaction(function() use ($productData,$features,$metor,$universities){
+
+    public function storeProduct(array $data): Product
+    {
+        $images        = $data['images'] ?? [];
+        $features      = $data['features'] ?? [];
+        $metros        = $data['metro'] ?? [];
+        $universities  = $data['university'] ?? [];
+
+        $productData = collect($data)
+            ->only((new Product)->getFillable())
+            ->toArray();
+
+        return DB::transaction(function () use (
+            $productData,
+            $images,
+            $features,
+            $metros,
+            $universities
+        ) {
+
             $product = $this->productRepository->create($productData);
 
-            if(!empty($features)){
-                $product->features()->attach($features);
+            foreach ($images as $image) {
+                $path = $this->storeImage($image);
+
+                $product->productImages()->create([
+                    'path' => $path,
+                ]);
             }
 
-            if(!empty($metor)){
-                Metro::whereIn('id', $metor)->update([
-                    'product_id' => $product->id
-                ]);
+            if (!empty($features)) {
+                $product->features()->sync($features);
+            }
+
+            if (!empty($metros)) {
+                Metro::whereIn('id', $metros)
+                    ->update(['product_id' => $product->id]);
             }
 
             if (!empty($universities)) {
-                University::whereIn('id', $universities)->update([
-                    'product_id' => $product->id,
-                ]);
+                University::whereIn('id', $universities)
+                    ->update(['product_id' => $product->id]);
             }
+
+            return $product;
         });
     }
+
+    private function storeImage(mixed $image): string
+    {
+        if ($image instanceof UploadedFile) {
+            return $image->store('products', 'public');
+        }
+
+        if (is_array($image)) {
+            return $image['path'] ?? reset($image);
+        }
+
+        return (string) $image;
+    }
+
 
     public function getProductById(int $id): Product
     {
@@ -79,19 +115,27 @@ class ProductService
         $product = $this->productRepository->findById($id);
 
         if (!$product) {
-            throw new Exception("Product not found!");
+            throw new \Exception("Product not found!");
         }
 
-        // 1. Rasmlarni Storage'dan o'chirish (Biznes mantiqining bir qismi)
-        if ($product->images) {
-            $images = json_decode($product->images, true);
-            foreach ($images as $imagePath) {
-                Storage::disk('public')->delete($imagePath);
+        return DB::transaction(function() use ($product) {
+            // 1. Rasmlarni Storage'dan (fayllarni) o'chirish
+            // Eslatib o'taman: productImages - bu sizning yangi relationshipingiz
+            foreach ($product->productImages as $image) {
+                if (Storage::disk('public')->exists($image->path)) {
+                    Storage::disk('public')->delete($image->path);
+                }
             }
-        }
-        
-        // 2. Mahsulotni o'chirish
-        return $this->productRepository->delete($product);
+
+            // 2. Bog'langan ma'lumotlarni tozalash 
+            // Metro va University product_id sini null qilish (agar kerak bo'lsa)
+            // Agar migratsiyada onDelete('cascade') ishlatmagan bo'lsangiz:
+            $product->productImages()->delete(); // Bazadagi rasm qatorlarini o'chirish
+            $product->features()->detach();     // Pivot table (features) bog'liqligini uzish
+
+            // 3. Mahsulotni o'chirish
+            return $this->productRepository->delete($product);
+        });
     }
        
 

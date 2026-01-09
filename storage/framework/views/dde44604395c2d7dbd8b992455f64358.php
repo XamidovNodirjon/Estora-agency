@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
     <meta charset="utf-8"/>
     <title>UyTop admin</title>
@@ -7,12 +7,12 @@
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
     <meta content="Coderthemes" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="{{asset('assets/logo/logo-white.png')}}">
+    <link rel="shortcut icon" href="<?php echo e(asset('assets/logo/logo-white.png')); ?>">
 
-    <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
+    <link href="<?php echo e(asset('assets/css/app.min.css')); ?>" rel="stylesheet" type="text/css" id="app-style"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
-    <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet" type="text/css" id="app-style"/>
+    <link href="<?php echo e(asset('assets/css/icons.min.css')); ?>" rel="stylesheet" type="text/css"/>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
     
@@ -84,7 +84,7 @@
         }
     </style>
 </head>
-@stack('scripts')
+<?php echo $__env->yieldPushContent('scripts'); ?>
 <body class="loading" data-layout-color="light" data-layout-mode="default" data-layout-size="fluid"
       data-topbar-color="light" data-leftbar-position="fixed" data-leftbar-color="light" data-leftbar-size='default'
       data-sidebar-user='true'>
@@ -97,7 +97,7 @@
             <li class="dropdown notification-list topbar-dropdown d-none d-lg-block">
                 <div class="language-selector">
                     <div class="select-language" onclick="toggleLanguageDropdown()">
-                        @php
+                        <?php
                             $locale = session('locale', config('app.locale'));
                             $flagClass = '';
                             if ($locale === 'en') {
@@ -107,27 +107,27 @@
                             } else {
                                 $flagClass = 'uz';
                             }
-                        @endphp
-                        <span class="flag-icon flag-icon-{{ $flagClass }}"></span>
-                        <span class="align-middle">{{ strtoupper($locale) }}</span>
+                        ?>
+                        <span class="flag-icon flag-icon-<?php echo e($flagClass); ?>"></span>
+                        <span class="align-middle"><?php echo e(strtoupper($locale)); ?></span>
                         <i class="mdi mdi-chevron-down ms-1"></i>
                     </div>
                     <div class="language-dropdown" id="languageDropdown">
                         <ul>
                             <li>
-                                <a href="{{ route('lang.switch', 'en') }}">
+                                <a href="<?php echo e(route('lang.switch', 'en')); ?>">
                                     <span class="flag-icon flag-icon-us"></span>
                                     <span class="align-middle">English</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('lang.switch', 'uz') }}">
+                                <a href="<?php echo e(route('lang.switch', 'uz')); ?>">
                                     <span class="flag-icon flag-icon-uz"></span>
                                     <span class="align-middle">O‘zbek</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('lang.switch', 'ru') }}">
+                                <a href="<?php echo e(route('lang.switch', 'ru')); ?>">
                                     <span class="flag-icon flag-icon-ru"></span>
                                     <span class="align-middle">Русский</span>
                                 </a>
@@ -145,8 +145,8 @@
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
+                    <form action="<?php echo e(route('logout')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="dropdown-item notify-item">
                             <i class="fe-log-out"></i>
                             <span>Logout</span>
@@ -167,38 +167,38 @@
         <div class="h-100" data-simplebar>
             <div id="sidebar-menu">
                 <ul id="side-menu">
-                    <li class="menu-title">{{__('Navigation')}}</li>
+                    <li class="menu-title"><?php echo e(__('Navigation')); ?></li>
                     <li>
-                        <a href="{{route('admin-dashboard')}}">
+                        <a href="<?php echo e(route('admin-dashboard')); ?>">
                             <i class="mdi mdi-view-dashboard-outline"></i>
                             <span class="badge bg-success rounded-pill float-end"></span>
-                            <span>{{__('Dashboard')}}</span>
+                            <span><?php echo e(__('Dashboard')); ?></span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('users')}}">
+                        <a href="<?php echo e(route('users')); ?>">
                             <i class="mdi mdi-account-multiple-outline"></i>
                             <span class="badge bg-success rounded-pill float-end"></span>
-                            <span>{{__('Users')}}</span>
+                            <span><?php echo e(__('Users')); ?></span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{route('products')}}">
+                        <a href="<?php echo e(route('products')); ?>">
                             <i class="mdi mdi-view-dashboard-outline"></i>
                             <span class="badge bg-success rounded-pill float-end"></span>
-                            <span> {{__('Products')}}</span>
+                            <span> <?php echo e(__('Products')); ?></span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('reservations') }}">
+                        <a href="<?php echo e(route('reservations')); ?>">
                             <i class="mdi mdi-calendar-check"></i>
-                            <span>{{__('Reservation Products')}}</span>
+                            <span><?php echo e(__('Reservation Products')); ?></span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('product.features') }}">
+                        <a href="<?php echo e(route('product.features')); ?>">
                             <i class="fa-solid fa-list-check"></i>
-                            <span>{{__('Product Features')}}</span>
+                            <span><?php echo e(__('Product Features')); ?></span>
                         </a>
                     </li>
                 </ul>
@@ -210,9 +210,9 @@
     <div class="content-page">
         <div class="content">
             <navigation></navigation>
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </div>
-{{--        @include('layouts.footer')--}}
+
     </div>
 </div>
 
@@ -300,22 +300,22 @@
 </script>
 
 
-<script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
-<script src="{{asset('assets/libs/node-waves/waves.min.js')}}"></script>
-<script src="{{asset('assets/libs/waypoints/lib/jquery.waypoints.min.js')}}"></script>
-<script src="{{asset('assets/libs/jquery.counterup/jquery.counterup.min.js')}}"></script>
-<script src="{{asset('assets/libs/feather-icons/feather.min.js')}}"></script>
+<script src="<?php echo e(asset('assets/libs/jquery/jquery.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/simplebar/simplebar.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/node-waves/waves.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/waypoints/lib/jquery.waypoints.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/jquery.counterup/jquery.counterup.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/feather-icons/feather.min.js')); ?>"></script>
 
-<script src="{{asset('assets/libs/jquery-knob/jquery.knob.min.js')}}"></script>
+<script src="<?php echo e(asset('assets/libs/jquery-knob/jquery.knob.min.js')); ?>"></script>
 
-<script src="{{asset('assets/libs/morris.js06/morris.min.js')}}"></script>
-<script src="{{asset('assets/libs/raphael/raphael.min.js')}}"></script>
+<script src="<?php echo e(asset('assets/libs/morris.js06/morris.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/libs/raphael/raphael.min.js')); ?>"></script>
 
-<script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>
+<script src="<?php echo e(asset('assets/js/pages/dashboard.init.js')); ?>"></script>
 
-<script src="{{asset('assets/js/app.min.js')}}"></script>
+<script src="<?php echo e(asset('assets/js/app.min.js')); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous">
@@ -331,3 +331,4 @@
 
 </body>
 </html>
+<?php /**PATH C:\Users\Asus\Desktop\Projects\UyTop\resources\views/layouts/admin_layout.blade.php ENDPATH**/ ?>

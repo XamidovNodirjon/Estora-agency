@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/filter_product.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/filter_product.css')); ?>">
     <link rel="stylesheet" href="/css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <link rel="stylesheet" href="/css/style.css"> -->
@@ -2366,97 +2366,100 @@
 
 </head>
 <body>
-    @include('layouts.header')
+    <?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    <div class="search-hero" style="background-image: url('{{ asset('images/dashboard.png') }}');">
+    <div class="search-hero" style="background-image: url('<?php echo e(asset('images/dashboard.png')); ?>');">
         <div class="search-hero-overlay"></div>
         <div class="search-hero-content">
-            <h1>Jami natijalar: {{ $filteredProducts->total() }}</h1>
+            <h1>Jami natijalar: <?php echo e($filteredProducts->total()); ?></h1>
             <p>Qayerda yashashni emas, qanday yashashni birga tanlaymiz.</p>
         </div>
     </div>
 
     <div class="search-form-card">
-        <h2>{{ __('Qidiruv natijalari') }}</h2>
-        <form action="{{ route('products.filter') }}" method="GET" id="searchForm">
+        <h2><?php echo e(__('Qidiruv natijalari')); ?></h2>
+        <form action="<?php echo e(route('products.filter')); ?>" method="GET" id="searchForm">
             <div class="search-form-grid">
                 <div class="form-group">
-                    <label for="ad_type">{{ __('E\'lon turi') }}</label>
+                    <label for="ad_type"><?php echo e(__('E\'lon turi')); ?></label>
                     <select name="ad_type" id="ad_type">
-                        <option value="All">{{ __('Hammasi') }}</option>
-                        <option value="sale" {{ request('ad_type') == 'sale' ? 'selected' : '' }}>{{ __('Sotish') }}</option>
-                        <option value="rent" {{ request('ad_type') == 'rent' ? 'selected' : '' }}>{{ __('Ijaraga') }}</option>
+                        <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                        <option value="sale" <?php echo e(request('ad_type') == 'sale' ? 'selected' : ''); ?>><?php echo e(__('Sotish')); ?></option>
+                        <option value="rent" <?php echo e(request('ad_type') == 'rent' ? 'selected' : ''); ?>><?php echo e(__('Ijaraga')); ?></option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="property_type">{{ __('Mulk turi') }}</label>
+                    <label for="property_type"><?php echo e(__('Mulk turi')); ?></label>
                     <select name="property_type" id="property_type">
-                        <option value="All">{{ __('Hammasi') }}</option>
-                        <option value="apartment" {{ request('property_type') == 'apartment' ? 'selected' : '' }}>{{ __('Kvartira') }}</option>
-                        <option value="house" {{ request('property_type') == 'house' ? 'selected' : '' }}>{{ __('Uy/Hovli') }}</option>
-                        <option value="land" {{ request('property_type') == 'land' ? 'selected' : '' }}>{{ __('Yer') }}</option>
-                        <option value="commercial" {{ request('property_type') == 'commercial' ? 'selected' : '' }}>{{ __('Tijorat binosi') }}</option>
+                        <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                        <option value="apartment" <?php echo e(request('property_type') == 'apartment' ? 'selected' : ''); ?>><?php echo e(__('Kvartira')); ?></option>
+                        <option value="house" <?php echo e(request('property_type') == 'house' ? 'selected' : ''); ?>><?php echo e(__('Uy/Hovli')); ?></option>
+                        <option value="land" <?php echo e(request('property_type') == 'land' ? 'selected' : ''); ?>><?php echo e(__('Yer')); ?></option>
+                        <option value="commercial" <?php echo e(request('property_type') == 'commercial' ? 'selected' : ''); ?>><?php echo e(__('Tijorat binosi')); ?></option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="rooms">{{ __('Xonalar soni') }}</label>
+                    <label for="rooms"><?php echo e(__('Xonalar soni')); ?></label>
                     <select name="rooms" id="rooms">
-                        <option value="All">{{ __('Hammasi') }}</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="{{ $i }}" {{ request('rooms') == $i ? 'selected' : '' }}>{{ $i }} {{ __('xona') }}</option>
-                        @endfor
-                        <option value="5+" {{ request('rooms') == '5+' ? 'selected' : '' }}>5+ {{ __('xona') }}</option>
+                        <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                        <?php for($i = 1; $i <= 5; $i++): ?>
+                            <option value="<?php echo e($i); ?>" <?php echo e(request('rooms') == $i ? 'selected' : ''); ?>><?php echo e($i); ?> <?php echo e(__('xona')); ?></option>
+                        <?php endfor; ?>
+                        <option value="5+" <?php echo e(request('rooms') == '5+' ? 'selected' : ''); ?>>5+ <?php echo e(__('xona')); ?></option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="price_from">{{ __('Narx (dan)') }}</label>
-                    <input type="number" name="price_from" id="price_from" value="{{ request('price_from') }}" placeholder="{{ __('minimal narx') }}" min="0">
+                    <label for="price_from"><?php echo e(__('Narx (dan)')); ?></label>
+                    <input type="number" name="price_from" id="price_from" value="<?php echo e(request('price_from')); ?>" placeholder="<?php echo e(__('minimal narx')); ?>" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="price_to">{{ __('Narx (gacha)') }}</label>
-                    <input type="number" name="price_to" id="price_to" value="{{ request('price_to') }}" placeholder="{{ __('maksimal narx') }}" min="0">
+                    <label for="price_to"><?php echo e(__('Narx (gacha)')); ?></label>
+                    <input type="number" name="price_to" id="price_to" value="<?php echo e(request('price_to')); ?>" placeholder="<?php echo e(__('maksimal narx')); ?>" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="region">{{ __('Hudud') }}</label>
+                    <label for="region"><?php echo e(__('Hudud')); ?></label>
                     <select name="region" id="region" onchange="fetchCities()">
-                        <option value="All">{{ __('Hammasi') }}</option>
-                        @foreach($regions as $region)
-                            <option value="{{ $region->id }}" {{ request('region') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
-                        @endforeach
+                        <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                        <?php $__currentLoopData = $regions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $region): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($region->id); ?>" <?php echo e(request('region') == $region->id ? 'selected' : ''); ?>><?php echo e($region->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="city">{{ __('Shahar') }}</label>
+                    <label for="city"><?php echo e(__('Shahar')); ?></label>
                     <select name="city" id="city">
-                        <option value="All">{{ __('Hammasi') }}</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
-                        @endforeach
+                        <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                        <?php $__currentLoopData = $cities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($city->id); ?>" <?php echo e(request('city') == $city->id ? 'selected' : ''); ?>><?php echo e($city->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div class="more-filters-hidden" style="display: none;">
                     <div class="form-group">
-                        <label for="floors">{{ __('Qavatlar soni') }}</label>
+                        <label for="floors"><?php echo e(__('Qavatlar soni')); ?></label>
                         <select name="floors" id="floors">
-                            <option value="All">{{ __('Hammasi') }}</option>
-                            @for ($i = 1; $i <= 5; $i++)
-                                <option value="{{ $i }}" {{ request('floors') == $i ? 'selected' : '' }}>{{ $i }} {{ __('Qavat') }}</option>
-                            @endfor
-                            <option value="6+" {{ request('floors') == '6+' ? 'selected' : '' }}>6+ {{ __('Qavat') }}</option>
+                            <option value="All"><?php echo e(__('Hammasi')); ?></option>
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <option value="<?php echo e($i); ?>" <?php echo e(request('floors') == $i ? 'selected' : ''); ?>><?php echo e($i); ?> <?php echo e(__('Qavat')); ?></option>
+                            <?php endfor; ?>
+                            <option value="6+" <?php echo e(request('floors') == '6+' ? 'selected' : ''); ?>>6+ <?php echo e(__('Qavat')); ?></option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="filter-actions">
                 <button type="button" class="more-filters-btn" id="moreFiltersBtn">
-                    <i class="bi bi-funnel-fill"></i> {{ __('Ko\'proq filterlar') }}
+                    <i class="bi bi-funnel-fill"></i> <?php echo e(__('Ko\'proq filterlar')); ?>
+
                 </button>
                 <div class="filter-buttons">
                     <button type="button" class="map-view-btn">
-                        <i class="bi bi-geo-alt-fill"></i> {{ __('Xaritadan ko\'rish') }}
+                        <i class="bi bi-geo-alt-fill"></i> <?php echo e(__('Xaritadan ko\'rish')); ?>
+
                     </button>
                     <button type="submit" class="show-ads-btn">
-                        <i class="bi bi-search"></i> {{ __('Ko\'rish') }} {{ $filteredProducts->total() }} {{ __('e\'lonlar') }}
+                        <i class="bi bi-search"></i> <?php echo e(__('Ko\'rish')); ?> <?php echo e($filteredProducts->total()); ?> <?php echo e(__('e\'lonlar')); ?>
+
                     </button>
                 </div>
             </div>
@@ -2469,16 +2472,16 @@
 
     <section class="ads-listing-section py-6">
         <div class="container mx-auto px-4">
-            <h2 class="text-xl font-semibold mb-4">{{ __('Topilgan e\'lonlar') }}</h2>
-            @if($filteredProducts->isEmpty())
-                <p class="text-gray-500">{{ __('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.') }}</p>
-            @else
+            <h2 class="text-xl font-semibold mb-4"><?php echo e(__('Topilgan e\'lonlar')); ?></h2>
+            <?php if($filteredProducts->isEmpty()): ?>
+                <p class="text-gray-500"><?php echo e(__('Hech qanday e\'lon topilmadi. Boshqa filterlarni sinab ko\'ring.')); ?></p>
+            <?php else: ?>
                 <div class="space-y-6">
-                    @foreach($filteredProducts as $product)
+                    <?php $__currentLoopData = $filteredProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition ad-card"
-                             data-images='{{ json_encode($product->image_array ?? []) }}'>
+                             data-images='<?php echo e(json_encode($product->image_array ?? [])); ?>'>
                             <div class="relative md:w-1/3 w-full h-56 md:h-auto open-image-modal" x-data="{ currentIndex: 0 }">
-                                @php
+                                <?php
                                     $images = [];
                                     if (!empty($product->images)) {
                                         if (is_array($product->images)) {
@@ -2488,89 +2491,89 @@
                                             $images = is_array($decoded) ? $decoded : [];
                                         }
                                     }
-                                @endphp
+                                ?>
 
-                                <span class="top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
+                                <span class="top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md"><?php echo e(__('Yaxshi Taklif')); ?></span>
                                 <div class="overflow-hidden w-full h-full relative">
-                                   @foreach($product->productImages as $index => $image)
-                                        <img src="{{ asset('storage/' . $image->path) }}" 
-                                            x-show="currentIndex === {{ $index }}" ...>
-                                    @endforeach
+                                   <?php $__currentLoopData = $product->productImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <img src="<?php echo e(asset('storage/' . $image->path)); ?>" 
+                                            x-show="currentIndex === <?php echo e($index); ?>" ...>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
-                                @if(count($images) > 1)
+                                <?php if(count($images) > 1): ?>
                                     <button class="prev-button-card absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-                                            @click="currentIndex = (currentIndex === 0) ? {{ count($images) - 1 }} : currentIndex - 1">‹</button>
+                                            @click="currentIndex = (currentIndex === 0) ? <?php echo e(count($images) - 1); ?> : currentIndex - 1">‹</button>
                                     <button class="next-button-card absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-                                            @click="currentIndex = (currentIndex === {{ count($images) - 1 }}) ? 0 : currentIndex + 1">›</button>
+                                            @click="currentIndex = (currentIndex === <?php echo e(count($images) - 1); ?>) ? 0 : currentIndex + 1">›</button>
                                     <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
-                                        @foreach($images as $index => $img)
-                                            <span class="w-2 h-2 rounded-full" :class="currentIndex === {{ $index }} ? 'bg-yellow-500' : 'bg-gray-300'"></span>
-                                        @endforeach
+                                        <?php $__currentLoopData = $images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <span class="w-2 h-2 rounded-full" :class="currentIndex === <?php echo e($index); ?> ? 'bg-yellow-500' : 'bg-gray-300'"></span>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
                             </div>
 
                             <div class="flex-1 p-4 flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="text-xs text-white bg-yellow-600 px-2 py-1 rounded-md">ID {{ $product->id }}</span>
-                                        <span class="text-lg font-bold text-green-700">{{ number_format($product->price, 0, '.', ' ') }} USD</span>
+                                        <span class="text-xs text-white bg-yellow-600 px-2 py-1 rounded-md">ID <?php echo e($product->id); ?></span>
+                                        <span class="text-lg font-bold text-green-700"><?php echo e(number_format($product->price, 0, '.', ' ')); ?> USD</span>
                                     </div>
-                                    <h3 class="text-base font-semibold text-gray-800">{{ $product->category->name ?? __('Kategoriya yo‘q') }}</h3>
+                                    <h3 class="text-base font-semibold text-gray-800"><?php echo e($product->category->name ?? __('Kategoriya yo‘q')); ?></h3>
                                     <p class="text-gray-600 text-sm mt-1 flex items-center gap-1"><i class="bi bi-geo-alt-fill"></i>
-                                        {{ $product->region->name ?? __('Hudud topilmadi') }},
-                                        {{ $product->city->name ?? $product->district->name ?? __('Shahar topilmadi') }}</p>
-                                    <p class="text-gray-500 text-sm mt-1">{{ __('Mo‘ljal:') }} {{ $product->landmark ?? __('Ko‘rsatilmagan') }}</p>
+                                        <?php echo e($product->region->name ?? __('Hudud topilmadi')); ?>,
+                                        <?php echo e($product->city->name ?? $product->district->name ?? __('Shahar topilmadi')); ?></p>
+                                    <p class="text-gray-500 text-sm mt-1"><?php echo e(__('Mo‘ljal:')); ?> <?php echo e($product->landmark ?? __('Ko‘rsatilmagan')); ?></p>
                                 </div>
-                                <p class="text-gray-400 text-xs mt-3">{{ __('E\'lon joylangan sana:') }} {{ $product->created_at->format('d.m.Y') }}</p>
+                                <p class="text-gray-400 text-xs mt-3"><?php echo e(__('E\'lon joylangan sana:')); ?> <?php echo e($product->created_at->format('d.m.Y')); ?></p>
                             </div>
                             <div class="md:w-1/4 w-full border-t md:border-t-0 md:border-l border-gray-200 p-4 flex flex-col justify-between">
                                 <div>
                                     <a href="tel:+998951606446">
-                                        <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">{{ __('Telefon raqam') }}</button>
+                                        <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700"><?php echo e(__('Telefon raqam')); ?></button>
                                     </a>
                                     <button class="w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 open-contact-modal"
-                                            data-product-name="{{ $product->name }}" data-product-id="{{ $product->id }}">{{ __('Biz bilan bog\'lanish') }}</button>
+                                            data-product-name="<?php echo e($product->name); ?>" data-product-id="<?php echo e($product->id); ?>"><?php echo e(__('Biz bilan bog\'lanish')); ?></button>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mt-4">
-                                    @if($product->floor > 0)
+                                    <?php if($product->floor > 0): ?>
                                         <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                            <img src="{{ asset('images/4465213.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
-                                            {{ $product->floor }}/{{ $product->building_floor }} etaj
+                                            <img src="<?php echo e(asset('images/4465213.png')); ?>" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            <?php echo e($product->floor); ?>/<?php echo e($product->building_floor); ?> etaj
                                         </span>
-                                    @endif
-                                    @if($product->rooms > 0)
+                                    <?php endif; ?>
+                                    <?php if($product->rooms > 0): ?>
                                         <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                            <img src="{{ asset('images/2800060.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
-                                            {{ $product->rooms }} xona
+                                            <img src="<?php echo e(asset('images/2800060.png')); ?>" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            <?php echo e($product->rooms); ?> xona
                                         </span>
-                                    @endif
-                                    @if($product->square > 0)
+                                    <?php endif; ?>
+                                    <?php if($product->square > 0): ?>
                                         <span class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-                                            <img src="{{ asset('images/5024066.png') }}" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
-                                            {{ $product->square }} m²
+                                            <img src="<?php echo e(asset('images/5024066.png')); ?>" alt="icon" class="w-4 h-4" onerror="this.src='https://placehold.co/20x20/CCCCCC/333333?text=Icon';">
+                                            <?php echo e($product->square); ?> m²
                                         </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
-                                @if($product->features && $product->features->count())
+                                <?php if($product->features && $product->features->count()): ?>
                                     <div class="flex flex-wrap gap-2 mt-3">
-                                        @foreach($product->features as $feature)
-                                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md">{{ $feature->feature_name }}</span>
-                                        @endforeach
+                                        <?php $__currentLoopData = $product->features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md"><?php echo e($feature->feature_name); ?></span>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                                 <div class="flex gap-2 mt-3">
-                                    @if($product->exchange)<span class="text-xs border border-yellow-500 text-yellow-600 px-2 py-1 rounded-md">Ayirboshlash</span>@endif
-                                    @if($product->pay_in_installments)<span class="text-xs border border-green-500 text-green-600 px-2 py-1 rounded-md">Bo'lib to'lash</span>@endif
-                                    @if($product->credit)<span class="text-xs border border-blue-500 text-blue-600 px-2 py-1 rounded-md">Ipoteka</span>@endif
+                                    <?php if($product->exchange): ?><span class="text-xs border border-yellow-500 text-yellow-600 px-2 py-1 rounded-md">Ayirboshlash</span><?php endif; ?>
+                                    <?php if($product->pay_in_installments): ?><span class="text-xs border border-green-500 text-green-600 px-2 py-1 rounded-md">Bo'lib to'lash</span><?php endif; ?>
+                                    <?php if($product->credit): ?><span class="text-xs border border-blue-500 text-blue-600 px-2 py-1 rounded-md">Ipoteka</span><?php endif; ?>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-                <div class="mt-6">{{ $filteredProducts->links() }}</div>
-            @endif
+                <div class="mt-6"><?php echo e($filteredProducts->links()); ?></div>
+            <?php endif; ?>
         </div>
 
     </section>
@@ -2579,19 +2582,19 @@
         <div class="modal-content">
             <span class="close-button" id="closeContactModal">×</span>
             <div class="modal-header">
-                <h3>{{ __('Tezkor Murojaat') }}</h3>
-                <p class="modal-product-info">{{ __('E\'lon:') }} <span id="modalProductName"></span> (ID: <span id="modalProductId"></span>)</p>
+                <h3><?php echo e(__('Tezkor Murojaat')); ?></h3>
+                <p class="modal-product-info"><?php echo e(__('E\'lon:')); ?> <span id="modalProductName"></span> (ID: <span id="modalProductId"></span>)</p>
             </div>
             <form id="contactForm">
                 <div class="form-group">
-                    <label for="contactName">{{ __('Ismingiz:') }}</label>
-                    <input type="text" id="contactName" name="name" placeholder="{{ __('Ismingizni kiriting') }}" required>
+                    <label for="contactName"><?php echo e(__('Ismingiz:')); ?></label>
+                    <input type="text" id="contactName" name="name" placeholder="<?php echo e(__('Ismingizni kiriting')); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="contactPhone">{{ __('Telefon raqamingiz:') }}</label>
+                    <label for="contactPhone"><?php echo e(__('Telefon raqamingiz:')); ?></label>
                     <input type="tel" id="contactPhone" name="phone" placeholder="+998 (XX) XXX-XX-XX" required>
                 </div>
-                <button type="submit" class="submit-contact-button">{{ __('Yuborish') }}</button>
+                <button type="submit" class="submit-contact-button"><?php echo e(__('Yuborish')); ?></button>
             </form>
         </div>
     </div>
@@ -2607,8 +2610,8 @@
                     </svg>
                 </div>
             </div>
-            <h3>{{ __('Murojaatingiz qabul qilindi!') }}</h3>
-            <p>{{ __('Tez orada siz bilan bog\'lanamiz.') }}</p>
+            <h3><?php echo e(__('Murojaatingiz qabul qilindi!')); ?></h3>
+            <p><?php echo e(__('Tez orada siz bilan bog\'lanamiz.')); ?></p>
         </div>
     </div>
 
@@ -2634,7 +2637,7 @@
         const fetchCities = () => {
             const regionId = document.getElementById('region').value;
             const citySelect = document.getElementById('city');
-            citySelect.innerHTML = '<option value="All">{{ __('Loading...') }}</option>';
+            citySelect.innerHTML = '<option value="All"><?php echo e(__('Loading...')); ?></option>';
             citySelect.disabled = true;
 
             if (regionId && regionId !== 'All') {
@@ -2647,24 +2650,24 @@
                         return response.json();
                     })
                     .then(data => {
-                        citySelect.innerHTML = '<option value="All">{{ __('Hammasi') }}</option>';
+                        citySelect.innerHTML = '<option value="All"><?php echo e(__('Hammasi')); ?></option>';
                         if (data.length) {
                             data.forEach(city => {
                                 const option = new Option(city.name, city.id);
-                                option.selected = '{{ request('city') }}' == city.id;
+                                option.selected = '<?php echo e(request('city')); ?>' == city.id;
                                 citySelect.add(option);
                             });
                             citySelect.disabled = false;
                         } else {
-                            citySelect.innerHTML = '<option value="All">{{ __('No cities found') }}</option>';
+                            citySelect.innerHTML = '<option value="All"><?php echo e(__('No cities found')); ?></option>';
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching cities:', error);
-                        citySelect.innerHTML = '<option value="All">{{ __('Error loading cities') }}</option>';
+                        citySelect.innerHTML = '<option value="All"><?php echo e(__('Error loading cities')); ?></option>';
                     });
             } else {
-                citySelect.innerHTML = '<option value="All">{{ __('Hammasi') }}</option>';
+                citySelect.innerHTML = '<option value="All"><?php echo e(__('Hammasi')); ?></option>';
                 citySelect.disabled = true;
             }
         };
@@ -2704,7 +2707,7 @@
                 const card = btn.closest('.ad-card');
                 currentImages = JSON.parse(card.dataset.images || '[]') || [];
                 currentIndex = 0;
-                elements.modalImage.src = currentImages.length ? "{{ asset('storage/') }}" + currentImages[currentIndex] : "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                elements.modalImage.src = currentImages.length ? "<?php echo e(asset('storage/')); ?>" + currentImages[currentIndex] : "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
                 elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
                 document.querySelector(modals.image).style.display = 'flex';
                 document.body.style.overflow = 'hidden';
@@ -2727,7 +2730,7 @@
                     currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
                     elements.modalImage.style.opacity = '0';
                     setTimeout(() => {
-                        elements.modalImage.src = "{{ asset('storage/') }}" + currentImages[currentIndex];
+                        elements.modalImage.src = "<?php echo e(asset('storage/')); ?>" + currentImages[currentIndex];
                         elements.modalImage.style.opacity = '1';
                     }, 300);
                     elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
@@ -2739,7 +2742,7 @@
                     currentIndex = (currentIndex + 1) % currentImages.length;
                     elements.modalImage.style.opacity = '0';
                     setTimeout(() => {
-                        elements.modalImage.src = "{{ asset('storage/') }}" + currentImages[currentIndex];
+                        elements.modalImage.src = "<?php echo e(asset('storage/')); ?>" + currentImages[currentIndex];
                         elements.modalImage.style.opacity = '1';
                     }, 300);
                     elements.modalImage.onerror = () => elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
@@ -2757,7 +2760,7 @@
 
                 const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${elements.productName.textContent}\nE'lon ID: ${elements.productId.textContent}`;
                 elements.submitBtn.disabled = true;
-                elements.submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
+                elements.submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> <?php echo e(__('Yuborilmoqda...')); ?>';
 
                 fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
@@ -2774,7 +2777,7 @@
                     .catch(() => alert('Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.'))
                     .finally(() => {
                         elements.submitBtn.disabled = false;
-                        elements.submitBtn.innerHTML = '{{ __('Yuborish') }}';
+                        elements.submitBtn.innerHTML = '<?php echo e(__('Yuborish')); ?>';
                     });
             });
 
@@ -2820,4 +2823,4 @@
         });
     </script>
 </body>
-</html>
+</html><?php /**PATH C:\Users\Asus\Desktop\Projects\UyTop\resources\views/filtered_products.blade.php ENDPATH**/ ?>
