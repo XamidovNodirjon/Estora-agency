@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     public function index()
     {
-        return view('admin.auth.login');
+        return view('Admin.Auth.login');
     }
 
     public function login(Request $request)

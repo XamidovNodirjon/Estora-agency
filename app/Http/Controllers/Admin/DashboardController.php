@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $total_products = Product::count();
         $total_reservations = ReservationProduct::count();
 
-        return view('admin.dashboard.dashboard',[
+        return view('Admin.dashboard.dashboard',[
             'clientCount' => $clientCount,
             'total_users' => $total_users,
             'total_products' => $total_products,
