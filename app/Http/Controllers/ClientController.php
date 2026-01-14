@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Metro;
+use App\Models\ProductFeatures;
+use App\Models\Region;
+use App\Models\University;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class ClientController extends Controller
 {
 
-
-    protected $productService;
-
-    public function __construct(ProductService $productService)
+    public function __construct(
+        private ProductService $productService
+    )
     {
-        $this->productService = $productService;
     }
 
     public function index()
@@ -27,26 +31,29 @@ class ClientController extends Controller
 
     }
 
-
     public function createProduct()
     {
-        return view('clients.create_product');
+
+        return view('clients.create_product',
+            [
+                'categories' => Category::has('subcategories')->with('subcategories')->get(),
+                'address' => Region::with('cities')->get(),
+                'product_features' => ProductFeatures::all(),
+                'metros' => Metro::all(),
+                'university' => University::all(),
+            ]);
     }
 
     public function storeProduct(Request $request)
     {
-        $data     = $request->except('features');
-        $features = $request->input('features', []);
-
-        DB::transaction(function () use ($data, $features) {
-            $product = $this->productService->storeProduct($data);
-
-            if (!empty($features)) {
-                $product->features()->attach($features);
-            }
-        });
-
-    return redirect()->route('get.client')->with('success', 'Mahsulot muvaffaqiyatli yaratildi!');
+        $data = $request->all();
+        dd($data);
+        try {
+            $this->productService->storeProduct($data);
+            return redirect()->route('get.client')->with('success', 'Mahsulot muvaffaqiyatli yaratildi!');
+        }catch (\Exception $exception){
+            return Redirect::back()->with('error', $exception->getMessage());
+        }
     }
 
 }

@@ -85,12 +85,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/get-cities/{region_id}', function ($region_id) {
     return \App\Models\City::where('region_id', $region_id)->select('id', 'name')->get();
 })->name('get-cities');
-
-
-Route::middleware('auth:client')->prefix('client')->group(function () {
-    Route::get('/dashboard', [ClientController::class, 'index'])->name('get.client');
-    Route::get('addList', [ClientController::class, 'addList'])->name('client.addList');
-    Route::get('/products/create', [ClientController::class, 'createProduct'])->name('client.products.create');
-    Route::post('/products/store', [ClientController::class, 'storeProduct'])->name('client.products.store');
-
-});
