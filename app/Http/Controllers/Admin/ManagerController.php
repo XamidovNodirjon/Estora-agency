@@ -31,7 +31,7 @@ class ManagerController extends Controller
     public function index(Request $request)
     {
         try {
-            $data = $this->productService->getManagerIndexData($request);
+            $data = $this->productService->getIndexData();
 
             return view('managers.products.index', $data);
 

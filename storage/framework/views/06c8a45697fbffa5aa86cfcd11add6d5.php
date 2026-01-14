@@ -1,89 +1,93 @@
-@extends('layouts.admin_layout')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">{{ __('Product Details') }}</h2>
+            <h2 class="mb-0"><?php echo e(__('Product Details')); ?></h2>
             <div>
-                <a href="{{ route('edit-product', $product->id) }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-edit me-2"></i>{{ __('Edit') }}
+                <a href="<?php echo e(route('edit-product', $product->id)); ?>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit me-2"></i><?php echo e(__('Edit')); ?>
+
                 </a>
-                <a href="{{ route('products') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-arrow-left me-2"></i>{{ __('Back to List') }}
+                <a href="<?php echo e(route('products')); ?>" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i><?php echo e(__('Back to List')); ?>
+
                 </a>
             </div>
         </div>
 
         <div class="card shadow-sm mb-4 border-0">
             <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 text-primary">{{ $product->name }}</h4>
-                <span class="badge bg-{{ $product->status === 'active' ? 'success' : 'secondary' }}">
-                    {{ ucfirst($product->status) }}
+                <h4 class="mb-0 text-primary"><?php echo e($product->name); ?></h4>
+                <span class="badge bg-<?php echo e($product->status === 'active' ? 'success' : 'secondary'); ?>">
+                    <?php echo e(ucfirst($product->status)); ?>
+
                 </span>
             </div>
 
             <div class="card-body">
                 <!-- Images Gallery -->
-                @if($product->images)
+                <?php if($product->images): ?>
                     <div class="row mb-4">
                         <div class="col-md-8">
                             <div class="main-image-container mb-3">
-                                @php $images = json_decode($product->images, true); @endphp
-                                <img src="{{ asset('storage/' . $images[0]) }}"
+                                <?php $images = json_decode($product->images, true); ?>
+                                <img src="<?php echo e(asset('storage/' . $images[0])); ?>"
                                      class="img-fluid rounded-3 border shadow-sm"
                                      id="mainImage"
-                                     alt="{{ __('Main Product Image') }}">
+                                     alt="<?php echo e(__('Main Product Image')); ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="thumbnail-container d-flex flex-column">
-                                @foreach(array_slice($images, 0, 3) as $key => $image)
-                                    <div class="thumbnail-item mb-2 {{ $key === 0 ? 'active' : '' }}">
-                                        <img src="{{ asset('storage/' . $image) }}"
+                                <?php $__currentLoopData = array_slice($images, 0, 3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="thumbnail-item mb-2 <?php echo e($key === 0 ? 'active' : ''); ?>">
+                                        <img src="<?php echo e(asset('storage/' . $image)); ?>"
                                              class="img-thumbnail cursor-pointer"
                                              onclick="changeMainImage(this)"
-                                             alt="{{ __('Product Thumbnail') }}">
+                                             alt="<?php echo e(__('Product Thumbnail')); ?>">
                                     </div>
-                                @endforeach
-                                @if(count($images) > 3)
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php if(count($images) > 3): ?>
                                     <div class="thumbnail-item position-relative">
-                                        <img src="{{ asset('storage/' . $images[3]) }}"
+                                        <img src="<?php echo e(asset('storage/' . $images[3])); ?>"
                                              class="img-thumbnail"
-                                             alt="{{ __('Product Thumbnail') }}">
+                                             alt="<?php echo e(__('Product Thumbnail')); ?>">
                                         <div class="more-images-overlay">
-                                            +{{ count($images) - 3 }}
+                                            +<?php echo e(count($images) - 3); ?>
+
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
 
             <!-- Basic Info Section -->
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="info-card mb-4">
                             <h5 class="info-card-header bg-light-primary">
-                                <i class="fas fa-info-circle me-2"></i>{{ __('Basic Information') }}
+                                <i class="fas fa-info-circle me-2"></i><?php echo e(__('Basic Information')); ?>
+
                             </h5>
                             <div class="info-card-body">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Category') }}:</span>
-                                    <span class="info-value">{{ $product->category->name ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Category')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->category->name ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Subcategory') }}:</span>
-                                    <span class="info-value">{{ $product->subcategory->name ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Subcategory')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->subcategory->name ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Type') }}:</span>
-                                    <span class="info-value text-capitalize">{{ $product->name }}</span>
+                                    <span class="info-label"><?php echo e(__('Type')); ?>:</span>
+                                    <span class="info-value text-capitalize"><?php echo e($product->name); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Status') }}:</span>
-                                    <span class="info-value badge bg-{{ $product->status === 'active' ? 'success' : 'secondary' }}">
-                                        {{ ucfirst($product->status) }}
+                                    <span class="info-label"><?php echo e(__('Status')); ?>:</span>
+                                    <span class="info-value badge bg-<?php echo e($product->status === 'active' ? 'success' : 'secondary'); ?>">
+                                        <?php echo e(ucfirst($product->status)); ?>
+
                                     </span>
                                 </div>
                             </div>
@@ -93,24 +97,25 @@
                     <div class="col-md-6">
                         <div class="info-card mb-4">
                             <h5 class="info-card-header bg-light-primary">
-                                <i class="fas fa-map-marker-alt me-2"></i>{{ __('Location') }}
+                                <i class="fas fa-map-marker-alt me-2"></i><?php echo e(__('Location')); ?>
+
                             </h5>
                             <div class="info-card-body">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Region') }}:</span>
-                                    <span class="info-value">{{ $product->region->name ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Region')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->region->name ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('City/District') }}:</span>
-                                    <span class="info-value">{{ $product->city->name ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('City/District')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->city->name ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Address') }}:</span>
-                                    <span class="info-value">{{ $product->landmark ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Address')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->landmark ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Published') }}:</span>
-                                    <span class="info-value">{{ $product->created_at->format('d.m.Y H:i') }}</span>
+                                    <span class="info-label"><?php echo e(__('Published')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->created_at->format('d.m.Y H:i')); ?></span>
                                 </div>
                             </div>
                         </div>
@@ -122,33 +127,35 @@
                     <div class="col-md-6">
                         <div class="info-card mb-4">
                             <h5 class="info-card-header bg-light-success">
-                                <i class="fas fa-tag me-2"></i>{{ __('Pricing') }}
+                                <i class="fas fa-tag me-2"></i><?php echo e(__('Pricing')); ?>
+
                             </h5>
                             <div class="info-card-body">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Price') }}:</span>
+                                    <span class="info-label"><?php echo e(__('Price')); ?>:</span>
                                     <span class="info-value fw-bold text-success">
-                                        {{ number_format($product->price, 0, ',', ' ') }} {{ __('USD') }}
+                                        <?php echo e(number_format($product->price, 0, ',', ' ')); ?> <?php echo e(__('USD')); ?>
+
                                     </span>
                                 </div>
-                                @if($product->sotix)
+                                <?php if($product->sotix): ?>
                                     <div class="info-item">
-                                        <span class="info-label">{{ __('Sotix') }}:</span>
-                                        <span class="info-value">{{ $product->sotix }}</span>
+                                        <span class="info-label"><?php echo e(__('Sotix')); ?>:</span>
+                                        <span class="info-value"><?php echo e($product->sotix); ?></span>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Payment Options') }}:</span>
+                                    <span class="info-label"><?php echo e(__('Payment Options')); ?>:</span>
                                     <div class="d-flex flex-wrap gap-2 mt-1">
-                                        @if($product->exchange)
-                                            <span class="badge bg-info">{{ __('Exchange') }}</span>
-                                        @endif
-                                        @if($product->pay_in_installments)
-                                            <span class="badge bg-info">{{ __('Installments') }}</span>
-                                        @endif
-                                        @if($product->credit)
-                                            <span class="badge bg-info">{{ __('Credit') }}</span>
-                                        @endif
+                                        <?php if($product->exchange): ?>
+                                            <span class="badge bg-info"><?php echo e(__('Exchange')); ?></span>
+                                        <?php endif; ?>
+                                        <?php if($product->pay_in_installments): ?>
+                                            <span class="badge bg-info"><?php echo e(__('Installments')); ?></span>
+                                        <?php endif; ?>
+                                        <?php if($product->credit): ?>
+                                            <span class="badge bg-info"><?php echo e(__('Credit')); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -158,35 +165,38 @@
                     <div class="col-md-6">
                         <div class="info-card mb-4">
                             <h5 class="info-card-header bg-light-info">
-                                <i class="fas fa-phone-alt me-2"></i>{{ __('Contact') }}
+                                <i class="fas fa-phone-alt me-2"></i><?php echo e(__('Contact')); ?>
+
                             </h5>
                             <div class="info-card-body">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Phone') }}:</span>
+                                    <span class="info-label"><?php echo e(__('Phone')); ?>:</span>
                                     <span class="info-value">
-                                        @if($product->isPhoneVisibleTo(auth()->user()))
-                                            <a href="tel:{{ $product->phone }}" class="text-decoration-none">
-                                                {{ $product->phone }}
+                                        <?php if($product->isPhoneVisibleTo(auth()->user())): ?>
+                                            <a href="tel:<?php echo e($product->phone); ?>" class="text-decoration-none">
+                                                <?php echo e($product->phone); ?>
+
                                             </a>
-                                        @else
-                                            <span class="text-muted">{{ __('Hidden') }}</span>
-                                        @endif
+                                        <?php else: ?>
+                                            <span class="text-muted"><?php echo e(__('Hidden')); ?></span>
+                                        <?php endif; ?>
                                     </span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Contact Name') }}:</span>
-                                    <span class="info-value">{{ $product->contact_name ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Contact Name')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->contact_name ?? '-'); ?></span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Email') }}:</span>
+                                    <span class="info-label"><?php echo e(__('Email')); ?>:</span>
                                     <span class="info-value">
-                                        @if($product->email)
-                                            <a href="mailto:{{ $product->email }}" class="text-decoration-none">
-                                                {{ $product->email }}
+                                        <?php if($product->email): ?>
+                                            <a href="mailto:<?php echo e($product->email); ?>" class="text-decoration-none">
+                                                <?php echo e($product->email); ?>
+
                                             </a>
-                                        @else
+                                        <?php else: ?>
                                             -
-                                        @endif
+                                        <?php endif; ?>
                                     </span>
                                 </div>
                             </div>
@@ -197,38 +207,45 @@
                 <!-- Property Details Section -->
                 <div class="info-card mb-4">
                     <h5 class="info-card-header bg-light-warning">
-                        <i class="fas fa-home me-2"></i>{{ __('Property Details') }}
+                        <i class="fas fa-home me-2"></i><?php echo e(__('Property Details')); ?>
+
                     </h5>
                     <div class="info-card-body">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Floor') }}:</span>
-                                    <span class="info-value">{{ $product->floor }}/{{ $product->building_floor }}</span>
+                                    <span class="info-label"><?php echo e(__('Floor')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->floor); ?>/<?php echo e($product->building_floor); ?></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Square') }}:</span>
-                                    <span class="info-value">{{ $product->square }} m<sup>2</sup></span>
+                                    <span class="info-label"><?php echo e(__('Square')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->square); ?> m<sup>2</sup></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Rooms') }}:</span>
-                                    <span class="info-value">{{ $product->rooms }}</span>
+                                    <span class="info-label"><?php echo e(__('Rooms')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->rooms); ?></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Repair') }}:</span>
-                                    <span class="info-value text-capitalize">{{ $product->repair }}</span>
+                                    <span class="info-label"><?php echo e(__('Repair')); ?>:</span>
+                                    <span class="info-value text-capitalize"><?php echo e($product->repair); ?></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label">{{ __('Condition') }}:</span>
-                                    <span class="info-value">{{ $product->condition ?? '-' }}</span>
+                                    <span class="info-label"><?php echo e(__('Year Built')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->year_built ?? '-'); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <span class="info-label"><?php echo e(__('Condition')); ?>:</span>
+                                    <span class="info-value"><?php echo e($product->condition ?? '-'); ?></span>
                                 </div>
                             </div>
                         </div>
@@ -238,32 +255,35 @@
                 <!-- Description Section -->
                 <div class="info-card mb-4">
                     <h5 class="info-card-header bg-light-secondary">
-                        <i class="fas fa-align-left me-2"></i>{{ __('Description') }}
+                        <i class="fas fa-align-left me-2"></i><?php echo e(__('Description')); ?>
+
                     </h5>
                     <div class="info-card-body">
                         <div class="info-item">
-                            <p class="info-description">{{ $product->description }}</p>
+                            <p class="info-description"><?php echo e($product->description); ?></p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Additional Features Section -->
-                @if($product->features && $product->features->count() > 0)
+                <?php if($product->features && $product->features->count() > 0): ?>
     <div class="info-card">
         <h5 class="info-card-header bg-light-info">
-            <i class="fas fa-star me-2"></i>{{ __('Features') }}
+            <i class="fas fa-star me-2"></i><?php echo e(__('Features')); ?>
+
         </h5>
         <div class="info-card-body">
             <div class="d-flex flex-wrap gap-2">
-                @foreach($product->features as $feature)
+                <?php $__currentLoopData = $product->features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <span class="badge bg-primary">
-                        {{ $feature->feature_name }}
+                        <?php echo e($feature->feature_name); ?>
+
                     </span>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </div>
-@endif
+<?php endif; ?>
             </div>
         </div>
     </div>
@@ -454,4 +474,6 @@
             element.parentElement.classList.add('active');
         }
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin_layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Asus\Desktop\Projects\UyTop\resources\views/Admin/products/show.blade.php ENDPATH**/ ?>

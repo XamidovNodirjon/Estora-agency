@@ -28,6 +28,7 @@ class ProductService
             'products' => $products,
             'categories' => \App\Models\Category::with('subcategories')->get(),
             'product_features' => \App\Models\ProductFeatures::with('products')->get(),
+            'product_images' => \App\Models\ProductImage::with('products')->get(),
         ];
     }
 

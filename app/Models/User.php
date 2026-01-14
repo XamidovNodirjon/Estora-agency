@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProductView::class, 'user_id', 'id');
     }
+
+    public function userBalance()
+    {
+        return $this->hasOne(UserBalance::class, 'user_id', 'id');
+    }
 }

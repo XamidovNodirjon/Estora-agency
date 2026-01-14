@@ -2191,6 +2191,19 @@
             padding: 20px;
         }
     }
+    .card {
+        display: flex;
+        align-items: stretch; /* Ikkala tomon bir xil balandlikda bo'lishi uchun */
+        max-height: 250px;    /* Kartochkaning umumiy balandligini cheklaymiz */
+        overflow: hidden;
+        border-radius: 12px;
+        }
+
+        .card-image {
+        flex: 0 0 30% !important;        /* Rasm umumiy kenglikning 30% qismini egallaydi */
+        height: 100% !important;
+        object-fit: cover;    /* Rasmni cho'zmasdan, konteynerga moslab kesadi */
+        }
 
     /* Asosiy konteyner stillari */
 .search-hero {
