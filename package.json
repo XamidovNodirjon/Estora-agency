@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^6.0.1",
+        "datatables.net-bs5": "^2.3.6",
         "flag-icon-css": "^4.1.7",
         "flowbite": "^3.1.2",
         "vue": "^3.5.22"

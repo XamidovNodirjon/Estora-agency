@@ -2538,6 +2538,19 @@
                                         <?php echo e($product->region->name ?? __('Hudud topilmadi')); ?>,
                                         <?php echo e($product->city->name ?? $product->district->name ?? __('Shahar topilmadi')); ?></p>
                                     <p class="text-gray-500 text-sm mt-1"><?php echo e(__('Mo‘ljal:')); ?> <?php echo e($product->landmark ?? __('Ko‘rsatilmagan')); ?></p>
+                                    <p class="text-gray-500 text-sm mt-1">
+                                        <?php echo e(__('Universitet:')); ?>
+
+                                        <?php echo e($product->universities->first()?->university_name ?? __('Ko‘rsatilmagan')); ?>
+
+                                    </p>
+                                    <p class="text-gray-500 text-sm mt-1">
+                                        <?php echo e(__('Metro:')); ?>
+
+                                        <?php echo e($product->metros->first()?->metro_name ?? __('Ko‘rsatilmagan')); ?>
+
+                                    </p>
+
                                 </div>
                                 <p class="text-gray-400 text-xs mt-3"><?php echo e(__('E\'lon joylangan sana:')); ?> <?php echo e($product->created_at->format('d.m.Y')); ?></p>
                             </div>
@@ -2569,6 +2582,7 @@
                                         </span>
                                     <?php endif; ?>
                                 </div>
+                              
                                 <?php if($product->features && $product->features->count()): ?>
                                     <div class="flex flex-wrap gap-2 mt-3">
                                         <?php $__currentLoopData = $product->features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

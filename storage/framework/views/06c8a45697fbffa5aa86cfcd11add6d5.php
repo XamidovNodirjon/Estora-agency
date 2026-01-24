@@ -238,12 +238,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="info-item">
-                                    <span class="info-label"><?php echo e(__('Year Built')); ?>:</span>
-                                    <span class="info-value"><?php echo e($product->year_built ?? '-'); ?></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="info-item">
                                     <span class="info-label"><?php echo e(__('Condition')); ?>:</span>
                                     <span class="info-value"><?php echo e($product->condition ?? '-'); ?></span>
                                 </div>

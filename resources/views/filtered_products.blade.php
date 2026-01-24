@@ -2535,6 +2535,15 @@
                                         {{ $product->region->name ?? __('Hudud topilmadi') }},
                                         {{ $product->city->name ?? $product->district->name ?? __('Shahar topilmadi') }}</p>
                                     <p class="text-gray-500 text-sm mt-1">{{ __('Mo‘ljal:') }} {{ $product->landmark ?? __('Ko‘rsatilmagan') }}</p>
+                                    <p class="text-gray-500 text-sm mt-1">
+                                        {{ __('Universitet:') }}
+                                        {{ $product->universities->first()?->university_name ?? __('Ko‘rsatilmagan') }}
+                                    </p>
+                                    <p class="text-gray-500 text-sm mt-1">
+                                        {{ __('Metro:') }}
+                                        {{ $product->metros->first()?->metro_name ?? __('Ko‘rsatilmagan') }}
+                                    </p>
+
                                 </div>
                                 <p class="text-gray-400 text-xs mt-3">{{ __('E\'lon joylangan sana:') }} {{ $product->created_at->format('d.m.Y') }}</p>
                             </div>
@@ -2566,6 +2575,7 @@
                                         </span>
                                     @endif
                                 </div>
+                              
                                 @if($product->features && $product->features->count())
                                     <div class="flex flex-wrap gap-2 mt-3">
                                         @foreach($product->features as $feature)
