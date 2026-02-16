@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 
     <style>
         /* General Styles */
@@ -2429,7 +2429,6 @@
             <p>Qayerda yashashni emas, qanday yashashni birga tanlaymiz.</p>
         </div>
     </div>
-
     <div class="search-form-card">
         <h2>{{ __('Qidiruv natijalari') }}</h2>
         <form action="{{ route('products.filter') }}" method="GET" id="searchForm">
@@ -2537,6 +2536,7 @@
         </form>
     </div>
 
+
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
@@ -2560,7 +2560,6 @@
                                     class="top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
 
                                 <div class="overflow-hidden w-full h-full relative">
-
 
                                     @foreach($images as $index => $imagePath)
                                         <img src="{{ asset('storage/' . $imagePath) }}" x-show="currentIndex === {{ $index }}"
@@ -2738,38 +2737,6 @@
     </div>
 
     <script>
-        // Image navigation function
-        const productCurrentIndex = {};
-        
-        function changeImage(productId, direction) {
-            const images = document.querySelectorAll(`.product-image-${productId}`);
-            const indicators = document.querySelectorAll(`.indicator-${productId}`);
-            
-            if (images.length === 0) return;
-            
-            // Initialize current index if not exists
-            if (typeof productCurrentIndex[productId] === 'undefined') {
-                productCurrentIndex[productId] = 0;
-            }
-            
-            // Hide current image
-            images[productCurrentIndex[productId]].style.display = 'none';
-            images[productCurrentIndex[productId]].style.opacity = '0';
-            indicators[productCurrentIndex[productId]].classList.remove('bg-yellow-500');
-            indicators[productCurrentIndex[productId]].classList.add('bg-gray-300');
-            
-            // Calculate new index
-            productCurrentIndex[productId] = (productCurrentIndex[productId] + direction + images.length) % images.length;
-            
-            // Show new image
-            images[productCurrentIndex[productId]].style.display = 'block';
-            setTimeout(() => {
-                images[productCurrentIndex[productId]].style.opacity = '1';
-            }, 10);
-            indicators[productCurrentIndex[productId]].classList.remove('bg-gray-300');
-            indicators[productCurrentIndex[productId]].classList.add('bg-yellow-500');
-        }
-
         $(document).ready(() => $('#contactPhone').inputmask({
             mask: "+998 (99) 999-99-99",
             clearIncomplete: true,
@@ -2838,132 +2805,248 @@
             const TELEGRAM_BOT_TOKEN = '8324622390:AAHTibxtx1NfrBz-P6NREXKZEboIqx8VxQI';
             const TELEGRAM_CHAT_ID = '-1002718251790';
 
-            buttons.openContact.forEach(btn => btn.addEventListener('click', () => {
-                elements.productName.textContent = btn.dataset.productName || 'Noma’lum e’lon';
-                elements.productId.textContent = btn.dataset.productId || 'Noma’lum ID';
-                document.querySelector(modals.contact).style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script>
+                $(document).ready(function() {
+            var table = $('#productsTable').DataTable({
+                    processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('products.filter') }}",
+                data: function (d) {
+                    d.ad_type = $('#ad_type').val();
+                d.category = $('#category').val(); // Ensure this input exists or remove
+                d.region = $('#region').val();
+                d.city = $('#city').val();
+                d.rooms = $('#rooms').val();
+                d.floors = $('#floors').val(); // Ensure this input exists
+                d.price_from = $('#price_from').val();
+                d.price_to = $('#price_to').val();
+                d.property_type = $('#property_type').val();
+                        // Add other fields if needed
+                    }
+                },
+                columns: [
+                {
+                    data: 'images',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                            var imgUrl = (data && data.length > 0)
+                ? "{{ asset('storage') }}/" + data[0]
+                : "https://placehold.co/80x60?text=No+Img";
+                return '<img src="'+imgUrl+'" class="dt-image" onclick="openImageModal(this, \''+row.id+'\')">';
+                        }
+                    },
+                    {data: 'id', name: 'id' },
+                    {data: 'category', name: 'category.name' },
+                    {data: 'price', name: 'price', render: function(data) { return data + ' USD'; } },
+                    {data: 'address', name: 'address', orderable: false },
+                    {
+                        data: null,
+                    orderable: false,
+                    render: function(data, type, row) {
+                            return row.rooms + ' xona / ' + row.floor + ' etaj';
+                        }
+                    },
+                    {data: 'square', name: 'square' },
+                    {data: 'created_at', name: 'created_at' },
+                    {
+                        data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                             return '<button class="bg-blue-600 text-white px-3 py-1 rounded text-sm mb-1 w-full open-contact-modal-dt" data-id="'+row.id+'" data-name="'+row.category+'">Aloqa</button>';
+                        }
+                    }
+                    ],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/uz.json' // Optional: Localization
+                }
+            });
+
+                    // Reload table on filter change
+                    $('#searchForm select, #searchForm input').on('change keyup', function() {
+                        // Debounce might be needed for text inputs
+                        table.draw();
+            });
+
+                    // Prevent default form submission and reload table instead
+                    $('#searchForm').on('submit', function(e) {
+                        e.preventDefault();
+                    table.draw();
+            });
+
+                    // Delegate event for dynamic contact buttons
+                    $('#productsTable').on('click', '.open-contact-modal-dt', function() {
+                var productId = $(this).data('id');
+                    var productName = $(this).data('name');
+                    $('#modalProductName').text(productName + ' (ID: ' + productId + ')');
+                    $('#modalProductId').text(productId);
+                    $('#quickContactModal').css('display', 'flex');
+                    $('body').css('overflow', 'hidden');
+            });
+
+                    // Need to expose image logic globally or attach to window for onclick
+                    window.openImageModal = function(img, id) {
+                // Logic to open image modal
+                // We might need to fetch all images for the product or just show this one
+                // For now, let's just use the clicked image source or basic logic
+                var src = $(img).attr('src');
+                    $('#modalImage').attr('src', src);
+                    $('#imageModal').css('display', 'flex');
+                    $('body').css('overflow', 'hidden');
+            }
+        });
+
+                    // Keep existing logic...
+
+                    elements.productName.textContent = btn.dataset.productName || 'Noma’lum e’lon';
+                    elements.productId.textContent = btn.dataset.productId || 'Noma’lum ID';
+                    document.querySelector(modals.contact).style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
             }));
 
-            const storageBaseUrl = "{{ asset('storage') }}";
+                    const storageBaseUrl = "{{ asset('storage') }}";
 
             buttons.openImage.forEach(btn => btn.addEventListener('click', e => {
                 if (e.target.tagName === 'BUTTON') return;
-                const card = btn.closest('.ad-card');
-                currentImages = JSON.parse(card.dataset.images || '[]') || [];
+                    const card = btn.closest('.ad-card');
+                    currentImages = JSON.parse(card.dataset.images || '[]') || [];
 
-                if (currentImages.length === 0) return;
+                    if (currentImages.length === 0) return;
 
-                currentIndex = 0;
-                updateModalImage();
-                document.querySelector(modals.image).style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+                    currentIndex = 0;
+                    updateModalImage();
+                    document.querySelector(modals.image).style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
             }));
 
-            function updateModalImage() {
+                    function updateModalImage() {
                 if (!currentImages.length) return;
 
-                const imagePath = currentImages[currentIndex];
-                // Handle potential double slashes
-                const fullPath = imagePath.startsWith('/')
+                    const imagePath = currentImages[currentIndex];
+                    // Handle potential double slashes
+                    const fullPath = imagePath.startsWith('/')
                     ? storageBaseUrl + imagePath
                     : storageBaseUrl + '/' + imagePath;
 
-                elements.modalImage.src = fullPath;
+                    elements.modalImage.src = fullPath;
                 elements.modalImage.onerror = () => {
-                    console.error('Failed to load image:', fullPath);
+                        console.error('Failed to load image:', fullPath);
                     elements.modalImage.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
                 };
             }
 
             [buttons.close, buttons.closeSuccess, buttons.closeImage].forEach(closeBtn => closeBtn.addEventListener('click', () => {
-                closeBtn.closest('.modal').style.display = 'none';
-                document.body.style.overflow = 'auto';
+                        closeBtn.closest('.modal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
             }));
 
             window.addEventListener('click', e => Object.values(modals).forEach(modal => {
                 if (e.target === document.querySelector(modal)) {
-                    document.querySelector(modal).style.display = 'none';
+                        document.querySelector(modal).style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }
             }));
 
             buttons.prevImage.addEventListener('click', () => {
                 if (currentImages.length) {
-                    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+                        currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
                     elements.modalImage.style.opacity = '0';
                     setTimeout(() => {
                         updateModalImage();
-                        elements.modalImage.style.opacity = '1';
+                    elements.modalImage.style.opacity = '1';
                     }, 200);
                 }
             });
 
             buttons.nextImage.addEventListener('click', () => {
                 if (currentImages.length) {
-                    currentIndex = (currentIndex + 1) % currentImages.length;
+                        currentIndex = (currentIndex + 1) % currentImages.length;
                     elements.modalImage.style.opacity = '0';
                     setTimeout(() => {
                         updateModalImage();
-                        elements.modalImage.style.opacity = '1';
+                    elements.modalImage.style.opacity = '1';
                     }, 200);
                 }
             });
 
             form.addEventListener('submit', e => {
-                e.preventDefault();
-                const name = document.getElementById('contactName').value;
-                const phone = document.getElementById('contactPhone').value;
-                if (phone.length < "+998 (99) 999-99-99".length) {
-                    alert("Iltimos, telefon raqamini to'liq kiriting.");
+                        e.preventDefault();
+                    const name = document.getElementById('contactName').value;
+                    const phone = document.getElementById('contactPhone').value;
+                    if (phone.length < "+998 (99) 999-99-99".length) {
+                        alert("Iltimos, telefon raqamini to'liq kiriting.");
                     return;
                 }
 
-                const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${elements.productName.textContent}\nE'lon ID: ${elements.productId.textContent}`;
-                elements.submitBtn.disabled = true;
-                elements.submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
+                    const message = `Yangi murojaat!\n\nIsmi: ${name}\nTelefon raqami: ${phone}\nQiziqish bildirgan e'lon: ${elements.productName.textContent}\nE'lon ID: ${elements.productId.textContent}`;
+                    elements.submitBtn.disabled = true;
+                    elements.submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise rotate-animation"></i> {{ __('Yuborilmoqda...') }}';
 
-                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+                    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                    headers: {'Content-Type': 'application/json' },
+                    body: JSON.stringify({chat_id: TELEGRAM_CHAT_ID, text: message })
                 })
                     .then(response => response.json())
                     .then(() => {
                         document.querySelector(modals.contact).style.display = 'none';
-                        document.querySelector(modals.success).style.display = 'flex';
-                        document.querySelector(modals.success).querySelector('.checkmark-circle').classList.add('animate');
-                        form.reset();
+                    document.querySelector(modals.success).style.display = 'flex';
+                    document.querySelector(modals.success).querySelector('.checkmark-circle').classList.add('animate');
+                    form.reset();
                     })
                     .catch(() => alert('Murojaat yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.'))
                     .finally(() => {
                         elements.submitBtn.disabled = false;
-                        elements.submitBtn.innerHTML = '{{ __('Yuborish') }}';
+                    elements.submitBtn.innerHTML = '{{ __('Yuborish') }}';
                     });
             });
 
-            // Image navigation is handled by Alpine.js in the blade template
+            document.querySelectorAll('.ad-card').forEach(card => {
+                const images = card.querySelectorAll('.ad-image');
+                    const [prevBtn, nextBtn] = [card.querySelector('.prev-button-card'), card.querySelector('.next-button-card')];
+                    const allImages = JSON.parse(card.dataset.images || '[]') || [];
+                    let currentIndex = 0;
 
-            const moreFiltersBtn = document.getElementById('moreFiltersBtn');
+                const updateImage = index => {
+                    if (allImages.length) {
+                        currentIndex = (index + allImages.length) % allImages.length;
+                        images.forEach((img, i) => {
+                        img.style.opacity = i === currentIndex ? '1' : '0';
+                            img.onerror = () => img.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
+                        });
+                    }
+                };
+
+                    if (allImages.length) updateImage(0);
+                [prevBtn, nextBtn].forEach((btn, i) => btn?.addEventListener('click', () => updateImage(currentIndex + (i ? 1 : -1))));
+            });
+
+                    const moreFiltersBtn = document.getElementById('moreFiltersBtn');
 
 
-            fetchCities();
+                    fetchCities();
 
             const toggleDropdown = (selector, menuClass) => {
-                document.querySelector(selector)?.addEventListener('click', e => {
-                    e.stopPropagation();
-                    document.querySelector(menuClass)?.classList.toggle('hidden');
-                });
+                        document.querySelector(selector)?.addEventListener('click', e => {
+                            e.stopPropagation();
+                            document.querySelector(menuClass)?.classList.toggle('hidden');
+                        });
             };
 
-            toggleDropdown('.language-selector', '.language-menu');
-            toggleDropdown('.currency-selector', '.currency-menu');
+                    toggleDropdown('.language-selector', '.language-menu');
+                    toggleDropdown('.currency-selector', '.currency-menu');
 
             document.querySelectorAll('.menu-icon, .dropdown-modal')?.forEach(el => el.addEventListener('click', e => e.stopPropagation()));
             document.addEventListener('click', () => {
-                ['.language-menu', '.currency-menu', '.dropdown-modal'].forEach(cls => document.querySelector(cls)?.classList.add('hidden'));
+                        ['.language-menu', '.currency-menu', '.dropdown-modal'].forEach(cls => document.querySelector(cls)?.classList.add('hidden'));
             });
         });
+
     </script>
 </body>
 

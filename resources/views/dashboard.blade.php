@@ -534,11 +534,16 @@
                                     class="property-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden h-full">
                                     <div class="relative">
                                         @php
-                                            $productImage = $product->productImages->first();
-                                            $imageUrl = $productImage ? asset('storage/' . $productImage->path) : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop';
+                                            $images = $product->image_array ?? [];
                                         @endphp
 
-                                        <img src="{{ $imageUrl }}" alt="Property" class="w-full h-56 object-cover">
+                                        @if(!empty($images))
+                                            <img src="{{ asset('storage/' . $images[0]) }}" alt="Property"
+                                                class="w-full h-56 object-cover">
+                                        @else
+                                            <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop"
+                                                alt="Property" class="w-full h-56 object-cover">
+                                        @endif
 
                                         <!-- TOP Badge -->
                                         <div
