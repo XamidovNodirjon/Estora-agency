@@ -47,7 +47,6 @@ class ClientController extends Controller
     public function storeProduct(Request $request)
     {
         $data = $request->all();
-        dd($data);
         try {
             $this->productService->storeProduct($data);
             return redirect()->route('get.client')->with('success', 'Mahsulot muvaffaqiyatli yaratildi!');

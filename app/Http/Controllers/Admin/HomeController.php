@@ -23,7 +23,7 @@ class HomeController extends Controller
             $cities = City::all();
 
             // Random 10 ta eng yaxshi uylar
-            $bestOffers = Product::with(['region', 'city', 'category'])
+            $bestOffers = Product::with(['region', 'city', 'category', 'productImages'])
                 ->inRandomOrder()
                 ->limit(10)
                 ->get();
@@ -147,7 +147,7 @@ public function filterProducts(Request $request)
 
         // 👇 Rasm va feature larni ham birga yuklaymiz
         $filteredProducts = $products
-            ->with(['features'])
+            ->with(['features', 'productImages', 'region', 'city', 'category', 'subcategory', 'metros', 'universities'])
             ->latest()
             ->paginate(10);
 

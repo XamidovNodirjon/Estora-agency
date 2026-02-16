@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
     /* General Styles */
@@ -2489,35 +2490,33 @@
                 <div class="space-y-6">
                     @foreach($filteredProducts as $product)
                         <div class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition ad-card"
-                             data-images='{{ json_encode($product->image_array ?? []) }}'>
-                            <div class="relative md:w-1/3 w-full h-56 md:h-auto open-image-modal" x-data="{ currentIndex: 0 }">
-                                @php
-                                    $images = [];
-                                    if (!empty($product->images)) {
-                                        if (is_array($product->images)) {
-                                            $images = $product->images;
-                                        } elseif (is_string($product->images)) {
-                                            $decoded = json_decode($product->images, true);
-                                            $images = is_array($decoded) ? $decoded : [];
-                                        }
-                                    }
-                                @endphp
-
-                                <span class="top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md">{{ __('Yaxshi Taklif') }}</span>
-                                <div class="overflow-hidden w-full h-full relative">
-                                   @foreach($product->productImages as $index => $image)
-                                        <img src="{{ asset('storage/' . $image->path) }}" 
-                                            x-show="currentIndex === {{ $index }}" ...>
-                                    @endforeach
+                             data-images='{{ json_encode($product->productImages->pluck("path")->toArray()) }}'>
+                            <div class="relative md:w-1/3 w-full h-56 md:h-auto open-image-modal" id="product-{{ $product->id }}-gallery">
+                                <span class="absolute top-2 left-2 bg-yellow-400 text-xs font-semibold px-2 py-1 rounded-md z-10">{{ __('Yaxshi Taklif') }}</span>
+                                <div class="overflow-hidden w-full h-full relative bg-gray-200">
+                                   @if($product->productImages->count() > 0)
+                                        @foreach($product->productImages as $index => $image)
+                                            <img src="{{ asset('storage/' . $image->path) }}" 
+                                                alt="Product Image {{ $index + 1 }}"
+                                                class="product-image-{{ $product->id }} w-full h-full object-cover absolute inset-0 transition-opacity duration-300"
+                                                data-index="{{ $index }}"
+                                                style="{{ $index === 0 ? 'display: block; opacity: 1;' : 'display: none; opacity: 0;' }}">
+                                        @endforeach
+                                   @else
+                                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                            <span>Rasm yo'q</span>
+                                        </div>
+                                   @endif
                                 </div>
-                                @if(count($images) > 1)
-                                    <button class="prev-button-card absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-                                            @click="currentIndex = (currentIndex === 0) ? {{ count($images) - 1 }} : currentIndex - 1">‹</button>
-                                    <button class="next-button-card absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-                                            @click="currentIndex = (currentIndex === {{ count($images) - 1 }}) ? 0 : currentIndex + 1">›</button>
-                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
-                                        @foreach($images as $index => $img)
-                                            <span class="w-2 h-2 rounded-full" :class="currentIndex === {{ $index }} ? 'bg-yellow-500' : 'bg-gray-300'"></span>
+                                @if($product->productImages->count() > 1)
+                                    <button class="prev-btn absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow z-20"
+                                            onclick="changeImage({{ $product->id }}, -1)">‹</button>
+                                    <button class="next-btn absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow z-20"
+                                            onclick="changeImage({{ $product->id }}, 1)">›</button>
+                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2 z-10" id="indicators-{{ $product->id }}">
+                                        @foreach($product->productImages as $index => $img)
+                                            <span class="indicator-{{ $product->id }} w-2 h-2 rounded-full {{ $index === 0 ? 'bg-yellow-500' : 'bg-gray-300' }}" 
+                                                  data-index="{{ $index }}"></span>
                                         @endforeach
                                     </div>
                                 @endif
@@ -2647,6 +2646,38 @@
     </div>
 
     <script>
+        // Image navigation function
+        const productCurrentIndex = {};
+        
+        function changeImage(productId, direction) {
+            const images = document.querySelectorAll(`.product-image-${productId}`);
+            const indicators = document.querySelectorAll(`.indicator-${productId}`);
+            
+            if (images.length === 0) return;
+            
+            // Initialize current index if not exists
+            if (typeof productCurrentIndex[productId] === 'undefined') {
+                productCurrentIndex[productId] = 0;
+            }
+            
+            // Hide current image
+            images[productCurrentIndex[productId]].style.display = 'none';
+            images[productCurrentIndex[productId]].style.opacity = '0';
+            indicators[productCurrentIndex[productId]].classList.remove('bg-yellow-500');
+            indicators[productCurrentIndex[productId]].classList.add('bg-gray-300');
+            
+            // Calculate new index
+            productCurrentIndex[productId] = (productCurrentIndex[productId] + direction + images.length) % images.length;
+            
+            // Show new image
+            images[productCurrentIndex[productId]].style.display = 'block';
+            setTimeout(() => {
+                images[productCurrentIndex[productId]].style.opacity = '1';
+            }, 10);
+            indicators[productCurrentIndex[productId]].classList.remove('bg-gray-300');
+            indicators[productCurrentIndex[productId]].classList.add('bg-yellow-500');
+        }
+
         $(document).ready(() => $('#contactPhone').inputmask({
             mask: "+998 (99) 999-99-99",
             clearIncomplete: true,
@@ -2801,25 +2832,7 @@
                     });
             });
 
-            document.querySelectorAll('.ad-card').forEach(card => {
-                const images = card.querySelectorAll('.ad-image');
-                const [prevBtn, nextBtn] = [card.querySelector('.prev-button-card'), card.querySelector('.next-button-card')];
-                const allImages = JSON.parse(card.dataset.images || '[]') || [];
-                let currentIndex = 0;
-
-                const updateImage = index => {
-                    if (allImages.length) {
-                        currentIndex = (index + allImages.length) % allImages.length;
-                        images.forEach((img, i) => {
-                            img.style.opacity = i === currentIndex ? '1' : '0';
-                            img.onerror = () => img.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
-                        });
-                    }
-                };
-
-                if (allImages.length) updateImage(0);
-                [prevBtn, nextBtn].forEach((btn, i) => btn?.addEventListener('click', () => updateImage(currentIndex + (i ? 1 : -1))));
-            });
+            // Image navigation is handled by Alpine.js in the blade template
 
             const moreFiltersBtn = document.getElementById('moreFiltersBtn');
     
