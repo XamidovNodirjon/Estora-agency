@@ -1,4 +1,5 @@
 @extends('layouts.admin_layout')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 @section('content')
     <div class="container">
@@ -242,8 +243,8 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="images">{{__('Photos')}}<span class="text-danger"></span></label>
-                                <input type="file" name="images[]" id="images" class="form-control-file" multiple
-                                       required>
+                                <input type="file" name="images[]" id="images" class="form-control-file" multiple required>
+                                <div id="image-previews" class="row mt-3"></div>
                                 <small class="form-text text-muted">You can select multiple images.</small>
                                 <div class="invalid-feedback">{{__('Please upload at least one image.')}}</div>
                             </div>
@@ -600,10 +601,47 @@
         }
 
         /* Required field indicator */
-        label:has(+ .form-control[required])::after,
         label:has(+ select[required])::after {
             content: " *";
             color: #dc3545;
+        }
+
+        .preview-container {
+            position: relative;
+            margin-bottom: 15px;
+            cursor: move;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .preview-remove:hover {
+            background: red;
+            color: white;
         }
     </style>
 
@@ -793,6 +831,99 @@
             updateWizard();
             subcategorySelect.disabled = true;
             citySelect.disabled = true;
+
+            // Image Reordering Logic
+            const imageInput = document.getElementById('images');
+            const previewContainer = document.getElementById('image-previews');
+            let currentFiles = [];
+
+            imageInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                if (files.length === 0) return;
+
+                // Reset and add new files
+                currentFiles = files;
+                renderPreviews();
+            });
+
+            function renderPreviews() {
+                previewContainer.innerHTML = '';
+                
+                currentFiles.forEach((file, index) => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-3 col-6 preview-container';
+                    col.dataset.index = index;
+                    
+                    const img = document.createElement('img');
+                    img.className = 'preview-image';
+                    img.file = file;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => img.src = e.target.result;
+                    reader.readAsDataURL(file);
+                    
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'preview-remove';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation(); // Prevent drag start
+                        removeFile(index);
+                    };
+
+                    col.appendChild(img);
+                    col.appendChild(removeBtn);
+                    previewContainer.appendChild(col);
+                });
+            }
+
+            function removeFile(index) {
+                currentFiles.splice(index, 1);
+                updateInputFiles();
+                renderPreviews();
+            }
+
+            function updateInputFiles() {
+                const dt = new DataTransfer();
+                currentFiles.forEach(file => dt.items.add(file));
+                imageInput.files = dt.files;
+            }
+
+            // Initialize Sortable
+            new Sortable(previewContainer, {
+                animation: 150,
+                ghostClass: 'bg-light',
+                onEnd: function(evt) {
+                    const newOrder = [];
+                    const items = previewContainer.querySelectorAll('.preview-container');
+                    
+                    items.forEach(item => {
+                        const oldIndex = parseInt(item.dataset.index);
+                        newOrder.push(currentFiles[oldIndex]);
+                    });
+
+                    // Reorder the currentFiles array to match the DOM
+                    // Tip: We need to reconstruct currentFiles based on the DOM order precisely
+                    // But accessing by dataset.index might be tricky if indices are stale.
+                    // Better approach: Attach file object to the DOM element property?
+                    // Or simplified: Just re-map.
+                    
+                    // Actually, let's fix the reorder logic safely:
+                    const reorderedFiles = [];
+                    Array.from(previewContainer.children).forEach(child => {
+                         const img = child.querySelector('img');
+                         reorderedFiles.push(img.file);
+                    });
+                    
+                    currentFiles = reorderedFiles;
+                    updateInputFiles();
+                    
+                    // Re-render to update indices? Not strictly necessary if we rely on DOM order next time, 
+                    // but good for index consistency if we remove.
+                    // Let's NOT re-render to avoid flicker, just update indices if needed. 
+                    // But removeFile relies on index. So we SHOULD re-render or update dataset.index.
+                    renderPreviews(); 
+                }
+            });
         });
     </script>
 @endsection

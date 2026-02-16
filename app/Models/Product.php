@@ -75,12 +75,20 @@ class Product extends Model
 
     public function getImageArrayAttribute()
     {
-        if (is_array($this->images)) {
-            return $this->images;
+        // 1. Yangi relationship orqali tekshirish
+        // Agar eager load qilingan bo'lsa yoki lazy load ishlatsak:
+        $newImages = $this->productImages->pluck('path')->toArray();
+        if (!empty($newImages)) {
+            return $newImages;
         }
 
-        $decoded = json_decode($this->images, true);
-        return is_array($decoded) ? $decoded : [];
+        // 2. Eski usul (json column) orqali tekshirish
+        if (isset($this->attributes['images'])) {
+            $decoded = json_decode($this->attributes['images'], true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return [];
     }
 
     public function tags()
