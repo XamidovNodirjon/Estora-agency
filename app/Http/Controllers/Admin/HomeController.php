@@ -23,7 +23,7 @@ class HomeController extends Controller
             $cities = City::all();
 
             // Random 10 ta eng yaxshi uylar
-            $bestOffers = Product::with(['region', 'city', 'category'])
+            $bestOffers = Product::with(['region', 'city', 'category', 'productImages'])
                 ->inRandomOrder()
                 ->limit(10)
                 ->get();

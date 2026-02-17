@@ -1,4 +1,5 @@
 @extends('layouts.managers_layout')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 @section('content')
     <div class="container">
@@ -8,7 +9,7 @@
             </div>
 
             <div class="card-body">
-                <form id="product-form" action="{{ route('store-product') }}" method="post"
+                <form id="product-form" action="{{ route('manager-store-products') }}" method="post"
                       enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="wizard-nav">
@@ -74,8 +75,14 @@
                                 </select>
                                 <div class="invalid-feedback">{{__('Please select a repair status')}}</div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="landmark">{{__('Landmark')}}<span class="text-danger"></span></label>
+                                <textarea name="landmark" id="landmark" class="form-control"
+                                          placeholder="{{__('Enter landmark')}}" required></textarea>
+                                <div class="invalid-feedback">{{__('Please enter a landmark')}}</div>
+                            </div>
 
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">           
                                 <label for="description">{{__('Description')}}<span class="text-danger"></span></label>
                                 <textarea name="description" id="description" class="form-control"
                                           placeholder="{{__('Enter product information')}}" rows="3"
@@ -154,6 +161,48 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label class="d-block mb-3">{{__('Mahsulot xususiyatlari')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($product_features as $product_feature)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="features[]" id="feature_{{ $product_feature->id }}" value="{{ $product_feature->id }}">
+                                            <label class="form-check-label" for="feature_{{ $product_feature->id }}">
+                                                {{ $product_feature->feature_name }}
+                                            </label>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="d-block mb-3">{{__('Qaysi metroga bekati yaqin ?')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($metros as $m)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="metro[]" id="feature_{{ $m->id }}" value="{{ $m->id }}">
+                                            <label class="form-check-label" for="feature_{{ $m->id }}">
+                                                {{ $m->metro_name }}
+                                            </label>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="d-block mb-3">{{__('Qaysi Universitetga yaqin ?')}}</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($university as $unver)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="university[]" id="feature_{{ $unver->id }}" value="{{ $unver->id }}">
+                                            <label class="form-check-label" for="feature_{{ $unver->id }}">
+                                                {{ $unver->university_name }}
+                                            </label>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -168,7 +217,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="building_floor">{{__('Building floor')}}<span
-                                        class="text-danger"></span></label>
+                                            class="text-danger"></span></label>
                                 <input type="number" name="building_floor" id="building_floor" class="form-control"
                                        placeholder="1" min="1" required>
                                 <div class="invalid-feedback">Please enter the building floor</div>
@@ -194,8 +243,8 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="images">{{__('Photos')}}<span class="text-danger"></span></label>
-                                <input type="file" name="images[]" id="images" class="form-control-file" multiple
-                                       required>
+                                <input type="file" name="images[]" id="images" class="form-control-file" multiple required>
+                                <div id="image-previews" class="row mt-3"></div>
                                 <small class="form-text text-muted">You can select multiple images.</small>
                                 <div class="invalid-feedback">{{__('Please upload at least one image.')}}</div>
                             </div>
@@ -552,10 +601,47 @@
         }
 
         /* Required field indicator */
-        label:has(+ .form-control[required])::after,
         label:has(+ select[required])::after {
             content: " *";
             color: #dc3545;
+        }
+
+        .preview-container {
+            position: relative;
+            margin-bottom: 15px;
+            cursor: move;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .preview-remove:hover {
+            background: red;
+            color: white;
         }
     </style>
 

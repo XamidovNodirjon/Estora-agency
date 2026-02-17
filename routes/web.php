@@ -79,6 +79,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user-products', [\App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager-products');
 
+    Route::resource('lisds', \App\Http\Controllers\Admin\LisdController::class)->middleware('role:1,2');
+
+    Route::get('manager-dashboard', [ManagerController::class, 'dashboard'])->name('manager.dashboard');
+    Route::get('manager-leads', [ManagerController::class, 'leads'])->name('manager.leads');
+
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 

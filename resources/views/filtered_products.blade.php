@@ -3006,25 +3006,7 @@
                     });
             });
 
-            document.querySelectorAll('.ad-card').forEach(card => {
-                const images = card.querySelectorAll('.ad-image');
-                    const [prevBtn, nextBtn] = [card.querySelector('.prev-button-card'), card.querySelector('.next-button-card')];
-                    const allImages = JSON.parse(card.dataset.images || '[]') || [];
-                    let currentIndex = 0;
 
-                const updateImage = index => {
-                    if (allImages.length) {
-                        currentIndex = (index + allImages.length) % allImages.length;
-                        images.forEach((img, i) => {
-                        img.style.opacity = i === currentIndex ? '1' : '0';
-                            img.onerror = () => img.src = "https://placehold.co/400x300/CCCCCC/333333?text=Rasm+Yo‘q";
-                        });
-                    }
-                };
-
-                    if (allImages.length) updateImage(0);
-                [prevBtn, nextBtn].forEach((btn, i) => btn?.addEventListener('click', () => updateImage(currentIndex + (i ? 1 : -1))));
-            });
 
                     const moreFiltersBtn = document.getElementById('moreFiltersBtn');
 

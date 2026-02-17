@@ -13,6 +13,7 @@ use App\Traits\ProductTrait;
 use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 use function back;
 use function redirect;
 use function view;
@@ -32,6 +33,7 @@ class ManagerController extends Controller
     {
         try {
             $data = $this->productService->getIndexData();
+            $data['user'] = Auth::user();
 
             return view('managers.products.index', $data);
 
@@ -49,6 +51,24 @@ class ManagerController extends Controller
         } catch (Exception $e) {
             return back()->with('error', 'Formani yuklashda xatolik: ' . $e->getMessage());
         }
+    }
+
+    public function dashboard()
+    {
+        $user = Auth::user();
+        $productsCount = Product::where('status', true)->count();
+        $leadsCount = \App\Models\Lisd::where('user_id', $user->id)->count();
+        $ballsCount = $user->balls->amount ?? 0;
+
+        return view('managers.dashboard', compact('user', 'productsCount', 'leadsCount', 'ballsCount'));
+    }
+
+    public function leads()
+    {
+        $user = Auth::user();
+        $leads = \App\Models\Lisd::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('managers.leads.index', compact('leads'));
     }
 
     public function store(Request $request)
@@ -70,7 +90,11 @@ class ManagerController extends Controller
         $managerId = Auth::id();
 
         try {
-            $this->productService->revealPhoneLogic($product, $managerId);
+            $success = $this->productService->revealPhoneLogic($product, $managerId);
+
+            if (!$success) {
+                return back()->with('error', "Sizda yetarli ball yo'q!");
+            }
 
             return back()->with('success', 'Telefon raqam ko‘rsatildi.');
         } catch (Exception $e) {

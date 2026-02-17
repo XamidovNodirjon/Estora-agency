@@ -6,13 +6,15 @@ use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-class ProductRepository implements ProductRepositoryInterface {
+class ProductRepository implements ProductRepositoryInterface
+{
 
-    public function getAllPublishedWithRelations(): Collection
+    public function getAllPublishedWithRelations()
     {
-        return Product:: where('status' ,true)
-        ->with(['user','category','subcategory'])
-        ->get();
+        return Product::where('status', true)
+            ->with(['user', 'category', 'subcategory', 'productImages'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
     }
 
     public function findById(int $id): ?Product

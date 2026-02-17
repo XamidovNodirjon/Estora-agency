@@ -1,584 +1,560 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcha e'lonlar | Menejer Paneli</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+@extends('layouts.managers_layout')
+
+@section('content')
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root {
+            --primary-color: #013220;
+            /* Dark Green */
+            --secondary-color: #B9952F;
+            /* Gold */
+            --dark-blue: #001F3F;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
 
         body {
+            background-color: #f4f7f6;
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            color: #333;
         }
 
         .container-fluid {
-            padding: 20px;
+            padding: 1.5rem;
         }
 
-        /* Yangi ranglar */
-        .bg-dark-green {
-            background-color: #013220;
-        }
-
-        .text-dark-green {
-            color: #013220;
-        }
-
-        .bg-gold {
-            background-color: #B9952F;
-        }
-
-        .text-gold {
-            color: #B9952F;
-        }
-
-        .bg-dark-blue {
-            background-color: #001F3F;
-        }
-
-        .text-dark-blue {
-            color: #001F3F;
-        }
-
-        .bg-custom-red {
-            background-color: #A30808;
-        }
-
-        .text-custom-red {
-            color: #A30808;
-        }
-
-        .product-card {
-            display: flex;
+        /* --- Page Header & Stats --- */
+        .page-header {
+            background: #fff;
             border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            background-color: #fff;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            cursor: pointer;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        .header-title h4 {
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark-blue);
         }
 
-        .card-image-wrapper {
-            width: 300px;
-            flex-shrink: 0;
+        .header-title p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-blue));
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(1, 50, 32, 0.3);
+        }
+
+        .balance-card i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        .balance-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-amount {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        /* --- Search & Filter --- */
+        .search-container {
             position: relative;
-            overflow: hidden;
+            flex-grow: 1;
+            max-width: 400px;
         }
 
-        .card-image {
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background-color: #fff;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(185, 149, 47, 0.1);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+
+        .btn-new-product {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-new-product:hover {
+            background-color: #a38125;
+            transform: translateY(-2px);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(185, 149, 47, 0.3);
+        }
+
+        /* --- Product Card --- */
+        .product-card-horizontal {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .product-card-horizontal:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .card-image-section {
+            width: 300px;
+            min-height: 220px;
+            position: relative;
+            background-color: #eee;
+        }
+
+        .card-img-slider,
+        .card-img-single {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 16px 0 0 16px;
         }
 
-        .card-image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(1, 50, 32, 0.7); /* Dark green with opacity */
-            color: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1rem;
-            opacity: 1;
-            transition: opacity 0.3s ease;
+        .card-img-single {
+            display: block;
         }
 
-        .overlay-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .overlay-profession {
-            font-size: 0.9rem;
-            font-weight: 400;
-        }
-
-        .card-img-nav {
-            background: rgba(185, 149, 47, 0.7); /* Gold with opacity */
-            color: #FFFFFF;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            z-index: 10;
-            border-radius: 50%;
+        .slider-nav-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: var(--dark-blue);
+            z-index: 2;
         }
 
-        .card-img-nav.prev {
+        .card-image-section:hover .slider-nav-btn {
+            opacity: 1;
+        }
+
+        .slider-prev {
             left: 10px;
         }
 
-        .card-img-nav.next {
+        .slider-next {
             right: 10px;
         }
 
-        .card-body {
-            flex-grow: 1;
+        .id-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 31, 63, 0.85);
+            /* Dark blue */
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            z-index: 1;
+        }
+
+        .card-content-section {
+            flex: 1;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
-        .product-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #010101; /* Black */
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 0.5rem;
         }
 
-        .product-price {
+        .product-title {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: #B9952F; /* Gold */
-            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin: 0;
+            line-height: 1.4;
         }
 
-        .product-meta {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 1.5rem;
-            font-size: 0.95rem;
-            color: #4a5568;
-            margin-bottom: 1rem;
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            background: rgba(185, 149, 47, 0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
+            white-space: nowrap;
         }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .meta-item i {
-            margin-right: 8px;
-            color: #001F3F; /* Dark blue */
-        }
-
-        .product-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .info-item {
+        .product-location {
+            color: #6c757d;
             font-size: 0.9rem;
-            color: #718096;
-        }
-
-        .info-item .label {
-            font-weight: 500;
-            color: #4a5568;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-actions {
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            margin-top: auto;
+            gap: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #555;
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .feature-item i {
+            color: var(--primary-color);
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
             padding-top: 1rem;
         }
 
-        .phone-button {
-            padding: 10px 24px;
+        .btn-reveal-phone {
+            background-color: #e9ecef;
+            color: var(--dark-blue);
+            border: none;
+            padding: 0.6rem 1.2rem;
             border-radius: 8px;
             font-weight: 600;
-            background-color: #013220; /* Dark green */
-            color: #FFFFFF;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .phone-button:hover {
-            background-color: #001F3F; /* Dark blue */
-        }
-
-        .phone-number {
-            font-size: 1rem;
-            color: #010101; /* Black */
-            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
-            margin-right: 1rem;
+            gap: 0.5rem;
+            cursor: pointer;
         }
 
-        .phone-number i {
-            margin-right: 8px;
-            color: #013220; /* Dark green */
+        .btn-reveal-phone:hover {
+            background-color: var(--dark-blue);
+            color: #fff;
         }
 
-        .telegram-link {
-            font-size: 1rem;
-            color: #001F3F; /* Dark blue */
+        .phone-display {
             font-weight: 600;
-            display: flex;
-            align-items: center;
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-telegram {
+            color: #0088cc;
             text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .telegram-link:hover {
-            color: #013220; /* Dark green */
-        }
-
-        .telegram-link i {
-            margin-right: 8px;
-        }
-
-        .btn-outline-primary {
-            color: #013220; /* Dark green */
-            border-color: #013220;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #013220;
-            color: #FFFFFF;
-        }
-
-        .card-images-container {
+            font-weight: 600;
             display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
         }
 
-        .card-image {
-            scroll-snap-align: start;
-            flex: 0 0 auto;
+        .btn-telegram:hover {
+            color: #006699;
+            text-decoration: underline;
         }
 
-        .text-primary {
-            color: #013220 !important; /* Dark green */
+        .badge-repair {
+            background-color: rgba(1, 50, 32, 0.1);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
-        .alert-info {
-            background-color: #e6f3ff; /* Light blue */
-            border-color: #001F3F; /* Dark blue */
-            color: #001F3F;
-        }
-
-        .alert-warning {
-            background-color: #fff8e6; /* Light gold */
-            border-color: #B9952F; /* Gold */
-            color: #B9952F;
-        }
-
-        @media (max-width: 768px) {
-            .product-card {
+        /* --- Responsive --- */
+        @media (max-width: 991px) {
+            .product-card-horizontal {
                 flex-direction: column;
             }
 
-            .card-image-wrapper {
+            .card-image-section {
                 width: 100%;
                 height: 250px;
-                border-radius: 16px 16px 0 0;
             }
 
-            .card-image {
-                border-radius: 16px 16px 0 0;
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
             }
+        }
 
-            .product-actions {
+        @media (max-width: 576px) {
+            .page-header {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .phone-number, .telegram-link {
+            .balance-card,
+            .search-container {
+                width: 100%;
+                max-width: none;
+            }
+
+            .card-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn-reveal-phone,
+            .btn-telegram {
+                width: 100%;
                 justify-content: center;
-                margin-bottom: 10px;
             }
         }
     </style>
-</head>
-<body>
-@extends('layouts.managers_layout')
-@section('content')
+
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 text-primary">Barcha e'lonlar</h5>
-                        <a href="{{ route('manager-create-product') }}" class="btn btn-outline-primary">
-                            <i class="fas fa-plus-circle me-1"></i> Yangi e'lon
-                        </a>
+        <!-- Header Section -->
+        <div class="page-header">
+            <div class="header-title">
+                <h4>Barcha E'lonlar</h4>
+                <p>Jami {{ $products->total() }} ta e'lon topildi</p>
+            </div>
+
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <form action="{{ route('manager-products') }}" method="GET">
+                    <input type="text" name="search" class="search-input" placeholder="ID yoki nom bo'yicha qidiring..."
+                        value="{{ request('search') }}">
+                </form>
+            </div>
+
+            <div class="balance-card">
+                <i class="fas fa-coins"></i>
+                <div class="balance-info">
+                    <span class="balance-label">Hisobingiz</span>
+                    <span class="balance-amount">{{ $user->balls->amount ?? '0' }} ball</span>
+                </div>
+            </div>
+
+            <a href="{{ route('manager-create-product') }}" class="btn-new-product">
+                <i class="fas fa-plus"></i> Yangi E'lon
+            </a>
+        </div>
+
+        <!-- Products List -->
+        <div class="products-list">
+            @forelse($products as $product)
+                <div class="product-card-horizontal" onclick="window.location='{{ route('show-product', $product->id) }}'"
+                    style="cursor: pointer;">
+                    <!-- Image Section with Slider -->
+                    <div class="card-image-section" onclick="event.stopPropagation();">
+                        <span class="id-badge">ID: {{ $product->id }}</span>
+
+                        @php
+                            // Get images from relation or fallback to empty array
+                            $images = $product->productImages->pluck('path')->toArray();
+                            $hasMultiple = count($images) > 1;
+                        @endphp
+
+                        @if(count($images) > 0)
+                            <div class="slider-wrapper" style="width: 100%; height: 100%; position: relative;">
+                                <img src="{{ asset('storage/' . $images[0]) }}" class="card-img-single active-slide" data-index="0"
+                                    alt="{{ $product->name }}">
+
+                                {{-- Hidden images for JS logic --}}
+                                @foreach($images as $index => $img)
+                                    @if($index > 0)
+                                        <img src="{{ asset('storage/' . $img) }}" class="card-img-single" style="display: none;"
+                                            data-index="{{ $index }}" alt="{{ $product->name }}">
+                                    @endif
+                                @endforeach
+
+                                @if($hasMultiple)
+                                    <button class="slider-nav-btn slider-prev" onclick="changeSlide(this, -1, event)"><i
+                                            class="fas fa-chevron-left"></i></button>
+                                    <button class="slider-nav-btn slider-next" onclick="changeSlide(this, 1, event)"><i
+                                            class="fas fa-chevron-right"></i></button>
+                                @endif
+                            </div>
+                        @else
+                            <img src="https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yo%27q" class="card-img-single"
+                                alt="No image">
+                        @endif
                     </div>
 
-                    <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <span class="badge bg-light border text-dark p-2">Sizda mavjud ball:
-                                    <strong class="text-gold">{{ $user->balls->amount ?? '0' }}</strong>
-                                </span>
+                    <!-- Content Section -->
+                    <div class="card-content-section">
+                        <div>
+                            <div class="card-header-row">
+                                <h5 class="product-title">{{ $product->name }}</h5>
+                                <div class="product-price">${{ number_format($product->price, 0, '.', ' ') }}</div>
                             </div>
-                            <div class="col-md-6">
-                                <form method="GET" action="{{ route('manager-products') }}" class="d-flex">
-                                    <input type="text"
-                                           name="search"
-                                           class="form-control me-2"
-                                           placeholder="ID yoki nom bo'yicha qidiring..."
-                                           value="{{ request('search') }}">
-                                    <button type="submit" class="btn btn-outline-primary">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    @if(request('search'))
-                                        <a href="{{ route('manager-products') }}"
-                                           class="btn btn-outline-secondary ms-1">
-                                            <i class="fas fa-times"></i>
-                                        </a>
-                                    @endif
-                                </form>
+
+                            <p class="product-location">
+                                <i class="fas fa-map-marker-alt text-danger"></i>
+                                {{ $product->region->name ?? '-' }}, {{ $product->city->name ?? '-' }}
+                            </p>
+
+                            <div class="features-grid">
+                                <div class="feature-item">
+                                    <i class="fas fa-bed"></i> {{ $product->rooms ?? '-' }} xona
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-building"></i> {{ $product->floor }}/{{ $product->building_floor }} qavat
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-ruler-combined"></i> {{ $product->square ?? '-' }} m²
+                                </div>
+                                @if($product->repair)
+                                    <div class="feature-item">
+                                        <i class="fas fa-paint-roller"></i> Ta'mir bor
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
-                        @if($products->isEmpty())
-                            @if(request('search'))
-                                <div class="alert alert-info text-center">
-                                    "<strong>{{ request('search') }}</strong>" bo'yicha hech narsa topilmadi.
-                                    <br>
-                                    <a href="{{ route('manager-products') }}"
-                                       class="btn btn-sm btn-outline-primary mt-2">
-                                        Barcha e'lonlarni ko'rish
+                        <div class="card-actions">
+                            <div>
+                                @if($product->isPhoneVisibleTo(auth()->user()))
+                                    <a href="tel:{{ $product->phone }}" class="phone-display text-decoration-none"
+                                        onclick="event.stopPropagation();">
+                                        <i class="fas fa-phone-alt me-2 text-success"></i> {{ $product->phone }}
                                     </a>
-                                </div>
-                            @else
-                                <div class="alert alert-warning text-center">E'lonlar mavjud emas.</div>
-                            @endif
-                        @else
-                            <div class="row g-4">
-                                @foreach ($products as $product)
-                                    <div class="col-12">
-                                        <div class="product-card"
-                                             onclick="window.location='{{ route('show-product', $product->id) }}'">
-                                            <div class="card-image-wrapper" data-images='@json($product->images)'>
-                                                <div class="card-images-container"
-                                                     style="display: flex; width: 100%; height: 100%;">
-                                                    @php
-                                                        $images = json_decode($product->images, true) ?? [];
-                                                    @endphp
-
-                                                    @if(count($images))
-                                                        @foreach($images as $image)
-                                                            <img src="{{ asset('storage/' . $image) }}"
-                                                                 alt="{{ $product->name }}"
-                                                                 class="card-image"
-                                                                 style="width: 100%; height: 100%; flex-shrink: 0; object-fit: cover;">
-                                                        @endforeach
-                                                    @else
-                                                        <img
-                                                            src="https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yo%27q"
-                                                            alt="No image"
-                                                            class="card-image"
-                                                            style="width: 100%; height: 100%;">
-                                                    @endif
-                                                </div>
-
-                                                <div class="card-image-overlay">
-                                                    <span class="overlay-name">ID: {{ $product->id }}</span>
-                                                    <span class="overlay-profession">
-                                                        @if($product->user) {{ $product->user->name }} @else N/A @endif
-                                                    </span>
-                                                </div>
-
-                                                @if(count($images) > 1)
-                                                    <button class="card-img-nav prev"><i
-                                                            class="fas fa-chevron-left"></i></button>
-                                                    <button class="card-img-nav next"><i
-                                                            class="fas fa-chevron-right"></i></button>
-                                                @endif
-                                            </div>
-                                            <div class="card-body">
-                                                <h5 class="product-title text-truncate">{{ $product->name ?? 'N/A' }}</h5>
-                                                <div class="product-price">
-                                                    ${{ number_format($product->price, 0, '.', ' ') }} USD
-                                                </div>
-                                                <div class="product-meta">
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-map-marker-alt"></i>
-                                                        {{ $product->region->name ?? 'N/A' }}
-                                                        , {{ $product->city->name ?? 'N/A' }}
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-bed"></i>{{ $product->rooms ?? '-' }} xona
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-building"></i>
-                                                        {{ $product->floor ?? '-' }}
-                                                        /{{ $product->building_floor ?? '-' }} qavat
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-ruler-combined"></i>{{ $product->square ?? '-' }}
-                                                        m²
-                                                    </div>
-                                                </div>
-                                                <div class="product-meta">
-                                                    <div class="meta-item">
-                                                        Kategoriya: {{ $product->category->name ?? 'N/A' }}
-                                                        / {{ $product->subcategory->name ?? 'N/A' }}
-                                                    </div>
-                                                    <div class="meta-item">Qo'shimcha ma'lumotlar:
-                                                        @if($product->repair) <span class="badge bg-secondary">Ta'mir bor</span> @endif
-                                                        @if($product->sotix) <span class="badge bg-secondary">{{ $product->sotix }} sotix</span> @endif
-                                                    </div>
-                                                </div>
-
-                                                <div class="product-actions mt-auto">
-                                                    @if($product->isPhoneVisibleTo(auth()->user()))
-                                                        <a href="tel:{{ $product->phone }}"
-                                                           class="phone-number text-decoration-none me-3">
-                                                            <i class="fas fa-phone"></i>{{ $product->phone }}
-                                                        </a>
-                                                    @else
-                                                        <form action="{{ route('manager.reveal-phone', $product->id) }}"
-                                                              method="POST"
-                                                              class="d-inline w-100"
-                                                              onclick="event.stopPropagation();">
-                                                            @csrf
-                                                            <button type="submit"
-                                                                    class="btn btn-sm phone-button w-100">
-                                                                <i class="fas fa-eye me-1"></i>
-                                                                Telefon ko'rish (-1 ball)
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                    <a href="https://t.me/{{ $product->telegram_username ?? '' }}"
-                                                       class="telegram-link" target="_blank">
-                                                        <i class="fab fa-telegram-plane"></i>Telegram
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                @else
+                                    <form action="{{ route('manager.reveal-phone', $product->id) }}" method="POST" class="d-inline"
+                                        onclick="event.stopPropagation();">
+                                        @csrf
+                                        <button type="submit" class="btn-reveal-phone">
+                                            <i class="fas fa-eye"></i> Raqamni ko'rish (-1 ball)
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
 
-                            @if(method_exists($products, 'links'))
-                                <div class="d-flex justify-content-center mt-4">
-                                    {{ $products->links() }}
-                                </div>
+                            @if(!empty($product->telegram_username))
+                                <a href="https://t.me/{{ $product->telegram_username }}" target="_blank" class="btn-telegram"
+                                    onclick="event.stopPropagation();">
+                                    <i class="fab fa-telegram-plane fa-lg"></i> Telegram
+                                </a>
                             @endif
-                        @endif
+                        </div>
                     </div>
                 </div>
+            @empty
+                <div class="text-center py-5">
+                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png"
+                        alt="No products" style="max-width: 200px; opacity: 0.7;">
+                    <h5 class="mt-3 text-muted">Hozircha e'lonlar mavjud emas</h5>
+                    @if(request('search'))
+                        <p class="text-muted">Qidiruv bo'yicha hech narsa topilmadi. <a
+                                href="{{ route('manager-products') }}">Barchasini ko'rish</a></p>
+                    @endif
+                </div>
+            @endforelse
+
+            <div class="mt-4">
+                {{ $products->links() }}
             </div>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        function changeSlide(btn, direction, event) {
+            event.stopPropagation();
+            const wrapper = btn.closest('.slider-wrapper');
+            const slides = wrapper.querySelectorAll('.card-img-single');
+            let activeIndex = -1;
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.product-card').forEach(card => {
-                const imgContainer = card.querySelector('.card-image-wrapper');
-                if (!imgContainer) return;
-
-                const imagesContainer = imgContainer.querySelector('.card-images-container');
-                const images = Array.from(imagesContainer.querySelectorAll('.card-image'));
-                const prevBtn = imgContainer.querySelector('.card-img-nav.prev');
-                const nextBtn = imgContainer.querySelector('.card-img-nav.next');
-
-                let currentImageIndex = 0;
-
-                function showImage(index) {
-                    images.forEach((img, i) => {
-                        img.style.display = i === index ? 'block' : 'none';
-                    });
+            slides.forEach((slide, index) => {
+                if (slide.style.display !== 'none' && !slide.classList.contains('active-slide')) {
+                    // This creates a failsafe if class logic fails, but relying on display
                 }
-
-                // Boshlang'ich holatda faqat birinchi rasmni ko'rsatamiz
-                showImage(currentImageIndex);
-
-                if (prevBtn && nextBtn && images.length > 1) {
-                    prevBtn.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-                        showImage(currentImageIndex);
-                    });
-
-                    nextBtn.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        currentImageIndex = (currentImageIndex + 1) % images.length;
-                        showImage(currentImageIndex);
-                    });
+                if (slide.style.display !== 'none') {
+                    activeIndex = index;
                 }
             });
-        });
 
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Rasm slaydshou funksiyasi
-            document.querySelectorAll('.product-card').forEach(card => {
-                const imgContainer = card.querySelector('.card-image-wrapper');
-                if (!imgContainer) return;
-
-                const prevBtn = card.querySelector('.card-img-nav.prev');
-                const nextBtn = card.querySelector('.card-img-nav.next');
-                const img = imgContainer.querySelector('.card-image');
-
-                try {
-                    const images = JSON.parse(imgContainer.dataset.images) || [];
-                    let currentImageIndex = 0;
-
-                    function updateImage() {
-                        if (images.length > 0 && images[currentImageIndex]) {
-                            const imagePath = images[currentImageIndex];
-                            if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('data:image/')) {
-                                img.src = imagePath;
-                            } else {
-                                img.src = "{{ asset('storage/') }}/" + imagePath;
-                            }
-                        } else {
-                            img.src = "https://placehold.co/600x400/CCCCCC/333333?text=Rasm+Yo%27q";
-                        }
-                    }
-
-                    // Faqat bir nechta rasmlar bo'lsa navigatsiya tugmalarini ko'rsatish
-                    if (images.length > 1) {
-                        if (prevBtn) prevBtn.style.display = 'flex';
-                        if (nextBtn) nextBtn.style.display = 'flex';
-                    }
-
-                    if (prevBtn && nextBtn) {
-                        prevBtn.addEventListener('click', function (e) {
-                            e.stopPropagation();
-                            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-                            updateImage();
-                        });
-
-                        nextBtn.addEventListener('click', function (e) {
-                            e.stopPropagation();
-                            currentImageIndex = (currentImageIndex + 1) % images.length;
-                            updateImage();
-                        });
-                    }
-                } catch (e) {
-                    console.error("Rasmlarni yuklashda xatolik:", e);
+            // Find currently visible slide
+            for (let i = 0; i < slides.length; i++) {
+                if (slides[i].style.display !== 'none') {
+                    activeIndex = i;
+                    break;
                 }
-            });
-        });
+            }
+
+            let newIndex = activeIndex + direction;
+            if (newIndex >= slides.length) newIndex = 0;
+            if (newIndex < 0) newIndex = slides.length - 1;
+
+            slides.forEach(slide => slide.style.display = 'none');
+            slides[newIndex].style.display = 'block';
+        }
     </script>
 @endsection
-</body>
-</html>

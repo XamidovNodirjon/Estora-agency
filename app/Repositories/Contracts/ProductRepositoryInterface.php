@@ -10,9 +10,9 @@ interface ProductRepositoryInterface
     /**
      * Barcha mahsulotlarni user, category va subcategory bilan birga olish
      *
-     * @return Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAllPublishedWithRelations(): Collection;
+    public function getAllPublishedWithRelations();
 
     /**
      * ID bo'yicha mahsulotni olish

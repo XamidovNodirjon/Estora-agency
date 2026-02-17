@@ -39,24 +39,24 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            if ($user->position_id !== null) {
-                return redirect()->intended('/users');
-            } else {
-                return redirect()->intended(route('get.client'));
+            if ($user->username == 'manager') {
+                return redirect()->intended('/manager');
+            } elseif ($user->username == 'admin') {
+                return redirect()->intended('/admin');
+            } elseif ($user->username == 'super_admin') {
+                return redirect()->intended('/admin-dashboard');
             }
         }
 
-        // 2) Agar user topilmasa -> clients.email dan qidiramiz
         $client = Client::where('email', $request->username)->first();
 
         if ($client && Hash::check($request->password, $client->password)) {
-            Auth::guard('client')->login($client); // client guard ishlatamiz
+            Auth::guard('client')->login($client);
             $request->session()->regenerate();
 
             return redirect()->intended(route('get.client'));
         }
 
-        // 3) Agar ikkala joyda ham topilmasa
         return back()->withErrors([
             'username' => 'Login yoki parol noto‘g‘ri',
         ])->withInput($request->only('username'));
