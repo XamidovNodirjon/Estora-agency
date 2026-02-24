@@ -5,16 +5,8 @@ namespace App\Repositories\Contracts;
 use App\Models\Metro;
 use Illuminate\Database\Eloquent\Collection;
 
-interface MetroRepositoryInterface
+interface MetroRepositoryInterface extends BaseRepositoryInterface
 {
-    public function getAll(): Collection;
-
-    public function create(array $data): Metro;
-
-    public function findById(int $id): ?Metro;
-
-    public function update(Metro $metro, array $data): Metro;
-
-    public function delete(Metro $metro): bool;
-
+    // Specific methods for Metro can go here if needed
+    // Otherwise, common CRUD is already in BaseRepositoryInterface
 }

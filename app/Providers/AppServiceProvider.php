@@ -18,6 +18,12 @@ class AppServiceProvider extends ServiceProvider
             ProductRepositoryInterface::class,
             \App\Repositories\ProductRepository::class,
         );
+
+        $this->app->bind(
+            \App\Repositories\Contracts\MetroRepositoryInterface::class,
+            \App\Repositories\MetroRepository::class,
+        );
+
     }
 
     /**

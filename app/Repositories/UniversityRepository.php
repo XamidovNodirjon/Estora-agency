@@ -3,34 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\University;
+use App\Repositories\Contracts\BaseRepositoryInterface;
 use App\Repositories\Contracts\UniversityRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-class UniversityRepository implements UniversityRepositoryInterface
+class UniversityRepository extends BaseRepository implements BaseRepositoryInterface
 {
-    public function getAll(): Collection
+    public function __construct(University $model)
     {
-        return University::all();
-    }
-
-    public function create(array $data): University
-    {
-        return University::create($data);
-    }
-
-    public function findById(int $id): ?University
-    {
-        return University::findOrFail($id);
-    }
-
-    public function update(University $university, array $data): University
-    {
-        $university->update($data);
-        return $university;
-    }
-
-    public function delete(University $university): bool
-    {
-        return $university->delete();
+        parent::__construct($model);
     }
 }

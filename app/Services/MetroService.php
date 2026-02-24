@@ -20,16 +20,18 @@ class MetroService
         return $this->metroRepository->create($data);
     }
 
-    public function  updateMetro(Metro $metro, array $data): Metro
+
+    public function updateMetro(Metro $metro, array $data): Metro
     {
+        $id = $metro->id;
         $metro = $this->metroRepository->findById($id);
 
         if (!$metro) {
-        throw new ModelNotFoundException("Metro stansiyasi topilmadi, ID: $id");
+            throw new ModelNotFoundException("Metro stansiyasi topilmadi, ID: $id");
         }
         return $this->metroRepository->update($metro, $data);
-
     }
+
 
     public function destroyMetro(int $id): bool
     {
