@@ -48,7 +48,7 @@ class AuthController extends Controller
             }
         }
 
-        $client = Client::where('email', $request->username)->first();
+        $client = User::where('email', $request->username)->first();
 
         if ($client && Hash::check($request->password, $client->password)) {
             Auth::guard('client')->login($client);
@@ -61,9 +61,6 @@ class AuthController extends Controller
             'username' => 'Login yoki parol noto‘g‘ri',
         ])->withInput($request->only('username'));
     }
-
-
-
 
     public function logout(Request $request)
     {
@@ -81,25 +78,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'sure_name' => 'required|string|max:255',
-            'phone' => 'required|unique:clients,phone',
-            'email' => 'required|email|unique:clients,email',
+            'phone' => 'required|unique:users,phone',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:10',
         ]);
 
-        $client = Client::create([
+        $user = User::create([
             'name' => $validated['name'],
-            'sure_name' => $validated['sure_name'],
-            'phone' => $validated['phone'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'],
             'password' => Hash::make($validated['password']),
         ]);
 
 
-         Auth::guard('client')->login($client);
+         Auth::guard('client')->login($user);
 
         return redirect()->route('get.client');
     }

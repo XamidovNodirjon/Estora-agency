@@ -14,11 +14,15 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('username')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('password');
             $table->unsignedBigInteger('position_id')->nullable();
             $table->string('phone');
             $table->string('passport');
             $table->string('jshshir');
+            $table->integer('balls')->default(0);
+            $table->string('type')->default('client');
+            $table->integer('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
