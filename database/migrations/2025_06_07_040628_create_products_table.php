@@ -29,7 +29,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('rooms')->nullable();
             $table->string('repair')->nullable();
             $table->unsignedBigInteger('sotix')->nullable();
-            $table->boolean('status')->default(true);
+            $table->string('status')->default('active');
             $table->string('landmark')->nullable();
             $table->boolean('exchange')->default(false);
             $table->boolean('pay_in_installments')->default(false);

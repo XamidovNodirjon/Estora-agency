@@ -177,4 +177,14 @@ class ProductService
 
         return true;
     }
+
+    public function updateProductStatus(int $productId, string $status): bool
+    {
+        $product = $this->productRepository->findById($productId);
+        
+        if($product->category->name == 'sale' && $status === 'some_special_case'){
+            $status = Constants::STATUS_PENDING;
+        }
+        return $this->productRepository->updateStatus($product, $status);
+    }
 }

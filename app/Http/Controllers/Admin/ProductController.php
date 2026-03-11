@@ -31,8 +31,17 @@ class ProductController extends Controller
 
     public function index()
     {
-        $data = $this->productService->getIndexData();
-        return view('Admin.products.index', $data);
+        $products = Product::with(['user', 'category', 'subcategory', 'productImages'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $activeProducts = $products->where('status', \App\Constants::STATUS_ACTIVE);
+        $pendingProducts = $products->where('status', \App\Constants::STATUS_PENDING);
+        $inactiveProducts = $products->where('status', \App\Constants::STATUS_INACTIVE);
+
+        $managers = \App\Models\User::where('position_id', 3)->get();
+
+        return view('Admin.products.index', compact('activeProducts', 'pendingProducts', 'inactiveProducts', 'managers'));
     }
 
     public function create()
@@ -55,13 +64,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['user_id'] = auth()->id();
+        $data['status'] = \App\Constants::STATUS_ACTIVE;
+        $data['images'] = $request->file('images');
+
         try {
             $product = $this->productService->storeProduct($data);
             return redirect()->route('products')->with('success', 'Mahsulot muvaffaqiyatli yaratildi!');
-        }catch (\Exception $exception){
-            return Redirect::back()->with('error', $exception->getMessage());
+        } catch (\Exception $exception) {
+            return Redirect::back()->withInput()->with('error', $exception->getMessage());
         }
-
     }
 
     public function edit(Request $request, $id)
@@ -109,6 +121,22 @@ class ProductController extends Controller
             return redirect()->route('products')->with('success', 'Product update successfully!');
         }catch (\Exception $exception){
             return Redirect::back()->with('error', $exception->getMessage());
+        }
+    }
+
+    public function assignManager(Request $request)
+    {
+        $request->validate([
+            'manager_id' => 'required|exists:users,id',
+            'product_ids' => 'required|array',
+            'product_ids.*' => 'exists:products,id'
+        ]);
+
+        try {
+            Product::whereIn('id', $request->product_ids)->update(['manager_id' => $request->manager_id]);
+            return redirect()->route('products')->with('success', 'Tanlangan mahsulotlar muvaffaqiyatli biriktirildi!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xatolik yuz berdi: ' . $e->getMessage());
         }
     }
 

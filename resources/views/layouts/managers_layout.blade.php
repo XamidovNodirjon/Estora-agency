@@ -15,6 +15,7 @@
 
     <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
+    @stack('css')
 </head>
 
 <body class="loading" data-layout-color="light" data-layout-mode="default" data-layout-size="fluid"
@@ -66,6 +67,12 @@
                             <a href="{{ route('manager-products') }}">
                                 <i class="mdi mdi-home-city-outline"></i>
                                 <span> Products </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('manager.tasks') }}">
+                                <i class="mdi mdi-clipboard-list-outline"></i>
+                                <span> Mening vazifalarim </span>
                             </a>
                         </li>
                         <li>
@@ -234,6 +241,7 @@
 
     <script src="{{asset('assets/js/app.min.js')}}"></script>
 
+    @stack('js')
 </body>
 
 </html>

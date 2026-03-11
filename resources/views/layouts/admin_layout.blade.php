@@ -86,6 +86,7 @@
             border: 1px solid #ddd;
         }
     </style>
+    @stack('css')
 </head>
 @stack('scripts')
 

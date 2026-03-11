@@ -17,7 +17,7 @@ class ManagerRepository implements ManagerRepositoryInterface
 
     public function getFilteredProductsForManager(Request $request): BaseCollection
     {
-        $query = Product::where('status', true)
+        $query = Product::where('status', \App\Constants::STATUS_ACTIVE)
             ->with(['user', 'category', 'subcategory', 'region', 'city']);
 
         if ($request->filled('search')) {

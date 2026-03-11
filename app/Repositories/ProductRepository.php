@@ -11,7 +11,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getAllPublishedWithRelations()
     {
-        return Product::where('status', true)
+        return Product::where('status', \App\Constants::STATUS_ACTIVE)
             ->with(['user', 'category', 'subcategory', 'productImages'])
             ->orderBy('created_at', 'desc')
             ->paginate(12);
@@ -29,6 +29,10 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function update(Product $product, array $data): Product
     {
+        // Statusni fillable bo'lsa avtomat yangilaydi. 
+        // Agar status faqat repository orqali o'zgarsin desak, quyidagicha qilsa ham bo'ladi:
+        // if (isset($data['status'])) { $product->status = $data['status']; }
+        
         $product->update($data);
         return $product;
     }
@@ -36,6 +40,11 @@ class ProductRepository implements ProductRepositoryInterface
     public function delete(Product $product): bool
     {
         return $product->delete();
+    }
+
+    public function updateStatus(Product $product, string $status): bool
+    {
+        return $product->update(['status' => $status]);
     }
 
 }

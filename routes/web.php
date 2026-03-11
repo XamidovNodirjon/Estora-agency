@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::post('products/assign-manager', [ProductController::class, 'assignManager'])->name('products.assign-manager');
     Route::get('show-products/{id}', [ProductController::class, 'show'])->name('show-products');
     Route::get('create', [ProductController::class, 'create'])->name('create-product');
     Route::post('store-product', [ProductController::class, 'store'])->name('store-product');
@@ -83,6 +84,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('manager-dashboard', [ManagerController::class, 'dashboard'])->name('manager.dashboard');
     Route::get('manager-leads', [ManagerController::class, 'leads'])->name('manager.leads');
+    
+    // Manager Tasks
+    Route::get('manager-tasks', [ManagerController::class, 'tasks'])->name('manager.tasks');
+    Route::post('manager-tasks/{id}/status', [ManagerController::class, 'updateTaskStatus'])->name('manager.tasks.status');
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

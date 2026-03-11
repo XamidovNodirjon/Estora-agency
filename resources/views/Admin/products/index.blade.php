@@ -25,60 +25,54 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
-                <table id="productsTable" class="table table-hover align-middle w-100">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>{{ __('name') }}</th>
-                            <th>{{ __('Narxi') }}</th>
-                            <th>{{ __('Telefon') }}</th>
-                            <th>{{ __('square') }}</th>
-                            <th>{{ __('rooms') }}</th>
-                            <th>{{ __('Sotix') }}</th>
-                            <th class="text-center">{{ __('Amal') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($products as $product)
-                            <tr>
-                                <td>{{ $product->id }}</td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ number_format($product->price, 0, '.', ' ') }} $</td>
-                                <td>{{ $product->phone }}</td>
-                                <td>{{ $product->square }} m²</td>
-                                <td>{{ $product->rooms }}</td>
-                                <td>{{ $product->sotix }}</td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('edit-product', $product->id) }}"
-                                           class="btn btn-sm btn-light border text-primary"
-                                           title="{{ __('edit') }}" data-bs-toggle="tooltip">
-                                            <i class="fas fa-pen"></i>
-                                        </a>
-                                        <a href="{{ route('show-products', $product->id) }}"
-                                           class="btn btn-sm btn-light border text-info"
-                                           title="{{ __('view') }}" data-bs-toggle="tooltip">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <form action="{{ route('delete.product', $product->id) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('{{ __('Ishonchingiz komilmi?') }}')"
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light border text-danger"
-                                                    title="{{ __('delete') }}" data-bs-toggle="tooltip">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            @endforelse
-                    </tbody>
-                </table>
+            <!-- Nav Tabs -->
+            <ul class="nav nav-tabs nav-justified mb-4" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold text-success" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="true">
+                        <i class="fas fa-check-circle me-1"></i> {{ __('Active') }} ({{ $activeProducts->count() }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold text-warning" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="false">
+                        <i class="fas fa-clock me-1"></i> {{ __('Pending') }} ({{ $pendingProducts->count() }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold text-danger" id="inactive-tab" data-bs-toggle="tab" data-bs-target="#inactive" type="button" role="tab" aria-controls="inactive" aria-selected="false">
+                        <i class="fas fa-times-circle me-1"></i> {{ __('Inactive') }} ({{ $inactiveProducts->count() }})
+                    </button>
+                </li>
+            </ul>
+
+            <div class="d-flex justify-content-end mb-3">
+                <form action="{{ route('products.assign-manager') }}" method="POST" id="assignManagerForm">
+                    @csrf
+                    <div class="input-group" style="width: 350px;">
+                        <select name="manager_id" class="form-select" required>
+                            <option value="">{{ __('Manager tanlang') }}</option>
+                            @foreach ($managers as $manager)
+                                <option value="{{ $manager->id }}">{{ $manager->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('{{ __('Tanlanganlarni biriktirasizmi?') }}')">{{ __('Biriktirish') }}</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="productTabsContent">
+                <!-- Active Products -->
+                <div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
+                    @include('Admin.products._table', ['products' => $activeProducts, 'tableId' => 'activeTable', 'statusClass' => 'success'])
+                </div>
+                <!-- Pending Products -->
+                <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                    @include('Admin.products._table', ['products' => $pendingProducts, 'tableId' => 'pendingTable', 'statusClass' => 'warning'])
+                </div>
+                <!-- Inactive Products -->
+                <div class="tab-pane fade" id="inactive" role="tabpanel" aria-labelledby="inactive-tab">
+                    @include('Admin.products._table', ['products' => $inactiveProducts, 'tableId' => 'inactiveTable', 'statusClass' => 'danger'])
+                </div>
             </div>
         </div>
     </div>
@@ -88,27 +82,29 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // DataTable-ni ishga tushirish
-            if (!$.fn.DataTable.isDataTable('#productsTable')) {
-                $('#productsTable').DataTable({
-                    "language": {
-                        "search": "Qidirish:",
-                        "lengthMenu": "Ko'rsatish _MENU_ tadan",
-                        "info": "_START_ dan _END_ gacha ko'rsatilyapti. Jami: _TOTAL_",
-                        "infoEmpty": "Ma'lumot topilmadi",
-                        "zeroRecords": "Mos keladigan ma'lumot topilmadi",
-                        "paginate": {
-                            "next": "Keyingi",
-                            "previous": "Oldingi"
-                        }
-                    },
-                    "order": [[0, "desc"]], // ID bo'yicha kamayish
-                    "pageLength": 10,
-                    "stateSave": true // Sahifa yangilansa ham holatni (sahifa raqami, qidiruv) saqlaydi
-                });
-            }
+            const tableIds = ['#activeTable', '#pendingTable', '#inactiveTable'];
+            
+            tableIds.forEach(function(id) {
+                if ($(id).length && !$.fn.DataTable.isDataTable(id)) {
+                    $(id).DataTable({
+                        "language": {
+                            "search": "Qidirish:",
+                            "lengthMenu": "Ko'rsatish _MENU_ tadan",
+                            "info": "_START_ dan _END_ gacha ko'rsatilyapti. Jami: _TOTAL_",
+                            "infoEmpty": "Ma'lumot topilmadi",
+                            "zeroRecords": "Mos keladigan ma'lumot topilmadi",
+                            "paginate": {
+                                "next": "Keyingi",
+                                "previous": "Oldingi"
+                            }
+                        },
+                        "order": [[0, "desc"]],
+                        "pageLength": 10,
+                        "stateSave": true
+                    });
+                }
+            });
 
-            // Bootstrap Tooltip-ni qayta ishga tushirish (DataTable sahifalari almashganda kerak bo'ladi)
             function initTooltips() {
                 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
                 tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -116,6 +112,37 @@
                 });
             }
             initTooltips();
+
+            // Re-init tooltips on tab change
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                initTooltips();
+            });
+
+            // Handle "Select All" functionality
+            $(document).on('change', '#selectAll', function() {
+                var isChecked = $(this).prop('checked');
+                var activeTabTable = $('.tab-pane.active').find('table tbody');
+                activeTabTable.find('.product-checkbox').prop('checked', isChecked);
+            });
+
+            // Prevent form submit if no checkboxes selected and append data
+            $('#assignManagerForm').on('submit', function(e) {
+                var checkedProducts = $('.tab-pane.active').find('.product-checkbox:checked');
+                
+                if (checkedProducts.length === 0) {
+                    e.preventDefault();
+                    alert('{{ __("Kamida bitta mahsulot tanlang!") }}');
+                    return false;
+                }
+                
+                // Clear old inputs if any
+                $(this).find('input[name="product_ids[]"]').remove();
+                
+                // Append selected products as hidden inputs
+                checkedProducts.each(function() {
+                    $('#assignManagerForm').append('<input type="hidden" name="product_ids[]" value="' + $(this).val() + '">');
+                });
+            });
         });
     </script>
 @endpush

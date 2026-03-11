@@ -14,6 +14,7 @@ class Product extends Model
         'category_id',
         'subcategory_id',
         'user_id',
+        'manager_id',
         'region_id',
         'city_id',
         'price',
@@ -27,11 +28,14 @@ class Product extends Model
         'sotix',
         'status',
         'landmark',
+        'exchange',
+        'pay_in_installments',
+        'credit',
     ];
 
 
     protected $casts = [
-        'status' => 'boolean',
+        'status' => 'string',
     ];
 
     public function isPhoneVisibleTo($user)
@@ -45,6 +49,11 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
     }
 
     public function category()

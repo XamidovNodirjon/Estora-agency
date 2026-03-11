@@ -34,5 +34,9 @@ class Constants
     public const PROPERTY_TYPE_HOUSE = 'Uy';
     public const PROPERTY_TYPE_LAND = 'Yer';
     public const PROPERTY_TYPE_COMMERCIAL = 'Tijorat';
-}
 
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const STATUS_PENDING = 'pending';
+    const STATUS_SOLD = 'sold';
+}

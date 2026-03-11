@@ -83,6 +83,7 @@
             border: 1px solid #ddd;
         }
     </style>
+    @stack('css')
 </head>
 @stack('scripts')
 <body class="loading" data-layout-color="light" data-layout-mode="default" data-layout-size="fluid"
@@ -284,5 +285,6 @@
         crossorigin="anonymous">
 </script>
 
+    @stack('js')
 </body>
 </html>

@@ -56,7 +56,7 @@ class ManagerController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $productsCount = Product::where('status', true)->count();
+        $productsCount = Product::where('status', \App\Constants::STATUS_ACTIVE)->count();
         $leadsCount = \App\Models\Lisd::where('user_id', $user->id)->count();
         $ballsCount = $user->balls->amount ?? 0;
 
@@ -74,57 +74,66 @@ class ManagerController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['user_id'] = auth()->id();
+        $data['status'] = \App\Constants::STATUS_PENDING;
         $data['images'] = $request->file('images'); // Filelarni to'g'ridan-to'g'ri Service'ga uzatamiz
 
         try {
             $this->productService->storeProduct($data);
 
-            return redirect()->route('manager')->with('success', 'Product created!');
+            return redirect()->route('manager-products')->with('success', 'Product created!');
         } catch (Exception $e) {
             return back()->withInput()->with('error', 'Mahsulot yaratishda xatolik: ' . $e->getMessage());
         }
     }
 
-    public function revealPhone(Product $product)
+    public function tasks()
     {
-        $managerId = Auth::id();
+        $user = Auth::user();
+        $products = Product::with(['region', 'city', 'productImages'])
+            ->where('manager_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
-        try {
-            $success = $this->productService->revealPhoneLogic($product, $managerId);
-
-            if (!$success) {
-                return back()->with('error', "Sizda yetarli ball yo'q!");
-            }
-
-            return back()->with('success', 'Telefon raqam ko‘rsatildi.');
-        } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        return view('managers.products.tasks', compact('products'));
     }
 
-    public function seenProducts()
+    public function updateTaskStatus(Request $request, $id)
     {
-        $manager = Auth::user();
+        $request->validate([
+            'status' => 'required|string|in:' . \App\Constants::STATUS_ACTIVE . ',' . \App\Constants::STATUS_PENDING . ',' . \App\Constants::STATUS_INACTIVE,
+        ]);
 
-        $products = Product::whereIn('id', function ($q) use ($manager) {
-            $q->select('product_id')
-                ->from('product_views')
-                ->where('manager_id', $manager->id);
-        })->get();
+        try {
+            $product = Product::findOrFail($id);
+            
+            // Allow update only if the user is the assigned manager
+            if ($product->manager_id !== Auth::id()) {
+                return back()->with('error', 'Sizda bu ruxsat yo\'q!');
+            }
 
-        return view('managers.products.seen', compact('products'));
+            $product->status = $request->status;
+            
+            // If the status is changed, we can also remove the manager assignment so it unassigns from them (optional). 
+            // In the requirement: "When a manager changes a product's status, it should be removed from their view".
+            // To remove from view and reappear in admin panel as unassigned, we set manager_id to null.
+            $product->manager_id = null;
+            
+            $product->save();
+
+            return back()->with('success', 'Mahsulot holati yangilandi va ro\'yxatdan olib tashlandi!');
+        } catch (Exception $e) {
+            return back()->with('error', 'Xatolik: ' . $e->getMessage());
+        }
     }
 
     public function show($id)
     {
-        $product = $this->getProductById($id);
-        $category = Category::with('subcategories')->get();
-        $address = Region::with('cities')->get();
-        return view('managers.products.show', [
-            'product' => $product,
-            'category' => $category,
-            'address' => $address,
-        ]);
+        try {
+            $product = $this->productService->getProductById($id);
+            return view('managers.products.show', compact('product'));
+        } catch (Exception $e) {
+            return back()->with('error', 'Mahsulot topilmadi: ' . $e->getMessage());
+        }
     }
-
 }

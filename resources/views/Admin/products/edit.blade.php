@@ -20,6 +20,15 @@
                             </select>
                         </div>
                         <div class="col-md-6">
+                            <label for="status" class="form-label fw-medium">{{ __('Status') }}</label>
+                            <select id="status" name="status" class="form-select rounded-pill" required>
+                                <option value="{{ \App\Constants::STATUS_ACTIVE }}" {{ old('status', $product->status) == \App\Constants::STATUS_ACTIVE ? 'selected' : '' }}>{{ __('Active') }}</option>
+                                <option value="{{ \App\Constants::STATUS_PENDING }}" {{ old('status', $product->status) == \App\Constants::STATUS_PENDING ? 'selected' : '' }}>{{ __('Pending') }}</option>
+                                <option value="{{ \App\Constants::STATUS_INACTIVE }}" {{ old('status', $product->status) == \App\Constants::STATUS_INACTIVE ? 'selected' : '' }}>{{ __('Inactive') }}</option>
+                                <option value="{{ \App\Constants::STATUS_SOLD }}" {{ old('status', $product->status) == \App\Constants::STATUS_SOLD ? 'selected' : '' }}>{{ __('Sold') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <label for="category" class="form-label fw-semibold">Kategoriya</label>
                             <select id="category" name="category_id" class="form-select" required>
                                 <option value="">Kategoriya tanlang</option>
