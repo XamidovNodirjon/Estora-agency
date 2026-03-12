@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Product;
-use http\Env\Request;
+use Illuminate\Http\Request;
 
 trait ProductTrait
 {

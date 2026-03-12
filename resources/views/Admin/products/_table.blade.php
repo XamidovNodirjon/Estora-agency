@@ -1,55 +1,83 @@
 <div class="table-responsive">
-    <table id="{{ $tableId }}" class="table table-hover align-middle w-100">
-        <thead class="table-light">
+    <table id="{{ $tableId }}" class="table table-custom align-middle w-100">
+        <thead>
             <tr>
-                <th><input type="checkbox" id="selectAll"></th>
-                <th>#</th>
-                <th>{{ __('name') }}</th>
-                <th>{{ __('Narxi') }}</th>
-                <th>{{ __('Telefon') }}</th>
-                <th>{{ __('square') }}</th>
-                <th>{{ __('rooms') }}</th>
-                <th>{{ __('Sotix') }}</th>
+                <th style="width: 40px;"><input type="checkbox" id="selectAll" class="form-check-input"></th>
+                <th style="width: 60px;">#</th>
+                <th style="width: 80px;">{{ __('Photo') }}</th>
+                <th>{{ __('Property Info') }}</th>
+                <th>{{ __('Price') }}</th>
+                <th>{{ __('Contact') }}</th>
                 <th>{{ __('Manager') }}</th>
-                <th class="text-center">{{ __('Amal') }}</th>
+                <th class="text-end" style="width: 140px;">{{ __('Actions') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($products as $product)
                 <tr>
-                    <td><input type="checkbox" name="product_ids[]" value="{{ $product->id }}" class="product-checkbox"></td>
-                    <td>{{ $product->id }}</td>
+                    <td><input type="checkbox" name="product_ids[]" value="{{ $product->id }}" class="product-checkbox form-check-input"></td>
+                    <td class="text-muted small">#{{ $product->id }}</td>
                     <td>
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-{{ $statusClass }} p-1 me-2" style="width: 10px; height: 10px; border-radius: 50%;"> </span>
-                            {{ $product->name }}
+                        @php $images = $product->image_array; @endphp
+                        @if(!empty($images))
+                            <img src="{{ asset('storage/' . $images[0]) }}" class="product-thumb" alt="thumb">
+                        @else
+                            <div class="product-thumb bg-light d-flex align-items-center justify-content-center text-muted">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="fw-bold text-main">{{ $product->name }}</div>
+                        <div class="text-muted small">
+                            {{ $product->rooms }} {{ __('rooms') }} • {{ $product->square }} m² • {{ $product->sotix }} {{ __('sotix') }}
+                        </div>
+                        <div class="mt-1">
+                            <span class="badge bg-light text-{{ $statusClass }} border border-{{ $statusClass }} px-2" style="font-size: 0.65rem; border-radius: 4px;">
+                                <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i> {{ ucfirst($product->status) }}
+                            </span>
                         </div>
                     </td>
-                    <td>{{ number_format($product->price, 0, '.', ' ') }} $</td>
-                    <td>{{ $product->phone }}</td>
-                    <td>{{ $product->square }} m²</td>
-                    <td>{{ $product->rooms }}</td>
-                    <td>{{ $product->sotix }}</td>
-                    <td>{{ $product->manager ? $product->manager->name : '-' }}</td>
-                    <td class="text-center">
-                        <div class="btn-group" role="group">
-                            <a href="{{ route('edit-product', $product->id) }}"
-                               class="btn btn-sm btn-light border text-primary"
-                               title="{{ __('edit') }}" data-bs-toggle="tooltip">
-                                <i class="fas fa-pen"></i>
-                            </a>
+                    <td>
+                        <div class="price-tag text-primary">{{ number_format($product->price, 0, '.', ' ') }} $</div>
+                    </td>
+                    <td>
+                        <div class="text-main fw-medium">{{ $product->phone }}</div>
+                        <div class="text-muted small">{{ $product->user ? $product->user->name : '-' }}</div>
+                    </td>
+                    <td>
+                        @if($product->manager)
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-xs me-2">
+                                    <span class="avatar-title rounded-circle bg-soft-info text-info small" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">
+                                        {{ substr($product->manager->name, 0, 1) }}
+                                    </span>
+                                </div>
+                                <span class="small">{{ $product->manager->name }}</span>
+                            </div>
+                        @else
+                            <span class="text-muted small">-</span>
+                        @endif
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('show-products', $product->id) }}"
-                               class="btn btn-sm btn-light border text-info"
+                               class="btn-action btn-action-view"
                                title="{{ __('view') }}" data-bs-toggle="tooltip">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            <a href="{{ route('edit-product', $product->id) }}"
+                               class="btn-action btn-action-edit"
+                               title="{{ __('edit') }}" data-bs-toggle="tooltip">
+                                <i class="fas fa-pen"></i>
+                            </a>
                             <form action="{{ route('delete.product', $product->id) }}"
                                   method="POST"
-                                  onsubmit="return confirm('{{ __('Ishonchingiz komilmi?') }}')"
+                                  onsubmit="return confirm('{{ __('Are you sure?') }}')"
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-light border text-danger"
+                                <button type="submit" class="btn-action btn-action-delete"
                                         title="{{ __('delete') }}" data-bs-toggle="tooltip">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>

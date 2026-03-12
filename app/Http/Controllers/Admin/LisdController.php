@@ -75,4 +75,20 @@ class LisdController extends Controller
         return redirect()->route('lisds.index')
             ->with('success', 'Lead deleted successfully.');
     }
+
+    public function bulkAssign(Request $request)
+    {
+        $request->validate([
+            'manager_id' => 'required|exists:users,id',
+            'lead_ids' => 'required|array',
+            'lead_ids.*' => 'exists:lisds,id'
+        ]);
+
+        try {
+            Lisd::whereIn('id', $request->lead_ids)->update(['user_id' => $request->manager_id]);
+            return redirect()->route('lisds.index')->with('success', 'Selected leads have been assigned successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
 }

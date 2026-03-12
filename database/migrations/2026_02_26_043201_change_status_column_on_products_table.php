@@ -5,13 +5,20 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
+        // On a fresh migrate or if already changed, skip raw SQL that might fail on PGSQL type casting
+        if (Schema::hasColumn('products', 'status')) {
+            $type = Schema::getColumnType('products', 'status');
+            if ($type === 'string' || $type === 'varchar') {
+                return;
+            }
+        }
+
         DB::statement("ALTER TABLE products ALTER COLUMN status DROP DEFAULT");
         DB::statement("ALTER TABLE products ALTER COLUMN status TYPE VARCHAR(255) USING CASE WHEN status=true THEN 'active' ELSE 'inactive' END");
         DB::statement("ALTER TABLE products ALTER COLUMN status SET DEFAULT 'active'");

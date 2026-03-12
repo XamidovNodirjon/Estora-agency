@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Container\Attributes\Tag;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -100,10 +99,12 @@ class Product extends Model
         return [];
     }
 
+    /*
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'product_tag', 'product_id', 'tag_id');
     }
+    */
 
     public function features()
     {

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Metro;
 use App\Models\Product;
 use App\Models\University;
+use App\Constants;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -181,8 +182,8 @@ class ProductService
     public function updateProductStatus(int $productId, string $status): bool
     {
         $product = $this->productRepository->findById($productId);
-        
-        if($product->category->name == 'sale' && $status === 'some_special_case'){
+
+        if ($product->category->name == 'sale' && $status === 'some_special_case') {
             $status = Constants::STATUS_PENDING;
         }
         return $this->productRepository->updateStatus($product, $status);

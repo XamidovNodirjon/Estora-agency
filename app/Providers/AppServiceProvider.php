@@ -14,16 +14,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
+        $this->app->singleton(
             ProductRepositoryInterface::class,
             \App\Repositories\ProductRepository::class,
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \App\Repositories\Contracts\MetroRepositoryInterface::class,
             \App\Repositories\MetroRepository::class,
         );
 
+        $this->app->singleton(
+            \App\Repositories\Contracts\ClientInterface::class,
+            \App\Repositories\ClientRepository::class,
+        );
     }
 
     /**

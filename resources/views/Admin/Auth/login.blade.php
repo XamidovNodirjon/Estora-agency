@@ -203,44 +203,82 @@
                         </svg>
                     </div>
                 </div>
-                <h4 class="text-gray-800 font-bold text-2xl lg:text-3xl mb-2">Sign In</h4>
-                <p class="text-gray-600 text-sm lg:text-base">Enter your credentials to access your account</p>
+                <h4 class="text-gray-800 font-bold text-2xl lg:text-3xl mb-2">Tizimga kirish</h4>
+                <p class="text-gray-600 text-sm lg:text-base">Akkauntingizga kirish uchun ma'lumotlarni kiriting</p>
+            </div>
+            
+            <!-- Type Toggle -->
+            <div class="flex justify-center mb-6">
+                <div class="bg-gray-100 p-1 rounded-full flex w-full max-w-[320px] relative shadow-inner">
+                    <button type="button" id="btn-user" class="flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#003366] to-[#004080] text-white shadow-md">Foydalanuvchi</button>
+                    <button type="button" id="btn-employee" class="flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-all duration-300 text-gray-500 hover:text-gray-700">Xodim</button>
+                </div>
             </div>
 
             <form action="{{route('login.store')}}" method="post" class="space-y-6">
                 @csrf
-                <div class="space-y-2">
-                    <label for="username" class="block text-gray-700 text-sm font-semibold">Username</label>
+                <input type="hidden" name="is_employee" id="is_employee" value="0">
+
+                <div class="space-y-2" id="user-email-group">
+                    <label for="email" class="block text-gray-700 text-sm font-semibold">Email</label>
                     <div class="relative">
-                        <input class="w-full px-4 py-3 lg:py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus text-base"
+                        <input class="w-full px-4 py-3 lg:py-4 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus text-base"
+                               name="email"
+                               type="email"
+                               id="email"
+                               value="{{ old('email') }}"
+                               placeholder="Elektron pochtangizni kiriting"
+                               autocomplete="email">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    @error('email')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="space-y-2 hidden" id="employee-username-group">
+                    <label for="username" class="block text-gray-700 text-sm font-semibold">Foydalanuvchi nomi</label>
+                    <div class="relative">
+                        <input class="w-full px-4 py-3 lg:py-4 border @error('username') border-red-500 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus text-base"
                                name="username"
                                type="text"
                                id="username"
-                               placeholder="Enter your username"
-                               required>
+                               value="{{ old('username') }}"
+                               placeholder="Loginni kiriting"
+                               autocomplete="username">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
                     </div>
+                    @error('username')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="space-y-2">
-                    <label for="password" class="block text-gray-700 text-sm font-semibold">Password</label>
+                    <label for="password" class="block text-gray-700 text-sm font-semibold">Parol</label>
                     <div class="relative">
-                        <input class="w-full px-4 py-3 lg:py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus text-base"
+                        <input class="w-full px-4 py-3 lg:py-4 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus text-base"
                                name="password"
                                type="password"
                                required
                                id="password"
-                               placeholder="Enter your password">
+                               placeholder="Parolni kiriting">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
                     </div>
+                    @error('password')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
@@ -248,18 +286,18 @@
                         <input type="checkbox"
                                class="h-4 w-4 text-[#FFD700] rounded border-gray-300 focus:ring-[#FFD700]"
                                id="remember-me">
-                        <label class="ml-2 text-gray-700 text-sm" for="remember-me">Remember me</label>
+                        <label class="ml-2 text-gray-700 text-sm" for="remember-me">Eslab qolish</label>
                     </div>
                     <a href="{{route('getRegister')}}"
                        class="text-[#FFD700] hover:text-[#003366] hover:underline text-sm font-medium transition-colors duration-200">
-                        Create account
+                        Ro'yxatdan o'tish
                     </a>
                 </div>
 
                 <div class="pt-2">
                     <button class="w-full bg-gradient-to-r from-[#003366] to-[#004080] text-white py-3 lg:py-4 rounded-xl font-semibold text-base lg:text-lg shadow-lg hover:shadow-xl hover:from-[#FFD700] hover:to-[#FFD700] hover:text-[#003366] transition-all duration-300 ease-in-out btn-hover transform hover:scale-[1.02]"
                             type="submit">
-                        Sign In
+                        Tizimga kirish
                     </button>
                 </div>
             </form>
@@ -282,5 +320,57 @@
 <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
 <script src="assets/libs/feather-icons/feather.min.js"></script>
 <script src="assets/js/app.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnUser = document.getElementById('btn-user');
+        const btnEmployee = document.getElementById('btn-employee');
+        const inputIsEmployee = document.getElementById('is_employee');
+        
+        const groupEmail = document.getElementById('user-email-group');
+        const inputEmail = document.getElementById('email');
+        const groupUsername = document.getElementById('employee-username-group');
+        const inputUsername = document.getElementById('username');
+
+        // Restore state if validation fails
+        @if(old('is_employee') == '1' || $errors->has('username'))
+            setEmployeeMode();
+        @endif
+
+        btnUser.addEventListener('click', setUserMode);
+        btnEmployee.addEventListener('click', setEmployeeMode);
+
+        function setUserMode() {
+            inputIsEmployee.value = '0';
+            
+            // Update buttons visually
+            btnUser.classList.add('bg-gradient-to-r', 'from-[#003366]', 'to-[#004080]', 'text-white', 'shadow-md');
+            btnUser.classList.remove('text-gray-500', 'hover:text-gray-700');
+            
+            btnEmployee.classList.remove('bg-gradient-to-r', 'from-[#003366]', 'to-[#004080]', 'text-white', 'shadow-md');
+            btnEmployee.classList.add('text-gray-500', 'hover:text-gray-700');
+
+            // Show email, hide username
+            groupEmail.classList.remove('hidden');
+            groupUsername.classList.add('hidden');
+        }
+
+        function setEmployeeMode() {
+            inputIsEmployee.value = '1';
+            
+            // Update buttons visually
+            btnEmployee.classList.add('bg-gradient-to-r', 'from-[#003366]', 'to-[#004080]', 'text-white', 'shadow-md');
+            btnEmployee.classList.remove('text-gray-500', 'hover:text-gray-700');
+            
+            btnUser.classList.remove('bg-gradient-to-r', 'from-[#003366]', 'to-[#004080]', 'text-white', 'shadow-md');
+            btnUser.classList.add('text-gray-500', 'hover:text-gray-700');
+
+            // Show username, hide email
+            groupUsername.classList.remove('hidden');
+            groupEmail.classList.add('hidden');
+        }
+    });
+</script>
+
 </body>
 </html>

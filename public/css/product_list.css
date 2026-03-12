@@ -1,0 +1,128 @@
+/* Product List Premium Styles */
+:root {
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --surface-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-subtle: #f1f5f9;
+}
+
+.product-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background: var(--surface-card);
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.product-header-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-main);
+}
+
+.nav-pills-custom .nav-link {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-pills-custom .nav-link.active {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.nav-pills-custom .nav-link:hover:not(.active) {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.table-custom {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.table-custom thead th {
+    border: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 12px 20px;
+}
+
+.table-custom tbody tr {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s;
+}
+
+.table-custom tbody tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.table-custom tbody td {
+    padding: 16px 20px;
+    border: none;
+    vertical-align: middle;
+}
+
+.table-custom tbody tr td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.table-custom tbody tr td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.product-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.price-tag {
+    font-weight: 700;
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.2s;
+    background: #f1f5f9;
+    border: none;
+    color: var(--text-muted);
+}
+
+.btn-action:hover {
+    background: #e2e8f0;
+    color: var(--text-main);
+    transform: scale(1.05);
+}
+
+.btn-action-edit:hover { background: #dcfce7; color: #166534; }
+.btn-action-view:hover { background: #dbeafe; color: #1e40af; }
+.btn-action-delete:hover { background: #fee2e2; color: #991b1b; }
+
+.assign-bar {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}

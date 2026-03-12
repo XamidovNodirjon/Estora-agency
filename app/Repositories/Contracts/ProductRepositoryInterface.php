@@ -46,4 +46,13 @@ interface ProductRepositoryInterface
      * @return bool
      */
     public function delete(Product $product): bool;
+
+    /**
+     * Mahsulot statusini yangilash
+     *
+     * @param Product $product
+     * @param string $status
+     * @return bool
+     */
+    public function updateStatus(Product $product, string $status): bool;
 }

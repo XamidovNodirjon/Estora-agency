@@ -64,13 +64,13 @@
                         <!-- <i class="fas fa-chevron-down text-xs"></i> -->
                     </div>
                     <!-- <div class="currency-menu absolute right-0 mt-2 w-16 bg-white shadow-lg rounded hidden">
-                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'USD']) }}"
-                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">USD</a>
-                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'RUB']) }}"
-                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">RUB</a>
-                        <a href="{{ request()->fullUrlWithQuery(['currency' => 'UZS']) }}"
-                           class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">UZS</a>
-                    </div> -->
+                                <a href="{{ request()->fullUrlWithQuery(['currency' => 'USD']) }}"
+                                   class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">USD</a>
+                                <a href="{{ request()->fullUrlWithQuery(['currency' => 'RUB']) }}"
+                                   class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">RUB</a>
+                                <a href="{{ request()->fullUrlWithQuery(['currency' => 'UZS']) }}"
+                                   class="currency-option block px-2 py-1 text-gray-700 hover:bg-gray-100">UZS</a>
+                            </div> -->
                 </div>
 
             @endguest
@@ -78,22 +78,22 @@
 
             @endauth
 
-        <!-- <a href="{{ route('login.index') }}" class="post-ad-btn flex items-center gap-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+            <!-- <a href="{{ route('login') }}" class="post-ad-btn flex items-center gap-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
                 <i class="fas fa-plus"></i>
                 <span>E'lon joylashtirish</span>
             </a> -->
 
             @guest
-                <a href="{{ route('login.index') }}"
-                   class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
+                <a href="{{ route('login') }}"
+                    class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
                     <i class="fas fa-user-circle text-2xl"></i>
                     <span>Login</span>
                 </a>
             @endguest
             @auth
                 <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                   class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="user-action flex items-center gap-2 text-gray-600 hover:text-yellow-600">
                     <i class="fas fa-sign-out-alt text-2xl"></i>
                     <span>Logout</span>
                 </a>
@@ -112,15 +112,18 @@
                 </div>
 
                 <div class="language-menu absolute right-0 mt-2 w-28 bg-white shadow-lg rounded hidden">
-                    <a href="{{ route('lang.switch', 'uz') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'uz') }}"
+                        class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-uz"></span>
                         <span>O'zbek</span>
                     </a>
-                    <a href="{{ route('lang.switch', 'ru') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'ru') }}"
+                        class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-ru"></span>
                         <span>Русский</span>
                     </a>
-                    <a href="{{ route('lang.switch', 'en') }}" class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="{{ route('lang.switch', 'en') }}"
+                        class="language-option flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100">
                         <span class="flag-icon flag-icon-gb"></span>
                         <span>English</span>
                     </a>
@@ -147,16 +150,16 @@
         </nav>
         <div class="mobile-actions p-4 border-t">
             @guest
-                <a href="{{ route('login.index') }}"
-                   class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
+                <a href="{{ route('login') }}"
+                    class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
                     <i class="fas fa-user-circle"></i>
                     <span>Login</span>
                 </a>
             @endguest
             @auth
                 <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                   class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-yellow-600">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>

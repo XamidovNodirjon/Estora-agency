@@ -2,11 +2,13 @@
 
 @push('css')
     <link href="{{ asset('css/premium-wizard.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f1f5f9; }
-        .is-invalid { border-color: var(--danger) !important; }
-        .invalid-feedback { color: var(--danger); font-size: 0.8rem; margin-top: 4px; display: block; }
+        body { background-color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .premium-wizard { background: white; border-radius: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); }
+        .wizard-header h2 { font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .is-invalid { border-color: #ef4444 !important; }
+        .invalid-feedback { color: #ef4444; font-size: 0.8rem; margin-top: 4px; display: block; }
     </style>
 @endpush
 

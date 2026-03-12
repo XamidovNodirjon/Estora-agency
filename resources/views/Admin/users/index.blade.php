@@ -33,7 +33,7 @@
                         </thead>
                         <tbody>
                         @forelse ($users as $index => $user)
-                            @if ($user->position->name === 'superAdmin')
+                            @if ($user->type === 'super_admin' || $user->type === 'admin')
                                 @continue
                             @endif
                             <tr>
@@ -203,7 +203,7 @@
                         <select class="form-select" name="user_id" required>
                             <option value="" disabled selected>{{ __('Tanlang') }}</option>
                             @foreach ($users as $u)
-                                @if ($u->position->name !== 'superAdmin')
+                                @if ($u->type !== 'super_admin' || $u->type !== 'admin')
                                     <option value="{{ $u->id }}">{{ $u->name }}</option>
                                 @endif
                             @endforeach

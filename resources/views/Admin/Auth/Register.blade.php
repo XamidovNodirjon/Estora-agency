@@ -202,18 +202,27 @@
                 <p class="text-gray-600 form-text">Enter your credentials to access your account</p>
             </div>
 
+            @if($errors->has('error'))
+                <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm animate__animated animate__shakeX">
+                    <i class="fas fa-exclamation-circle me-2"></i> {{ $errors->first('error') }}
+                </div>
+            @endif
+
             <form action="{{route('register')}}" method="post" class="space-y-3">
                 @csrf
                 <div class="space-y-1">
                     <label for="name" class="block text-gray-700 form-label font-semibold">Name</label>
                     <div class="input-icon-container">
                         <input
-                            class="form-input input-with-icon w-full border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
-                            name="name" type="text" id="name" placeholder="Enter your name" required>
+                            class="form-input input-with-icon w-full border @error('name') border-red-400 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
+                            name="name" type="text" id="name" value="{{ old('name') }}" placeholder="Enter your name" required>
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
                     </div>
+                    @error('name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="space-y-1">
@@ -233,36 +242,45 @@
                     <label for="phone" class="block text-gray-700 form-label font-semibold">Phone number</label>
                     <div class="input-icon-container">
                         <input
-                            class="form-input input-with-icon w-full border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
-                            name="phone" type="tel" id="phone" placeholder="Enter your phone number" required>
+                            class="form-input input-with-icon w-full border @error('phone') border-red-400 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
+                            name="phone" type="tel" id="phone" value="{{ old('phone') }}" placeholder="Enter your phone number" required>
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                         </svg>
                     </div>
+                    @error('phone')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="space-y-1">
                     <label for="email" class="block text-gray-700 form-label font-semibold">Email</label>
                     <div class="input-icon-container">
                         <input
-                            class="form-input input-with-icon w-full border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
-                            name="email" type="email" id="email" placeholder="Enter your email" required>
+                            class="form-input input-with-icon w-full border @error('email') border-red-400 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
+                            name="email" type="email" id="email" value="{{ old('email') }}" placeholder="Enter your email" required>
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
                         </svg>
                     </div>
+                    @error('email')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="space-y-1">
                     <label for="password" class="block text-gray-700 form-label font-semibold">Password</label>
                     <div class="input-icon-container">
                         <input
-                            class="form-input input-with-icon w-full border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
+                            class="form-input input-with-icon w-full border @error('password') border-red-400 @else border-gray-300 @enderror rounded-xl focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-gray-800 placeholder-gray-400 input-focus"
                             name="password" type="password" id="password" placeholder="Enter your password" required>
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                         </svg>
                     </div>
+                    @error('password')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
@@ -270,7 +288,7 @@
                         <input type="checkbox" class="h-4 w-4 text-[#FFD700] rounded border-gray-300 focus:ring-[#FFD700]" id="remember-me">
                         <label class="ml-2 text-gray-700 form-text" for="remember-me">Remember me</label>
                     </div>
-                    <a href="{{route('login.index')}}"
+                    <a href="{{route('login')}}"
                        class="text-[#FFD700] hover:text-[#003366] hover:underline form-text font-medium transition-colors duration-200">
                         I am already a user
                     </a>

@@ -72,7 +72,7 @@ return [
 
         'clients' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Client::class, // sizning Client model classingiz
+            'model' => App\Models\User::class, // sizning User model classingiz
         ],
     ],
 
