@@ -57,6 +57,16 @@ class ClientController extends Controller
         return view('clients.dashboard', ['user' => Auth::user(), 'message' => 'Likes (Saved) feature coming soon!']);
     }
 
+    public function allAds(Request $request)
+    {
+        $products = \App\Models\Product::with(['productImages', 'category', 'city', 'region'])
+            ->where('status', 'published')
+            ->latest()
+            ->paginate(12);
+
+        return view('clients.all_ads', compact('products'));
+    }
+
     public function storeProduct(Request $request)
     {
         $data = $request->all();

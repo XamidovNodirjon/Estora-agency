@@ -18,6 +18,9 @@ class ProductFilterRepository implements ProductFilterRepositoryInterface
     public function getFilteredProducts(Request $request, array $constants): LengthAwarePaginator
     {
         $product = Product::query();
-        $apartmentSellers = trim($constants['APARTMENT_SELLERS']);
+        if (isset($constants['APARTMENT_SELLERS'])) {
+            $apartmentSellers = trim($constants['APARTMENT_SELLERS']);
+        }
+        return $product->paginate(10);
     }
 }
