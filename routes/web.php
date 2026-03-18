@@ -32,8 +32,9 @@ Route::post('login', [AuthController::class, 'login'])->name('login.store');
 Route::get('register', [AuthController::class, 'getRegister'])->name('getRegister');
 Route::post('register/create', [AuthController::class, 'register'])->name('register');
 
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     
     // Shared routes for anyone logged in
     Route::get('/subcategories/{category_id}', [ProductController::class, 'getSubcategories']);

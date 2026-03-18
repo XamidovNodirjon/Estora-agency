@@ -16,6 +16,20 @@ class HomeController extends Controller
 {
     public function dashboard(Request $request)
     {
+        // Redirect if already logged in
+        if (auth()->guard('web')->check()) {
+            $user = auth()->user();
+            if ($user->type === 'super_admin' || $user->username === 'super_admin') {
+                return redirect()->route('admin-dashboard');
+            } elseif ($user->type === 'admin' || $user->username === 'admin') {
+                return redirect()->route('products'); // Or another appropriate admin route
+            } elseif ($user->type === 'manager' || $user->username === 'manager') {
+                return redirect()->route('manager');
+            }
+        } elseif (auth()->guard('client')->check()) {
+            return redirect()->route('get.client');
+        }
+
         try {
             $categories = Category::all();
             $subCategories = SubCategory::all();

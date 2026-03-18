@@ -22,6 +22,9 @@ class AuthController extends Controller
 
     public function index()
     {
+        if (Auth::guard('web')->check() || Auth::guard('client')->check()) {
+            return redirect()->route('dashboard');
+        }
         return view('Admin.Auth.login');
     }
 
@@ -81,7 +84,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        if (Auth::guard('client')->check()) {
+            Auth::guard('client')->logout();
+        } else {
+            Auth::logout();
+        }
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -90,6 +98,9 @@ class AuthController extends Controller
 
     public function getRegister()
     {
+        if (Auth::guard('web')->check() || Auth::guard('client')->check()) {
+            return redirect()->route('dashboard');
+        }
         return view('Admin/Auth/Register');
     }
 

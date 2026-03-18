@@ -272,18 +272,49 @@
                 </div>
 
                 <div class="flex items-center gap-2 md:gap-8">
-                    <button
+                    @php
+                        $createProductRoute = route('login');
+                        if (auth()->guard('web')->check()) {
+                            $createProductRoute = route('create-product');
+                        } elseif (auth()->guard('client')->check()) {
+                            $createProductRoute = route('client.products.create');
+                        }
+                    @endphp
+                    <a href="{{ $createProductRoute }}"
                         class="bg-secondary-gold text-white px-3 md:px-6 py-2 rounded-lg font-medium hover:bg-primary-gold transition-colors flex items-center gap-2 text-sm md:text-base">
                         <i class="fas fa-plus"></i>
                         <span class="hidden sm:inline">E'lon joylashtirish</span>
                         <span class="sm:hidden">E'lon</span>
-                    </button>
-
-                    <a href="{{route('login')}}"
-                        class="flex items-center gap-2 text-gray-700 hover:text-secondary-gold text-sm md:text-base">
-                        <i class="fas fa-user-circle text-xl md:text-2xl"></i>
-                        <span class="hidden sm:inline">Login</span>
                     </a>
+
+                    @if(auth()->guard('web')->check() || auth()->guard('client')->check())
+                        @php
+                            $user = auth()->guard('web')->check() ? auth()->guard('web')->user() : auth()->guard('client')->user();
+                            $dashboardRoute = auth()->guard('web')->check() 
+                                ? ($user->type === 'super_admin' || $user->username === 'super_admin' ? route('admin-dashboard') : route('products')) 
+                                : route('get.client');
+                        @endphp
+                        <div class="flex items-center gap-4">
+                            <a href="{{ $dashboardRoute }}"
+                                class="flex items-center gap-2 text-gray-700 hover:text-secondary-gold text-sm md:text-base">
+                                <i class="fas fa-user-circle text-xl md:text-2xl"></i>
+                                <span class="hidden sm:inline">Kabinet</span>
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="text-gray-700 hover:text-red-500 text-sm md:text-base">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span class="hidden sm:inline">Chiqish</span>
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <a href="{{route('login')}}"
+                            class="flex items-center gap-2 text-gray-700 hover:text-secondary-gold text-sm md:text-base">
+                            <i class="fas fa-user-circle text-xl md:text-2xl"></i>
+                            <span class="hidden sm:inline">Login</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -826,11 +857,19 @@
                     <i class="fas fa-heart text-secondary-gold"></i>
                     <span>Favourites</span>
                 </a>
-                <a href="{{ route('login') }}"
-                    class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-secondary-gold">
-                    <i class="fas fa-user-circle text-secondary-gold"></i>
-                    <span>Login</span>
-                </a>
+                @if(auth()->guard('web')->check() || auth()->guard('client')->check())
+                    <a href="{{ $dashboardRoute }}"
+                        class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-secondary-gold">
+                        <i class="fas fa-user-circle text-secondary-gold"></i>
+                        <span>Kabinet</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="mobile-action-item flex items-center gap-2 py-2 text-gray-700 hover:text-secondary-gold">
+                        <i class="fas fa-user-circle text-secondary-gold"></i>
+                        <span>Login</span>
+                    </a>
+                @endif
             </div>
         </div>
     </div>
