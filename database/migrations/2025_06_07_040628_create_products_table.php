@@ -37,7 +37,7 @@ return new class extends Migration {
 
             $table->timestamps();
         });
-        DB::statement("ALTER SEQUENCE products_id_seq RESTART WITH 10000;");
+        DB::statement("ALTER TABLE products AUTO_INCREMENT = 10000;");
 
     }
 

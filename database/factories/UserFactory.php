@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Position;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +26,7 @@ class UserFactory extends Factory
     {
         return [
             'name'        => $this->faker->name,
-            'position_id' => Position::inRandomOrder()->first()->id ?? 1, // position_id borligini tekshiring
+            'role'        => $this->faker->randomElement(['client', 'manager', 'admin', 'superAdmin', 'dev']),
             'username'    => $this->faker->unique()->userName,
             'password'    => bcrypt('password'),
             'phone'       => $this->faker->phoneNumber,

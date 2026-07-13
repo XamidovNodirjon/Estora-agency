@@ -11,25 +11,27 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $positions = [
-            'super_admin' => 1,
-            'admin' => 2,
-            'manager' => 3,
+        $roles = [
+            'dev' => 'dev',
+            'super_admin' => 'superAdmin',
+            'admin' => 'admin',
+            'manager' => 'manager',
         ];
 
-        foreach ($positions as $role => $id) {
+        $counter = 1;
+        foreach ($roles as $username => $roleName) {
             User::updateOrCreate(
-                ['username' => $role],
+                ['username' => $username],
                 [
-                    'name' => strtoupper($role),
+                    'name' => strtoupper(str_replace('_', ' ', $username)),
                     'password' => Hash::make('1234'),
-                    'position_id' => $id,
-                    'phone' => '+998935273335' . $id,
-                    'passport' => 'AB7938253' . $id,
-                    'jshshir' => '50510016810045' . $id,
-                    'type' => $role,
+                    'phone' => '+998935273335' . $counter,
+                    'passport' => 'AB7938253' . $counter,
+                    'jshshir' => '50510016810045' . $counter,
+                    'role' => $roleName,
                 ]
             );
+            $counter++;
         }
     }
 }
